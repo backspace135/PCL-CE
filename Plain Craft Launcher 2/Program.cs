@@ -51,7 +51,7 @@ internal static class Program
         AnnouncementActions.Current = new WpfAnnouncementActions();
         WatcherUi.Current = new WpfWatcherUi();
         MediaService.Current = new WpfMediaService();
-        CrashAnalysisService.Current = new WpfCrashAnalysisService();
+        HorizonGames.ExitUi = new WpfGameExitUi();
         CompNavigation.Current = new WpfCompNavigationService();
         CompUi.Current = new WpfCompUi();
         LaunchUi.Current = new WpfLaunchUi();

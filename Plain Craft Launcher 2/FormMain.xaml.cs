@@ -1032,30 +1032,6 @@ public partial class FormMain
                     }
                 }
 
-            // 错误报告分析
-            do
-            {
-                try
-                {
-                    Common.Log("[System] 尝试进行错误报告分析");
-                    var analyzer = new CrashAnalyzer(Common.GetUuid());
-                    analyzer.Import(filePath);
-                    if (!analyzer.Prepare())
-                        break;
-                    analyzer.Analyze();
-                    analyzer.Output(true, new List<string>());
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    Common.Log(
-                        ex,
-                        "自主错误报告分析失败",
-                        Common.LogLevel.Feedback,
-                        userSummary: Lang.Text("Main.Error.OperationFailed"));
-                }
-            } while (false);
-
             // 未知操作
             HintService.Show(Hints.Info(Lang.Text("Main.FileDrag.UnknownOperation")));
         }, "文件拖拽");
