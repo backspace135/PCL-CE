@@ -42,14 +42,9 @@ public static partial class Launcher
     public static PageLoginOffline? frmLoginOffline;
     public static PageInstanceLeft? frmInstanceLeft;
     public static PageInstanceOverall? frmInstanceOverall;
-    public static PageInstanceCompResource? frmInstanceMod;
-    public static PageInstanceModDisabled? frmInstanceModDisabled;
-    public static PageInstanceCompJarInJar? frmInstanceModJarInJar;
     public static PageInstanceScreenshot? frmInstanceScreenshot;
     public static PageInstanceSaves? frmInstanceSaves;
-    public static PageInstanceCompResource? frmInstanceShader;
-    public static PageInstanceCompResource? frmInstanceSchematic;
-    public static PageInstanceCompResource? frmInstanceResourcePack;
+    public static PageInstanceResourcePack? frmInstanceResourcePack;
     public static PageInstanceSetup? frmInstanceSetup;
     public static PageInstanceServer? frmInstanceServer;
     public static PageInstanceSavesLeft? frmInstanceSavesLeft;

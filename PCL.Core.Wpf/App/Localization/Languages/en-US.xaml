@@ -828,6 +828,17 @@
     <sys:String x:Key="Event.Setting.Written">Setting written: {0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">Variable written: {0} → {1}</sys:String>
 
+    <!-- Horizon.Datapack -->
+
+    <sys:String x:Key="Horizon.Datapack.Card">Data packs ({0})</sys:String>
+    <sys:String x:Key="Horizon.Datapack.Disabled">Off</sys:String>
+    <sys:String x:Key="Horizon.Datapack.Empty">This world has no data packs yet. Put a .zip or a data pack folder in its datapacks folder, or download one from Modrinth.</sys:String>
+    <sys:String x:Key="Horizon.Datapack.OpenFolder">Open the data pack folder</sys:String>
+
+    <!-- Horizon.Datapack.Error -->
+
+    <sys:String x:Key="Horizon.Datapack.Error.Load">Reading the data pack list failed.</sys:String>
+
     <!-- Horizon.Exit -->
 
     <sys:String x:Key="Horizon.Exit.Error">The game stopped on an error (exit code {0}).</sys:String>
@@ -843,6 +854,42 @@
     <sys:String x:Key="Horizon.Files.Error.NoServerDownload">The version JSON of Minecraft {0} has no server download, which the first preparation needs.</sys:String>
     <sys:String x:Key="Horizon.Files.Error.VersionJsonInvalid">The version JSON of Minecraft {0} is invalid.</sys:String>
     <sys:String x:Key="Horizon.Files.Error.VersionNotFound">Minecraft {0} is not in the version list, so the vanilla files needed to prepare resources can't be downloaded.</sys:String>
+
+    <!-- Horizon.Instance -->
+
+    <sys:String x:Key="Horizon.Instance.LastPlayed">Last played {0}</sys:String>
+
+    <!-- Horizon.Instance.Build -->
+
+    <sys:String x:Key="Horizon.Instance.Build.Latest">Uses the newest installed build</sys:String>
+    <sys:String x:Key="Horizon.Instance.Build.Pinned">Pinned to {0}</sys:String>
+
+    <!-- Horizon.Instance.Delete -->
+
+    <sys:String x:Key="Horizon.Instance.Delete.Confirm">Delete instance {0}? Its worlds, resource packs, screenshots and settings go to the Recycle Bin with it.</sys:String>
+    <sys:String x:Key="Horizon.Instance.Delete.ConfirmPermanent">Permanently delete instance {0}? Its worlds, resource packs, screenshots and settings are deleted with it and can't be recovered!</sys:String>
+
+    <!-- Horizon.Instance.Overall -->
+
+    <sys:String x:Key="Horizon.Instance.Overall.Build">Horizon build: {0}</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.BuildNotInstalled">Horizon build: not installed yet. It is downloaded when the game starts.</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.Folder">Instance folder: {0}</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.LogsFolder">Logs folder</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.NoLog">There is no game log yet. Start the game once first.</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.OpenLatestLog">Open the latest log</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.ScreenshotsFolder">Screenshots folder</sys:String>
+
+    <!-- Horizon.Instance.Setup.Build -->
+
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Hint">Nightly builds stay on GitHub for 7 days. Installed builds are kept locally, so you can pin one to go back to.</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Label">Build</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Title">Horizon build</sys:String>
+
+    <!-- Horizon.Instance.Setup.Window -->
+
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Fullscreen">Start fullscreen</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Size">Window size</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Title">Game window</sys:String>
 
     <!-- Horizon.Launch.Error -->
 
@@ -873,6 +920,54 @@
     <sys:String x:Key="Horizon.Launch.Stage.Root">Start Horizon</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Start">Start the game</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">Wait for the game window</sys:String>
+
+    <!-- Horizon.ResourcePack -->
+
+    <sys:String x:Key="Horizon.ResourcePack.AppliesNextStart">The game is running: the change applies at the next start.</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Card">Resource packs ({0})</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Disable">Turn off</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Empty">This instance has no resource packs yet. Put a .zip or a pack folder in its resourcepacks folder, drop it on this page, or download one from Modrinth.</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Enable">Turn on</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Enabled">On</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Folder">Folder</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Hint">Click a pack to turn it on or off; the one turned on last has the highest priority. Changes apply at the next start.</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.OpenFolder">Open the resource pack folder</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Size">{0} MB</sys:String>
+
+    <!-- Horizon.ResourcePack.Delete -->
+
+    <sys:String x:Key="Horizon.ResourcePack.Delete.Confirm">Delete {0}?</sys:String>
+
+    <!-- Horizon.ResourcePack.Error -->
+
+    <sys:String x:Key="Horizon.ResourcePack.Error.Delete">Deleting failed.</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Error.Load">Reading the resource pack list failed.</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Error.Toggle">Changing whether it is on failed.</sys:String>
+
+    <!-- Horizon.Select -->
+
+    <sys:String x:Key="Horizon.Select.Card">Instances ({0})</sys:String>
+    <sys:String x:Key="Horizon.Select.Refreshed">Refreshed the instance list</sys:String>
+    <sys:String x:Key="Horizon.Select.Selected">Current</sys:String>
+
+    <!-- Horizon.Select.Create -->
+
+    <sys:String x:Key="Horizon.Select.Create.Content">Each instance has its own worlds, resource packs, settings and screenshots.</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.DefaultName">Horizon</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Failed">Creating the instance failed.</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Success">Created instance {0}</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Title">New instance</sys:String>
+
+    <!-- Horizon.Select.Empty -->
+
+    <sys:String x:Key="Horizon.Select.Empty.Message">There are no instances yet. Create one to start Horizon: the first start downloads the newest Horizon build and prepares the game resources.</sys:String>
+    <sys:String x:Key="Horizon.Select.Empty.Title">No instances</sys:String>
+
+    <!-- Horizon.Select.Left -->
+
+    <sys:String x:Key="Horizon.Select.Left.Create">New instance</sys:String>
+    <sys:String x:Key="Horizon.Select.Left.Instances">Instances</sys:String>
+    <sys:String x:Key="Horizon.Select.Left.OpenFolder">Open the instances folder</sys:String>
 
     <!-- Instance -->
 

@@ -151,12 +151,12 @@ public partial class ServerCard
     {
         try
         {
-            var launchOptions = new GameLaunch.McLaunchOptions
-            {
-                ServerIp = server.Address,
-                instance = PageInstanceLeft.McInstance
-            };
-            GameLaunch.McLaunchStart(launchOptions);
+            if (!HorizonLaunch.Start(new HorizonLaunchOptions
+                {
+                    Instance = PageInstanceLeft.Instance,
+                    QuickPlayServer = server.Address
+                }))
+                return;
             Launcher.frmMain.PageChange(new FormMain.PageStackData
             { page = FormMain.PageType.Launch });
             HintService.Show(Hints.Info(Lang.Text("Instance.Server.Card.ConnectingTo", server.Name)));

@@ -38,7 +38,7 @@ public partial class PageInstanceSavesViewModel : ViewModelBase
 
     public ObservableCollection<SaveEntry> Saves { get; } = [];
 
-    public string WorldPath => PageInstanceLeft.McInstance.PathIndie + @"saves\";
+    public string WorldPath => PageInstanceLeft.Instance.SavesDir + @"\";
 
     public SaveSortMethod SortMethod => _sortMethod;
 
@@ -58,16 +58,8 @@ public partial class PageInstanceSavesViewModel : ViewModelBase
 
     public void CheckQuickPlay()
     {
-        try
-        {
-            var cur = new GameLaunch.LaunchArgument(PageInstanceLeft.McInstance);
-            _quickPlayFeature = cur.HasArguments("--quickPlaySingleplayer");
-        }
-        catch (Exception ex)
-        {
-            Common.Log(ex, "检查存档快捷启动失败", Common.LogLevel.Hint,
-                userSummary: Lang.Text("Instance.Saves.Error.OperationFailed"));
-        }
+        // Horizon 的 horizon-client 都支持 --quickPlaySingleplayer
+        _quickPlayFeature = true;
     }
 
     public Task LoadListAsync()
@@ -210,12 +202,12 @@ public partial class PageInstanceSavesViewModel : ViewModelBase
     {
         if (folder is null)
             return;
-        var launchOptions = new GameLaunch.McLaunchOptions
-        {
-            WorldName = Path.GetFileName(folder),
-            instance = PageInstanceLeft.McInstance
-        };
-        GameLaunch.McLaunchStart(launchOptions);
+        if (!HorizonLaunch.Start(new HorizonLaunchOptions
+            {
+                Instance = PageInstanceLeft.Instance,
+                QuickPlayWorld = Path.GetFileName(folder)
+            }))
+            return;
         Launcher.frmMain!.PageChange(new FormMain.PageStackData { page = FormMain.PageType.Launch });
     }
 
@@ -296,7 +288,7 @@ public partial class PageInstanceSavesViewModel : ViewModelBase
         if (File.Exists(saveLogo))
         {
             var target =
-                $@"{PageInstanceLeft.McInstance.PathInstance}PCL\ImgCache\{Common.GetStringMd5(saveLogo)}.png";
+                Path.Combine(Common.pathTemp, "Cache", "SaveIcon", $"{Common.GetStringMd5(saveLogo)}.png");
             Common.CopyFile(saveLogo, target);
             saveLogo = target;
         }

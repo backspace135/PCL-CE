@@ -54,8 +54,6 @@ internal static class Program
         CrashAnalysisService.Current = new WpfCrashAnalysisService();
         CompNavigation.Current = new WpfCompNavigationService();
         CompUi.Current = new WpfCompUi();
-        CompLocalUi.Current = new WpfCompLocalUi();
-        MemorySettings.Current = new WpfMemorySettings();
         LaunchUi.Current = new WpfLaunchUi();
         LoginProfile.Current = new WpfProfileUi();
         LogFilter.Current = new WpfLogFilter();

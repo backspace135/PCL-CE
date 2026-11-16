@@ -137,14 +137,6 @@ public partial class Setup
                 ConfigEvent.Changed,
                 e => SystemHttpProxyCustomPassword((string)(e.Value ?? ""))));
 
-        Config.Instance.MemorySolutionConfig.Observe(
-            new ConfigObserver(
-                ConfigEvent.Changed,
-                e => VersionRamType((int)e.Value!)));
-        Config.InstanceAuth.LoginRequirementSolutionConfig.Observe(
-            new ConfigObserver(
-                ConfigEvent.Changed,
-                e => VersionServerLogin((int)e.Value!)));
     }
 
     /// <summary>

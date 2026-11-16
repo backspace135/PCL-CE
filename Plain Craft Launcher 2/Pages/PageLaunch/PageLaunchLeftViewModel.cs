@@ -100,14 +100,12 @@ public partial class PageLaunchLeftViewModel : ViewModelBase
     {
         if (GameLaunch.mcLaunchLoader.State == LoadState.Loading)
             return;
-        InstanceList.McMcInstanceSelected.Load();
-        PageInstanceLeft.McInstance = InstanceList.McMcInstanceSelected;
-        if (File.Exists(InstanceList.McMcInstanceSelected.PathInstance + ".pclignore"))
+        if (HorizonEnvironment.SelectedInstance is not { } instance)
         {
-            HintService.Show(Hints.Error(Lang.Text("Launch.Home.Instance.InstallingCannotSetup")));
+            Launcher.frmMain.PageChange(FormMain.PageType.InstanceSelect);
             return;
         }
 
-        Launcher.frmMain.PageChange(FormMain.PageType.InstanceSetup);
+        PageSelectRight.OpenSettings(instance);
     }
 }

@@ -708,13 +708,10 @@ public partial class PageSetupUI : IPageView
             }
 
             // 其他入口刷新
-            if (Launcher.frmMain.pageCurrent == FormMain.PageType.InstanceSelect)
-                Launcher.frmSelectRight.BtnEmptyDownload_Loaded();
             if (Launcher.frmMain.pageCurrent == FormMain.PageType.Launch)
                 Launcher.frmLaunchLeft.RefreshButtonsUI();
-            if (Launcher.frmMain.pageCurrent == FormMain.PageType.InstanceSetup &&
-                Launcher.frmInstanceModDisabled is not null)
-                Launcher.frmInstanceModDisabled.BtnDownload_Loaded();
+            if (Launcher.frmMain.pageCurrent == FormMain.PageType.InstanceSetup)
+                Launcher.frmInstanceLeft?.ViewModel.RefreshVisibility();
         }
 
         catch (Exception ex)

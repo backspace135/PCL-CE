@@ -92,7 +92,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
 
         var nbtData =
             await NbtFileHandler.ReadTagInNbtFileAsync<NbtList>(
-                Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat"), "servers").ConfigureAwait(true);
+                PageInstanceLeft.Instance.ServersDatPath, "servers").ConfigureAwait(true);
         if (nbtData is null)
         {
             HintService.Show(Hints.Error(Lang.Text("Instance.Server.ReadDataFailed")));
@@ -103,7 +103,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
         var clonedNbtData = (NbtList)nbtData.Clone();
 
         if (!await NbtFileHandler.WriteTagInNbtFileAsync(clonedNbtData,
-                Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat")).ConfigureAwait(true))
+                PageInstanceLeft.Instance.ServersDatPath).ConfigureAwait(true))
         {
             HintService.Show(Hints.Error(Lang.Text("Instance.Server.WriteDataFailed")));
             return;
@@ -121,7 +121,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
     private async void EditServer(object sender, ServerCard.ResultEventArgs e)
     {
         var nbtData =
-            await NbtFileHandler.ReadTagInNbtFileAsync<NbtList>(Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat"),
+            await NbtFileHandler.ReadTagInNbtFileAsync<NbtList>(PageInstanceLeft.Instance.ServersDatPath,
                 "servers").ConfigureAwait(true);
         if (nbtData is null)
         {
@@ -143,7 +143,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
 
         var clonedNbtData = (NbtList)nbtData.Clone();
         if (!await NbtFileHandler.WriteTagInNbtFileAsync(clonedNbtData,
-                Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat")).ConfigureAwait(true))
+                PageInstanceLeft.Instance.ServersDatPath).ConfigureAwait(true))
         {
             HintService.Show(Hints.Error(Lang.Text("Instance.Server.WriteDataFailed")));
             return;
@@ -231,7 +231,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
 
             await serverCard.RefreshServerStatusAsync(false).ConfigureAwait(true);
 
-            var serversDatPath = Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat");
+            var serversDatPath = PageInstanceLeft.Instance.ServersDatPath;
 
             NbtList nbtData;
             if (!File.Exists(serversDatPath))
@@ -292,7 +292,7 @@ public partial class PageInstanceServer : MyPageRight, IPageView
     {
         serverList.Clear();
 
-        var serversFile = Path.Combine(PageInstanceLeft.McInstance.PathIndie, "servers.dat");
+        var serversFile = PageInstanceLeft.Instance.ServersDatPath;
         if (!File.Exists(serversFile))
             return;
 

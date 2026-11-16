@@ -224,8 +224,9 @@ public partial class PageSetupLaunch : IPageView
     // 切换到实例独立设置
     private void BtnSwitch_Click(object sender, MouseButtonEventArgs e)
     {
-        InstanceList.McMcInstanceSelected.Load();
-        PageInstanceLeft.McInstance = InstanceList.McMcInstanceSelected;
+        if (HorizonEnvironment.SelectedInstance is not { } instance)
+            return;
+        PageInstanceLeft.Instance = instance;
         Launcher.frmMain.PageChange(FormMain.PageType.InstanceSetup, FormMain.PageSubType.VersionSetup);
     }
 

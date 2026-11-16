@@ -733,15 +733,6 @@ public partial class FormMain
         // 按 ESC 返回上一级
         if (e.Key == Key.Escape)
             TriggerPageBack();
-        // 更改隐藏实例可见性
-        if (e.Key == Key.F11 && pageCurrent == PageType.InstanceSelect)
-        {
-            Launcher.frmSelectRight.showHidden = !Launcher.frmSelectRight.showHidden;
-            Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader, GameFolders.mcFolderSelected,
-                Loading.LoaderFolderRunType.ForceRun, 1, @"versions\");
-            return;
-        }
-
         // 更改功能隐藏可见性
         if (e.Key == Key.F12)
         {
@@ -796,40 +787,20 @@ public partial class FormMain
         {
             if (Config.Download.Comp.ReadClipboard)
                 Comp.CompClipboard.GetClipboardResource();
-            if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionMod)
-            {
-                // Mod 管理自动刷新
-                Launcher.frmInstanceMod.ReloadCompFileList();
-            }
-            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionResourcePack)
+            if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionResourcePack)
             {
                 // 资源包管理自动刷新
-                if (Launcher.frmInstanceResourcePack is not null)
-                    Launcher.frmInstanceResourcePack.ReloadCompFileList();
-            }
-            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionShader)
-            {
-                // 光影包管理自动刷新
-                if (Launcher.frmInstanceShader is not null)
-                    Launcher.frmInstanceShader.ReloadCompFileList();
-            }
-            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSchematic)
-            {
-                // 投影原理图管理自动刷新
-                if (Launcher.frmInstanceSchematic is not null)
-                    Launcher.frmInstanceSchematic.ReloadCompFileList();
+                Launcher.frmInstanceResourcePack?.Refresh();
             }
             else if (pageCurrent == PageType.InstanceSelect)
             {
                 // 实例选择自动刷新
-                Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader, GameFolders.mcFolderSelected,
-                    Loading.LoaderFolderRunType.RunOnUpdated, 1, @"versions\");
+                HorizonEnvironment.ReloadInstances();
             }
-            else if (Launcher.frmMain.pageRight is PageInstanceSavesDatapack &&
-                     Launcher.frmInstanceSavesDatapack is not null)
+            else if (Launcher.frmMain.pageRight is PageInstanceSavesDatapack datapackPage)
             {
                 // 数据包管理自动刷新
-                Launcher.frmInstanceSavesDatapack.ReloadDatapackFileList();
+                datapackPage.Refresh();
             }
         }
         catch (Exception ex)
@@ -929,7 +900,7 @@ public partial class FormMain
                         });
                         if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSetup)
                             // 正在服务器选项页，需要刷新设置项显示
-                            Launcher.frmInstanceSetup.Reload();
+                            Launcher.frmInstanceSetup.Refresh();
                     }
                     else if (str.StartsWithF("file:///"))
                     {
@@ -997,12 +968,11 @@ public partial class FormMain
                 var firstExtension = filePathList.First().AfterLast(".").ToLower();
                 var allSameType = filePathList.All(f => (f.AfterLast(".").ToLower() ?? "") == (firstExtension ?? ""));
 
-                if (allSameType &&
-                    new[] { "jar", "litemod", "disabled", "old", "litematic", "nbt", "schematic", "schem" }.Contains(
-                        firstExtension))
+                if (allSameType && firstExtension == "zip" && pageCurrent == PageType.InstanceSetup &&
+                    PageCurrentSub == PageSubType.VersionResourcePack)
                 {
                 }
-                // 允许同类型的 Mod 文件或投影文件批量拖拽
+                // 允许在资源包页批量拖入资源包
                 else
                 {
                     HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameTypeOnly")));
@@ -1035,31 +1005,13 @@ public partial class FormMain
                 return;
             }
 
-            // 安装 Mod
-            if (PageInstanceCompResource.InstallMods(filePathList))
-                return;
-            // 安装投影文件
-            if (new[] { "litematic", "nbt", "schematic", "schem" }.Contains(extension))
-            {
-                Common.Log($"[System] 文件为 {extension} 格式，尝试作为原理图安装");
-                // 获取当前文件夹路径（如果在资源管理页面）
-                string targetFolderPath = null;
-                if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSchematic &&
-                    Launcher.frmInstanceSchematic is not null &&
-                    Launcher.frmInstanceSchematic is PageInstanceCompResource)
-                    targetFolderPath = Launcher.frmInstanceSchematic.CurrentFolderPath;
-                PageInstanceCompResource.InstallCompFiles(filePathList, Comp.CompType.Schematic, targetFolderPath);
-                return;
-            }
-
             // 处理资源安装
             if (pageCurrent == PageType.InstanceSetup && new[] { "zip" }.Any(i => (i ?? "") == (extension ?? "")))
                 switch (PageCurrentSub)
                 {
                     case PageSubType.VersionWorld:
                     {
-                        var destFolder = PageInstanceLeft.McInstance.PathIndie + @"saves\" +
-                                         Path.GetFileNameWithoutExtension(filePath);
+                        var destFolder = Path.Combine(PageInstanceLeft.Instance.SavesDir, Path.GetFileNameWithoutExtension(filePath));
                         var destLevelDat = Path.Combine(destFolder, "level.dat");
                         if (Directory.Exists(destFolder))
                         {
@@ -1111,59 +1063,10 @@ public partial class FormMain
                     }
                     case PageSubType.VersionResourcePack:
                     {
-                        var destFile = PageInstanceLeft.McInstance.PathIndie + @"resourcepacks\" +
-                                       Common.GetFileNameFromPath(filePath);
-                        if (File.Exists(destFile))
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                            return;
-                        }
-
-                        Common.CopyFile(filePath, destFile);
-                        HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                        if (Launcher.frmInstanceResourcePack is not null)
-                            Common.RunInUi(() => Launcher.frmInstanceResourcePack.ReloadCompFileList());
-                        return;
-                    }
-                    case PageSubType.VersionShader:
-                    {
-                        var destFile = PageInstanceLeft.McInstance.PathIndie + @"shaderpacks\" +
-                                       Common.GetFileNameFromPath(filePath);
-                        if (File.Exists(destFile))
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                            return;
-                        }
-
-                        Common.CopyFile(filePath, destFile);
-                        HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                        if (Launcher.frmInstanceShader is not null)
-                            Common.RunInUi(() => Launcher.frmInstanceShader.ReloadCompFileList());
+                        Common.RunInUi(() => PageInstanceResourcePack.Import(filePathList));
                         return;
                     }
                 }
-
-            // 处理投影文件
-            if (pageCurrent == PageType.InstanceSetup &&
-                new[] { "litematic", "nbt", "schematic", "schem" }.Contains(extension) &&
-                PageCurrentSub == PageSubType.VersionSchematic)
-            {
-                var destFile = PageInstanceLeft.McInstance.PathIndie + @"schematics\" +
-                               Common.GetFileNameFromPath(filePath);
-                if (File.Exists(destFile))
-                {
-                    HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                    return;
-                }
-
-                Directory.CreateDirectory(PageInstanceLeft.McInstance.PathIndie + @"schematics\");
-                Common.CopyFile(filePath, destFile);
-                HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                if (Launcher.frmInstanceSchematic is not null)
-                    Common.RunInUi(() => Launcher.frmInstanceSchematic.ReloadCompFileList());
-                return;
-            }
-
 
             // 错误报告分析
             do
@@ -1443,7 +1346,7 @@ public partial class FormMain
             }
             case PageType.InstanceSetup:
             {
-                return Lang.Text("Main.Title.InstanceSetup", PageInstanceLeft.McInstance is null ? Lang.Text("Common.State.Unknown") : PageInstanceLeft.McInstance.Name);
+                return Lang.Text("Main.Title.InstanceSetup", PageInstanceLeft.Instance is null ? Lang.Text("Common.State.Unknown") : PageInstanceLeft.Instance.Name);
             }
             case PageType.CompDetail:
             {

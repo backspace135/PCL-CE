@@ -828,6 +828,17 @@
     <sys:String x:Key="Event.Setting.Written">已写入设置：{0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">已写入变量：{0} → {1}</sys:String>
 
+    <!-- Horizon.Datapack -->
+
+    <sys:String x:Key="Horizon.Datapack.Card">数据包（{0}）</sys:String>
+    <sys:String x:Key="Horizon.Datapack.Disabled">已停用</sys:String>
+    <sys:String x:Key="Horizon.Datapack.Empty">这个存档还没有数据包。把 .zip 或数据包文件夹放进 datapacks 文件夹，或从 Modrinth 下载。</sys:String>
+    <sys:String x:Key="Horizon.Datapack.OpenFolder">打开数据包文件夹</sys:String>
+
+    <!-- Horizon.Datapack.Error -->
+
+    <sys:String x:Key="Horizon.Datapack.Error.Load">读取数据包列表失败。</sys:String>
+
     <!-- Horizon.Exit -->
 
     <sys:String x:Key="Horizon.Exit.Error">游戏因错误而退出（退出码 {0}）。</sys:String>
@@ -843,6 +854,42 @@
     <sys:String x:Key="Horizon.Files.Error.NoServerDownload">Minecraft {0} 的版本 JSON 中没有服务端下载信息，而首次准备资源需要服务端 jar。</sys:String>
     <sys:String x:Key="Horizon.Files.Error.VersionJsonInvalid">Minecraft {0} 的版本 JSON 无效。</sys:String>
     <sys:String x:Key="Horizon.Files.Error.VersionNotFound">在版本列表中找不到 Minecraft {0}，无法下载准备资源所需的原版文件。</sys:String>
+
+    <!-- Horizon.Instance -->
+
+    <sys:String x:Key="Horizon.Instance.LastPlayed">上次游玩：{0}</sys:String>
+
+    <!-- Horizon.Instance.Build -->
+
+    <sys:String x:Key="Horizon.Instance.Build.Latest">使用最新安装的构建</sys:String>
+    <sys:String x:Key="Horizon.Instance.Build.Pinned">固定使用 {0}</sys:String>
+
+    <!-- Horizon.Instance.Delete -->
+
+    <sys:String x:Key="Horizon.Instance.Delete.Confirm">确定要删除实例 {0} 吗？它的存档、资源包、截图和设置会一起移到回收站。</sys:String>
+    <sys:String x:Key="Horizon.Instance.Delete.ConfirmPermanent">确定要永久删除实例 {0} 吗？它的存档、资源包、截图和设置会一起被删除，无法恢复！</sys:String>
+
+    <!-- Horizon.Instance.Overall -->
+
+    <sys:String x:Key="Horizon.Instance.Overall.Build">Horizon 构建：{0}</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.BuildNotInstalled">Horizon 构建：尚未安装，启动时会自动下载。</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.Folder">实例文件夹：{0}</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.LogsFolder">日志文件夹</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.NoLog">还没有游戏日志，启动一次游戏后再来看看。</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.OpenLatestLog">打开最新日志</sys:String>
+    <sys:String x:Key="Horizon.Instance.Overall.ScreenshotsFolder">截图文件夹</sys:String>
+
+    <!-- Horizon.Instance.Setup.Build -->
+
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Hint">Nightly 构建只在 GitHub 上保留 7 天，已安装的构建会一直保留在本地，可以固定使用某个构建作为回退。</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Label">使用的构建</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Build.Title">Horizon 构建</sys:String>
+
+    <!-- Horizon.Instance.Setup.Window -->
+
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Fullscreen">以全屏启动</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Size">窗口大小</sys:String>
+    <sys:String x:Key="Horizon.Instance.Setup.Window.Title">游戏窗口</sys:String>
 
     <!-- Horizon.Launch.Error -->
 
@@ -873,6 +920,54 @@
     <sys:String x:Key="Horizon.Launch.Stage.Root">启动 Horizon</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Start">启动游戏进程</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">等待游戏窗口出现</sys:String>
+
+    <!-- Horizon.ResourcePack -->
+
+    <sys:String x:Key="Horizon.ResourcePack.AppliesNextStart">游戏正在运行，修改会在下次启动时生效。</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Card">资源包（{0}）</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Disable">停用</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Empty">这个实例还没有资源包。把 .zip 或资源包文件夹放进 resourcepacks 文件夹、拖到这个页面，或从 Modrinth 下载。</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Enable">启用</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Enabled">已启用</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Folder">文件夹</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Hint">点击资源包可以启用或停用，启用的资源包优先级更高。修改会在下次启动游戏时生效。</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.OpenFolder">打开资源包文件夹</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Size">{0} MB</sys:String>
+
+    <!-- Horizon.ResourcePack.Delete -->
+
+    <sys:String x:Key="Horizon.ResourcePack.Delete.Confirm">确定要删除 {0} 吗？</sys:String>
+
+    <!-- Horizon.ResourcePack.Error -->
+
+    <sys:String x:Key="Horizon.ResourcePack.Error.Delete">删除失败。</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Error.Load">读取资源包列表失败。</sys:String>
+    <sys:String x:Key="Horizon.ResourcePack.Error.Toggle">修改启用状态失败。</sys:String>
+
+    <!-- Horizon.Select -->
+
+    <sys:String x:Key="Horizon.Select.Card">实例（{0}）</sys:String>
+    <sys:String x:Key="Horizon.Select.Refreshed">已刷新实例列表</sys:String>
+    <sys:String x:Key="Horizon.Select.Selected">当前</sys:String>
+
+    <!-- Horizon.Select.Create -->
+
+    <sys:String x:Key="Horizon.Select.Create.Content">每个实例有自己的存档、资源包、设置和截图。</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.DefaultName">Horizon</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Failed">新建实例失败。</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Success">已新建实例 {0}</sys:String>
+    <sys:String x:Key="Horizon.Select.Create.Title">新建实例</sys:String>
+
+    <!-- Horizon.Select.Empty -->
+
+    <sys:String x:Key="Horizon.Select.Empty.Message">还没有实例。新建一个实例后就可以启动 Horizon，首次启动会自动下载最新的 Horizon 构建并准备游戏资源。</sys:String>
+    <sys:String x:Key="Horizon.Select.Empty.Title">没有实例</sys:String>
+
+    <!-- Horizon.Select.Left -->
+
+    <sys:String x:Key="Horizon.Select.Left.Create">新建实例</sys:String>
+    <sys:String x:Key="Horizon.Select.Left.Instances">实例</sys:String>
+    <sys:String x:Key="Horizon.Select.Left.OpenFolder">打开实例文件夹</sys:String>
 
     <!-- Instance -->
 

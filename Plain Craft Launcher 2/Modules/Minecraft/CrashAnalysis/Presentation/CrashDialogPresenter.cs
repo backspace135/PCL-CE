@@ -95,7 +95,9 @@ internal sealed class CrashDialogPresenter(CrashAnalysisContext context)
 
     private void _OpenModLoaderInstallPage()
     {
-        PageInstanceLeft.McInstance = context.Instance;
+        if (HorizonEnvironment.SelectedInstance is not { } instance)
+            return;
+        PageInstanceLeft.Instance = instance;
 
         Common.RunInUi(() => Launcher.frmMain.PageChange(
             FormMain.PageType.InstanceSetup,

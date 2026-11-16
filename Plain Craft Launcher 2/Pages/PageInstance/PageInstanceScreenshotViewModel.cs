@@ -21,7 +21,7 @@ public partial class PageInstanceScreenshotViewModel : ViewModelBase
     /// <summary>当前显示的截图条目，由页面增量装填。</summary>
     public ObservableCollection<ScreenshotItemViewModel> Screenshots { get; } = new();
 
-    private string ScreenshotPath => PageInstanceLeft.McInstance.PathIndie + @"screenshots\";
+    private string ScreenshotPath => PageInstanceLeft.Instance.ScreenshotsDir + @"\";
 
     public void RefreshTip(int fileCount)
     {
