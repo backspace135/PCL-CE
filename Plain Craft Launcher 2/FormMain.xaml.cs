@@ -1423,7 +1423,6 @@ public partial class FormMain
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
         DownloadShader = 6,
-        DownloadWorld = 7,
         DownloadCompFavorites = 8,
         DownloadClient = 9,
         DownloadOptiFine = 10,

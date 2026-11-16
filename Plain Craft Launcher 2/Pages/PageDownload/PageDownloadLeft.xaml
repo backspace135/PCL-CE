@@ -91,22 +91,6 @@
                     </x:Array>
                 </local:MyListItem.Buttons>
             </local:MyListItem>
-            <local:MyListItem x:Name="ItemWorld" Type="RadioBox" IsScaleAnimationEnabled="False" Tag="7"
-                              Check="PageCheck"
-                              MinPaddingRight="35" Height="36" VerticalAlignment="Top"
-                              Title="{loc:Loc Download.Left.World}"
-                              LogoScale="0.85"
-                              SvgIcon="lucide/globe">
-                <local:MyListItem.Buttons>
-                    <x:Array Type="{x:Type local:MyIconButton}">
-                        <local:MyIconButton Tag="7" ToolTip="{loc:Loc Common.Action.Refresh}"
-                                            ToolTipService.Placement="Right" Click="RefreshButton_Click"
-                                            ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
-                                            LogoScale="0.85"
-                                            SvgIcon="lucide/refresh-cw" />
-                    </x:Array>
-                </local:MyListItem.Buttons>
-            </local:MyListItem>
             <local:MyListItem x:Name="ItemFavorites" Type="RadioBox" IsScaleAnimationEnabled="False" Tag="8"
                               Check="PageCheck"
                               MinPaddingRight="35" Height="36" VerticalAlignment="Top"

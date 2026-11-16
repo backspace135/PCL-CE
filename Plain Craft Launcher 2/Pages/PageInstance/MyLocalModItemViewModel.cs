@@ -342,23 +342,11 @@ public partial class MyLocalModItemViewModel : ViewModelBase
             return;
         if (Entry.Comp is not null)
         {
-            if (!Information.IsNumeric(Entry.Comp.Id))
+            var modrinthUrl = Entry.ChangelogUrls.FirstOrDefault(x => x.Contains("modrinth.com"));
+            if (modrinthUrl is not null)
             {
-                var modrinthUrl = Entry.ChangelogUrls.FirstOrDefault(x => x.Contains("modrinth.com"));
-                if (modrinthUrl is not null)
-                {
-                    Common.OpenWebsite(modrinthUrl);
-                    return;
-                }
-            }
-            else
-            {
-                var curseForgeUrl = Entry.ChangelogUrls.FirstOrDefault(x => x.Contains("curseforge.com"));
-                if (curseForgeUrl is not null)
-                {
-                    Common.OpenWebsite(curseForgeUrl);
-                    return;
-                }
+                Common.OpenWebsite(modrinthUrl);
+                return;
             }
         }
 

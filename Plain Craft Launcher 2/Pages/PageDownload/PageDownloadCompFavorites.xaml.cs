@@ -582,7 +582,7 @@ public partial class PageDownloadCompFavorites : IPageView
                             {
                                 try
                                 {
-                                    allFiles.Add(Comp.CompFilesGet(item, Comp.CompRequest.IsFromCurseForge(item))
+                                    allFiles.Add(Comp.CompFilesGet(item)
                                         .Where(i => i.Type != Comp.CompType.Mod || i.ModLoaders.Contains(desiredModLoader))
                                         .ToList());
                                 }

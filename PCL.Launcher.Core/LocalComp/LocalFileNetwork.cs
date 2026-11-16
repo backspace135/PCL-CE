@@ -15,7 +15,6 @@ public static partial class LocalComp
         public CompFile CompFile = null!;
         public bool CompLoaded;
 
-        private uint? _curseForgeHash;
 
         public CompProject? Comp
         {
@@ -45,24 +44,6 @@ public static partial class LocalComp
         private static bool IsUpdateDisabled =>
             LauncherState.SelectedInstance is { } instance
             && Config.Instance.DisableModUpdate[instance.PathInstance];
-
-        public uint CurseForgeHash
-        {
-            get
-            {
-                if (_curseForgeHash is null)
-                {
-                    var buf = HashCache
-                        .Value.GetMurmurHash2Async(path)
-                        .GetAwaiter()
-                        .GetResult()
-                        .HexToBytes();
-                    _curseForgeHash = BitConverter.ToUInt32(buf);
-                }
-
-                return (uint)_curseForgeHash;
-            }
-        }
 
         public string ModrinthHash
         {

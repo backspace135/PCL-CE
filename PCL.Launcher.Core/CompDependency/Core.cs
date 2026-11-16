@@ -18,7 +18,7 @@ public static partial class CompDependency
         ArgumentNullException.ThrowIfNull(file);
         ArgumentNullException.ThrowIfNull(project);
 
-        var source = GetSource(project.FromCurseForge);
+        var source = ModrinthSource;
         var dependencies = file
             .Dependencies
             .Where(static dependencyId => !string.IsNullOrWhiteSpace(dependencyId))
@@ -65,7 +65,7 @@ public static partial class CompDependency
 
             var source = localFile.Comp is null
                 ? null
-                : GetSource(localFile.Comp.FromCurseForge);
+                : ModrinthSource;
             var gameVersions = localFile
                     .CompFile?.GameVersions
                     ?.Where(static version => !string.IsNullOrWhiteSpace(version))
@@ -92,7 +92,7 @@ public static partial class CompDependency
 
             if (!string.IsNullOrWhiteSpace(localFile.CompFile?.ProjectId))
             {
-                var fileSource = GetSource(localFile.CompFile.FromCurseForge);
+                var fileSource = ModrinthSource;
                 result.Add(
                     new InstalledModIdentity
                     {
@@ -124,13 +124,10 @@ public static partial class CompDependency
         if (string.IsNullOrWhiteSpace(source) || string.IsNullOrWhiteSpace(projectId))
             return null;
 
-        var fromCurseForge =
-            string.Equals(source, "CurseForge", StringComparison.OrdinalIgnoreCase);
-        var files = Comp.CompFilesGet(projectId, fromCurseForge);
-        if (!Comp.compProjectCache.TryGetValue(projectId, out var compProject))
+        if (!string.Equals(source, ModrinthSource, StringComparison.OrdinalIgnoreCase))
             return null;
-
-        if (compProject.FromCurseForge != fromCurseForge)
+        var files = Comp.CompFilesGet(projectId);
+        if (!Comp.compProjectCache.TryGetValue(projectId, out var compProject))
             return null;
 
         return new ModDependencyProject

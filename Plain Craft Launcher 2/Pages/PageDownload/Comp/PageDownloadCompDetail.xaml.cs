@@ -78,7 +78,7 @@ public partial class PageDownloadCompDetail : IPageView
         {
             // 获取基本信息
             var file = (Comp.CompFile)sender.Tag;
-            var loaderName = $"{(_project.FromCurseForge ? "CurseForge" : "Modrinth")} {Lang.Text("Download.Comp.Detail.WorldDownload")}：{_project.TranslatedName} ";
+            var loaderName = $"Modrinth {Lang.Text("Download.Comp.Detail.WorldDownload")}：{_project.TranslatedName} ";
 
             // 确认默认保存位置
             string? defaultFolder;
@@ -329,7 +329,7 @@ public partial class PageDownloadCompDetail : IPageView
                         $"{Lang.Text("Download.Comp.Detail.ResourceFile.Filter", desc)}|{(file.Type == Comp.CompType.Mod
                             ? file.FileName?.EndsWith(".litemod") == true ? "*.litemod" : "*.jar"
                             : file.FileName?.EndsWith(".mrpack") == true
-                              || (string.IsNullOrWhiteSpace(file.FileName) && file is { Type: Comp.CompType.ModPack, FromCurseForge: false })
+                              || (string.IsNullOrWhiteSpace(file.FileName) && file is { Type: Comp.CompType.ModPack })
                                 ? "*.mrpack"
                                 : "*.zip")}",
                         defaultFolder);
@@ -608,7 +608,7 @@ public partial class PageDownloadCompDetail : IPageView
         _compFileLoader = new Loading.LoaderTask<int, List<Comp.CompFile>>("Comp File", task =>
         {
             LoadTargetFromAdditional();
-            var result = Comp.CompFilesGet(_project!.Id, _project.FromCurseForge);
+            var result = Comp.CompFilesGet(_project!.Id);
             if (task.IsAborted)
                 return;
             task.output = result;

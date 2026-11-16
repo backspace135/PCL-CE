@@ -219,13 +219,6 @@ public partial class PageInstanceSavesViewModel : ViewModelBase
         Launcher.frmMain!.PageChange(new FormMain.PageStackData { page = FormMain.PageType.Launch });
     }
 
-    [RelayCommand]
-    private void DownloadNew()
-    {
-        Launcher.frmMain!.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadWorld);
-        PageComp.targetVersion = PageInstanceLeft.McInstance;
-    }
-
     private async Task ApplyListAsync(bool rescan)
     {
         var snapshot = await RunAsync(ct => Task.Run(() => BuildEntries(rescan, SearchText), ct)).ConfigureAwait(false);

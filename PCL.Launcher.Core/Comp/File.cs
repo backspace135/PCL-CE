@@ -39,7 +39,7 @@ public static partial class Comp
         public readonly List<string> Dependencies;
 
         /// <summary>
-        ///     下载量计数。注意，该计数仅为一个来源，无法反应两边加起来的下载量，且 CurseForge 可能错误地返回 0。
+        ///     下载量计数。
         /// </summary>
         public readonly int DownloadCount;
 
@@ -47,11 +47,6 @@ public static partial class Comp
         ///     下载的文件名。
         /// </summary>
         public readonly string FileName;
-
-        /// <summary>
-        ///     该文件来自 CurseForge 还是 Modrinth。
-        /// </summary>
-        public readonly bool FromCurseForge;
 
         /// <summary>
         ///     支持的游戏版本列表。<br />
@@ -67,7 +62,7 @@ public static partial class Comp
         public readonly string Hash;
 
         /// <summary>
-        ///     用于唯一性鉴别该文件的 ID。CurseForge 中为 123456 的大整数，Modrinth 中为英文乱码的 Version 字段。
+        ///     用于唯一性鉴别该文件的 ID，即 Modrinth 的 Version ID。
         /// </summary>
         public readonly string Id;
 
@@ -131,7 +126,7 @@ public static partial class Comp
 
         /// <summary>
         ///     Mod 版本号。
-        ///     不一定是标准格式。CurseForge 上默认为 Nothing。
+        ///     不一定是标准格式。
         /// </summary>
         public string Version;
 
@@ -140,16 +135,10 @@ public static partial class Comp
         /// </summary>
         public CompFile(JsonObject data, CompType defaultType)
         {
-            CompFileBuildResult result;
+            var result = data.ContainsKey("DataSource")
+                ? _BuildFromCompJson(data, defaultType)
+                : _BuildFromModrinth(data, defaultType);
 
-            if (data.ContainsKey("FromCurseForge"))
-                result = _BuildFromCompJson(data, defaultType);
-            else if (data.ContainsKey("gameId"))
-                result = _BuildFromCurseForge(data, defaultType);
-            else
-                result = _BuildFromModrinth(data, defaultType);
-
-            FromCurseForge = result.FromCurseForge;
             Type = result.Type;
             Id = result.Id;
             ProjectId = result.ProjectId ?? "";
@@ -195,7 +184,6 @@ public static partial class Comp
             var result = new CompFileBuildResult
             {
                 Type = defaultType,
-                FromCurseForge = data["FromCurseForge"]?.ToObject<bool>() ?? false,
                 Id = data["Id"]?.ToString() ?? "",
                 DisplayName = data["DisplayName"]?.ToString() ?? "",
                 ReleaseDate = data["ReleaseDate"]?.ToObject<DateTime>() ?? default,
@@ -231,145 +219,9 @@ public static partial class Comp
             return result;
         }
 
-        private static CompFileBuildResult _BuildFromCurseForge(
-            JsonObject data,
-            CompType defaultType)
-        {
-            var hashes = data["hashes"]?.AsArray() ?? [];
-            var result = new CompFileBuildResult
-            {
-                FromCurseForge = true,
-                Type = defaultType,
-                Id = data["id"]?.ToString() ?? "",
-                ProjectId = data["modId"]?.ToString(),
-                DisplayName = NormalizeDisplayName(data["displayName"]?.ToString() ?? ""),
-                ReleaseDate = data["fileDate"]?.ToObject<DateTime>() ?? default,
-                Status = (CompFileStatus)(data["releaseType"]?.ToObject<int>() ?? 0),
-                DownloadCount = data["downloadCount"]?.ToObject<int>() ?? 0,
-                FileName = (string?)data["fileName"],
-                Hash = GetCurseForgeHash(hashes, 1) ?? GetCurseForgeHash(hashes, 2)
-            };
-
-            result.DownloadUrls = BuildCurseForgeDownloadUrls(data, result);
-
-            if (data.ContainsKey("dependencies"))
-            {
-                var dependencies = data["dependencies"]?.AsArray() ?? [];
-                result.RawDependencies = BuildCurseForgeDependencies(dependencies, 3);
-                result.RawOptionalDependencies = BuildCurseForgeDependencies(dependencies, 2);
-            }
-
-            result.RawGameVersions =
-            [
-                .. data["gameVersions"]
-                    ?.AsArray()
-                    .Select(version => version?.ToString()?.Trim().ToLower() ?? "")
-                ?? []
-            ];
-            result.GameVersions = BuildCurseForgeGameVersions(
-                result.RawGameVersions,
-                result.Type);
-            result.ModLoaders = BuildCurseForgeModLoaders(result.RawGameVersions);
-
-            return result;
-        }
-
         private static string NormalizeDisplayName(string displayName)
         {
             return displayName.Replace("\t", "").Trim(' ');
-        }
-
-        private static string? GetCurseForgeHash(JsonArray hashes, int algorithm)
-        {
-            return hashes
-                .ToList()
-                .FirstOrDefault(hash => hash?["algo"]?.ToObject<int>() == algorithm)?["value"]
-                ?.ToString();
-        }
-
-        private static List<string> BuildCurseForgeDownloadUrls(
-            JsonObject data,
-            CompFileBuildResult result)
-        {
-            var url = data["downloadUrl"]?.ToString() ?? string.Empty;
-
-            if (string.IsNullOrWhiteSpace(url))
-                url =
-                    $"https://edge.forgecdn.net/files/{int.Parse(result.Id[..4])}/{int.Parse(result.Id[4..])}/{result.FileName}";
-
-            if (!string.IsNullOrEmpty(result.FileName))
-                url = url.Replace(result.FileName, WebUtility.UrlEncode(result.FileName));
-            url = url.Replace("+", "%20");
-
-            return GameDownload.DlSourceModDownloadGet(
-                HandleCurseForgeDownloadUrls(url));
-        }
-
-        private static List<string> BuildCurseForgeDependencies(
-            JsonArray dependencies,
-            int relationType)
-        {
-            return
-            [
-                .. dependencies
-                    .Where(dependency =>
-                        dependency?["relationType"]?.ToObject<int>() == relationType
-                        && dependency?["modId"]?.ToObject<int>() != 306612
-                        && dependency?["modId"]?.ToObject<int>() != 634179)
-                    .Select(dependency => dependency?["modId"]?.ToString() ?? "")
-            ];
-        }
-
-        private static List<string> BuildCurseForgeGameVersions(
-            List<string> rawGameVersions,
-            CompType type)
-        {
-            var gameVersions = rawGameVersions
-                .Where(McInstanceInfo.IsFormatFit)
-                .Select(NormalizeGameVersion)
-                .Distinct()
-                .ToList();
-
-            switch (gameVersions.Count)
-            {
-                case > 1:
-                {
-                    gameVersions =
-                    [
-                        .. LauncherText.SortByPredicate(
-                            gameVersions,
-                            McVersionComparer.CompareVersionGe)
-                    ];
-                    if (type == CompType.ModPack)
-                        gameVersions = [gameVersions[0]];
-                    break;
-                }
-                case 1:
-                    gameVersions = [.. gameVersions];
-                    break;
-                default:
-                    gameVersions = [UnknownGameVersion];
-                    break;
-            }
-
-            return gameVersions;
-        }
-
-        private static List<CompLoaderType> BuildCurseForgeModLoaders(
-            List<string> rawGameVersions)
-        {
-            var modLoaders = new List<CompLoaderType>();
-
-            if (rawGameVersions.Contains("forge"))
-                modLoaders.Add(CompLoaderType.Forge);
-            if (rawGameVersions.Contains("fabric"))
-                modLoaders.Add(CompLoaderType.Fabric);
-            if (rawGameVersions.Contains("quilt"))
-                modLoaders.Add(CompLoaderType.Quilt);
-            if (rawGameVersions.Contains("neoforge"))
-                modLoaders.Add(CompLoaderType.NeoForge);
-
-            return modLoaders;
         }
 
         private static CompFileBuildResult _BuildFromModrinth(
@@ -378,7 +230,6 @@ public static partial class Comp
         {
             var result = new CompFileBuildResult
             {
-                FromCurseForge = false,
                 Type = defaultType,
                 Id = (string?)data["id"] ?? "",
                 ProjectId = (string?)data["project_id"],
@@ -573,17 +424,6 @@ public static partial class Comp
         }
 
         /// <summary>
-        ///     对之前错误的 CurseForge 的下载地址进行修正。
-        /// </summary>
-        public static string HandleCurseForgeDownloadUrls(string url)
-        {
-            return url
-                .Replace("-service.overwolf.wtf", ".forgecdn.net")
-                .Replace("://media.", "://edge.")
-                .Replace("://mediafilez.", "://edge.");
-        }
-
-        /// <summary>
         ///     对 Modrinth 下载链接添加上报参数。
         /// </summary>
         /// <param name="urls">下载链接。</param>
@@ -634,7 +474,7 @@ public static partial class Comp
             var json = new JsonObject
             {
                 {
-                    "FromCurseForge", FromCurseForge
+                    "DataSource", "Modrinth"
                 },
                 {
                     "Id", Id
@@ -696,7 +536,6 @@ public static partial class Comp
             public int DownloadCount;
             public List<string>? DownloadUrls;
             public string? FileName;
-            public bool FromCurseForge;
             public List<string> GameVersions = [];
             public string? Hash;
             public string Id = "";

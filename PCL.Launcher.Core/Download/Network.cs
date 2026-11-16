@@ -320,10 +320,7 @@ public static partial class GameDownload
         return original
             .Replace(
                 "https://api.modrinth.com",
-                "https://mod.mcimirror.top/modrinth")
-            .Replace(
-                "https://api.curseforge.com",
-                "https://mod.mcimirror.top/curseforge");
+                "https://mod.mcimirror.top/modrinth");
     }
 
     /// <summary>
@@ -337,9 +334,6 @@ public static partial class GameDownload
         var mirrorDl = original
             .Replace(
                 "https://cdn.modrinth.com",
-                "https://mod.mcimirror.top")
-            .Replace(
-                "https://edge.forgecdn.net",
                 "https://mod.mcimirror.top");
         switch (Config.Download.Comp.CompSourceSolution)
         {

@@ -51,9 +51,7 @@ public static partial class Comp
 
         private async Task<string?> GetChineseDescriptionAsync()
         {
-            var from = FromCurseForge
-                ? "curseforge"
-                : "modrinth";
+            const string from = "modrinth";
             string? result = null;
 
             var descHash = $"{Id}{LauncherCommon.GetStringMd5(Description)}";
@@ -114,17 +112,11 @@ public static partial class Comp
         {
             var json = new JsonObject
             {
-                ["DataSource"] = FromCurseForge ? "CurseForge" : "Modrinth",
+                ["DataSource"] = "Modrinth",
                 ["Type"] = (int)Type,
                 ["Slug"] = Slug,
                 ["Id"] = Id
             };
-
-            if (CurseForgeFileIds is not null)
-                json["CurseForgeFileIds"] = new JsonArray(
-                    CurseForgeFileIds
-                        .Select(i => (JsonNode)i)
-                        .ToArray());
 
             json["RawName"] = RawName;
             json["Description"] = Description;
@@ -429,58 +421,7 @@ public static partial class Comp
 
         public bool IsLike(CompProject project)
         {
-            if (SameText(Id, project.Id))
-                return true;
-
-            if (FromCurseForge == project.FromCurseForge)
-                return false;
-
-            if (!HasSameItems(ModLoaders, project.ModLoaders))
-                return false;
-
-            if (Type != CompType.Shader && !HasSameItems(Drops, project.Drops))
-                return false;
-
-            if (LastUpdate is { } lastUpdate
-                && project.LastUpdate is { } projectLastUpdate
-                && Math.Abs((lastUpdate - projectLastUpdate).TotalDays) > 7)
-                return false;
-
-            if (!HasMatchingText(project))
-                return false;
-
-            LauncherCommon.Log(
-                $"[Comp] 将 {RawName} ({Slug}) 与 {project.RawName} ({project.Slug}) 认定为相似工程");
-
-            if (DatabaseEntry is null)
-                DatabaseEntry = project.DatabaseEntry;
-            else if (project.DatabaseEntry is null)
-                project.DatabaseEntry = DatabaseEntry;
-
-            return true;
-
-            static bool SameText(string? left, string? right)
-            {
-                return (left ?? "") == (right ?? "");
-            }
-
-            static bool HasSameItems<T>(ICollection<T> left, ICollection<T> right)
-            {
-                return left.Count == right.Count && !left.Except(right).Any();
-            }
-
-            bool HasMatchingText(CompProject other)
-            {
-                return SameText(TranslatedName, other.TranslatedName)
-                    || SameText(RawName, other.RawName)
-                    || SameText(Description, other.Description)
-                    || SameText(GetRaw(Slug), GetRaw(other.Slug));
-            }
-
-            static string GetRaw(string data)
-            {
-                return string.Concat(data.Where(char.IsLetterOrDigit)).ToLower();
-            }
+            return (Id ?? "") == (project.Id ?? "");
         }
 
         public override string ToString()

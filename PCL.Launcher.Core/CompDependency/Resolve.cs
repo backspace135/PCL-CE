@@ -19,15 +19,8 @@ public static partial class CompDependency
                     out var depProject))
                 continue;
 
-            var fromCurseForge = string.Equals(
-                install.Source,
-                "CurseForge",
-                StringComparison.OrdinalIgnoreCase);
-            if (depProject.FromCurseForge != fromCurseForge)
-                continue;
-
             var depCompFile = Comp
-                .CompFilesGet(install.ProjectId, fromCurseForge)
+                .CompFilesGet(install.ProjectId)
                 .FirstOrDefault(file => string.Equals(
                     file.Id,
                     install.File.Id,

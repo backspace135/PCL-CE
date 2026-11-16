@@ -388,12 +388,6 @@ public partial class MyCompItem
                             targetVersion = Launcher.frmDownloadShader!.Content.loader.input!.gameVersion;
                             break;
                         }
-                    case FormMain.PageSubType.DownloadWorld:
-                        {
-                            targetType = Comp.CompType.World;
-                            targetVersion = Launcher.frmDownloadWorld!.Content.loader.input!.gameVersion;
-                            break;
-                        }
                 }
             }
         }

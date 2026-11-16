@@ -140,32 +140,6 @@ public partial class PageComp
     /// </summary>
     public ItemCollection SearchTags => ComboSearchTag.Items;
 
-    public static readonly DependencyProperty SupportCurseForgeProperty =
-        DependencyProperty.Register(nameof(SupportCurseForge), typeof(bool), typeof(PageComp),
-            new PropertyMetadata(true, OnSupportCurseForgeChanged));
-
-    public bool SupportCurseForge
-    {
-        get => (bool)GetValue(SupportCurseForgeProperty);
-        set => SetValue(SupportCurseForgeProperty, value);
-    }
-
-    public static readonly DependencyProperty SupportModrinthProperty =
-        DependencyProperty.Register(nameof(SupportModrinth), typeof(bool), typeof(PageComp),
-            new PropertyMetadata(true, OnSupportModrinthChanged));
-
-    public bool SupportModrinth
-    {
-        get => (bool)GetValue(SupportModrinthProperty);
-        set => SetValue(SupportModrinthProperty, value);
-    }
-
-    private static void OnSupportCurseForgeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((PageComp)d).ViewModel.SupportCurseForge = (bool)e.NewValue;
-
-    private static void OnSupportModrinthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((PageComp)d).ViewModel.SupportModrinth = (bool)e.NewValue;
-
     /// <summary>
     ///     英文前后不含空格的可读资源类型名，例如 "Mod"、"整合包"。
     /// </summary>
@@ -315,7 +289,6 @@ public partial class PageComp
         request.modLoader = PageType is Comp.CompType.Mod or Comp.CompType.ModPack
             ? (Comp.CompLoaderType)Common.Val(((MyComboBoxItem)ComboSearchLoader.SelectedItem).Tag)
             : Comp.CompLoaderType.Any;
-        request.source = (Comp.CompSourceType)Common.Val(((MyComboBoxItem)ComboSearchSource.SelectedItem).Tag);
         request.sort = (Comp.CompSortType)Common.Val(((MyComboBoxItem)ComboSearchSort.SelectedItem).Tag);
         return request;
     }
@@ -345,7 +318,6 @@ public partial class PageComp
         PanSearchBox.Text = "";
         TextSearchVersion.Text = Lang.Text("Download.Comp.Filter.Version.AllInputAvailable");
         TextSearchVersion.SelectedIndex = 0;
-        ComboSearchSource.SelectedIndex = 0;
         ComboSearchTag.SelectedIndex = 0;
         ComboSearchLoader.SelectedIndex = 0;
         ComboSearchShaderLoader.SelectedIndex = 0;

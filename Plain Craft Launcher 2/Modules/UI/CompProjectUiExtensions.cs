@@ -27,7 +27,7 @@ public static class CompProjectUiExtensions
                 SubTitleVisibility = hasSubtitle ? Visibility.Visible : Visibility.Collapsed,
                 DescriptionText = project.Description.Replace("\r", "").Replace("\n", ""),
                 Tags = project.Tags,
-                SourceText = project.FromCurseForge ? "CurseForge" : "Modrinth",
+                SourceText = "Modrinth",
                 ShowVersion = showMcVersionDesc || showLoaderDesc,
                 ShowTime = project.LastUpdate is not null,
                 ShowDownloadButton = showQuickDownload,

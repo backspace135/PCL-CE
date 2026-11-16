@@ -24,7 +24,7 @@ public static partial class Comp
                         Lang.Text("Download.Comp.QuickDownload.Hint.Loading"));
                     var files = FilterFilesByType(
                         [
-                            .. CompFilesGet(project.Id, project.FromCurseForge)
+                            .. CompFilesGet(project.Id)
                                 .Where(f => f.Available)
                         ],
                         project.Type);

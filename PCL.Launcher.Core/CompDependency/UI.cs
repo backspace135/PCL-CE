@@ -67,10 +67,7 @@ public static partial class CompDependency
         return Comp.CompDepsInstallTypes.WithDeps;
     }
 
-    private static string GetSource(bool fromCurseForge)
-    {
-        return fromCurseForge ? "CurseForge" : "Modrinth";
-    }
+    private const string ModrinthSource = "Modrinth";
 
     private static List<string> ToLoaderNames(IEnumerable<CompLoaderType>? loaders)
     {

@@ -10,7 +10,7 @@ namespace PCL;
 /// <summary>资源详情页的视图模型。</summary>
 public partial class PageDownloadCompDetailViewModel : ViewModelBase
 {
-    [ObservableProperty] private string _introWebText = "CurseForge";
+    [ObservableProperty] private string _introWebText = "Modrinth";
 
     [ObservableProperty] private Visibility _introWikiVisibility = Visibility.Visible;
 
@@ -75,7 +75,7 @@ public partial class PageDownloadCompDetailViewModel : ViewModelBase
 
     public void ApplyProjectState(Comp.CompProject project)
     {
-        IntroWebText = project.FromCurseForge ? "CurseForge" : "Modrinth";
+        IntroWebText = "Modrinth";
         IntroWikiVisibility = Lang.IsChineseMainland && project.WikiId != 0
             ? Visibility.Visible
             : Visibility.Collapsed;

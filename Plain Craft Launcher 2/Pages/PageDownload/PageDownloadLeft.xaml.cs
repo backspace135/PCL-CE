@@ -96,20 +96,6 @@ public partial class PageDownloadLeft : IRefreshable
                 ItemShader.Checked = true;
                 break;
             }
-            case FormMain.PageSubType.DownloadWorld:
-            {
-                Comp.compProjectCache.Clear();
-                Comp.compFilesCache.Clear();
-                if (Launcher.frmDownloadWorld is not null)
-                {
-                    Launcher.frmDownloadWorld.Content.storage = new Comp.CompProjectStorage();
-                    Launcher.frmDownloadWorld.Content.page = 0;
-                    Launcher.frmDownloadWorld.PageLoaderRestart();
-                }
-
-                ItemWorld.Checked = true;
-                break;
-            }
             case FormMain.PageSubType.DownloadClient:
             {
                 GameDownload.dlClientListLoader.Start(isForceRestart: true);
@@ -242,12 +228,6 @@ public partial class PageDownloadLeft : IRefreshable
                 if (Launcher.frmDownloadShader is null)
                     Launcher.frmDownloadShader = new PageDownloadShader();
                 return Launcher.frmDownloadShader;
-            }
-            case FormMain.PageSubType.DownloadWorld:
-            {
-                if (Launcher.frmDownloadWorld is null)
-                    Launcher.frmDownloadWorld = new PageDownloadWorld();
-                return Launcher.frmDownloadWorld;
             }
             case FormMain.PageSubType.DownloadCompFavorites:
             {
