@@ -61,7 +61,6 @@ public partial class PageSetupGameManage : IPageView
         CheckFixAuthlib.Checked = Config.Download.FixAuthLib;
 
         // Mod 与整合包
-        CheckDownloadIgnoreQuilt.Checked = Config.Download.Comp.IgnoreQuilt;
         CheckDownloadClipboard.Checked = Config.Download.Comp.ReadClipboard;
 
         // 辅助设置

@@ -1074,8 +1074,6 @@
 
     <!-- Setup.GameManage.Community -->
 
-    <sys:String x:Key="Setup.GameManage.Community.HideQuilt">Hide Quilt loader</sys:String>
-    <sys:String x:Key="Setup.GameManage.Community.HideQuilt.ToolTip">Hide Quilt from the community resource loader display.</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload">Quick download behaviour</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload.AlwaysAsk">Always ask</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload.AskInstance">Ask which instance to use</sys:String>

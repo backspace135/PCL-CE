@@ -119,7 +119,7 @@ public static partial class Comp
             var gameVersionDescription = _BuildGameVersionDescription();
 
             var modLoadersForDesc = ModLoaders.ToList();
-            if (Config.Download.Comp.IgnoreQuilt) modLoadersForDesc.Remove(CompLoaderType.Quilt);
+            modLoadersForDesc.Remove(CompLoaderType.Quilt);
 
             var (fullDesc, partDesc) = modLoadersForDesc.Count switch
             {
@@ -224,10 +224,7 @@ public static partial class Comp
             var newestDrop = Drops?.FirstOrDefault() ?? 9999;
             var isAny = ModLoaders.Contains(CompLoaderType.Forge)
                 && (newestDrop < 140 || ModLoaders.Contains(CompLoaderType.Fabric))
-                && (newestDrop < 200 || ModLoaders.Contains(CompLoaderType.NeoForge))
-                && (newestDrop < 140
-                    || ModLoaders.Contains(CompLoaderType.Quilt)
-                    || Config.Download.Comp.IgnoreQuilt);
+                && (newestDrop < 200 || ModLoaders.Contains(CompLoaderType.NeoForge));
 
             var joined = string.Join(" / ", modLoadersForDesc);
             return isAny

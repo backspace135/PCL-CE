@@ -133,17 +133,6 @@
                             <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.QuickDownload.AskPath}" />
                         </local:MyComboBox>
                     </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{loc:Loc Setup.GameManage.Community.HideQuilt}" ToolTip="{loc:Loc Setup.GameManage.Community.HideQuilt.ToolTip}"
-                                          Grid.Row="0" Height="22" Grid.Column="0" Change="CheckBoxChange"
-                                          x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
-                    </Grid>
                 </StackPanel>
             </local:MyCard>
             <local:MyCard Margin="0,0,0,15" Title="{loc:Loc Setup.GameManage.Accessibility.Title}">

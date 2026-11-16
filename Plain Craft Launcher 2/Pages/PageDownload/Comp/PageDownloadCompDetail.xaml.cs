@@ -538,7 +538,6 @@ public partial class PageDownloadCompDetail : IPageView
         var supportedLoaders =
             new HashSet<Comp.CompLoaderType>(Enum.GetValues(typeof(Comp.CompLoaderType))
                 .Cast<Comp.CompLoaderType>());
-        var ignoreQuilt = Config.Download.Comp.IgnoreQuilt;
         var hasMultipleLoaders = _project!.ModLoaders.Count > 1;
 
         // 核心数据归类 (使用 Dictionary 配合 HashSet 去重)
@@ -568,7 +567,7 @@ public partial class PageDownloadCompDetail : IPageView
                 {
                     foreach (var loader in version.ModLoaders)
                     {
-                        if (loader == Comp.CompLoaderType.Quilt && ignoreQuilt)
+                        if (loader == Comp.CompLoaderType.Quilt)
                             continue;
                         if (!supportedLoaders.Contains(loader))
                             continue;

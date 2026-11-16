@@ -1461,8 +1461,6 @@
 
     <!-- Setup.GameManage.Community -->
 
-    <sys:String x:Key="Setup.GameManage.Community.HideQuilt">不显示 Quilt 加载器</sys:String>
-    <sys:String x:Key="Setup.GameManage.Community.HideQuilt.ToolTip">不在社区资源的加载器展示中显示 Quilt 加载器</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload">快速下载行为</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload.AlwaysAsk">总是询问</sys:String>
     <sys:String x:Key="Setup.GameManage.Community.QuickDownload.AskInstance">询问并下载到选择的实例</sys:String>
