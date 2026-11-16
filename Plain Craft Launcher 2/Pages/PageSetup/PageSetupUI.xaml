@@ -363,8 +363,6 @@
                                               x:Name="CheckHiddenVersionResourcePack" Tag="UiHiddenVersionResourcePack" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Shader}"
                                               x:Name="CheckHiddenVersionShader" Tag="UiHiddenVersionShader" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Schematic}"
-                                              x:Name="CheckHiddenVersionSchematic" Tag="UiHiddenVersionSchematic" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Server}"
                                               x:Name="CheckHiddenVersionServer" Tag="UiHiddenVersionServer" Change="CheckBoxChange" />
                         </WrapPanel>
@@ -375,9 +373,6 @@
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.InstanceSelect}"
                                               x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect"
                                               ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.InstanceSelect.ToolTip}" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.ModUpdate}"
-                                              x:Name="CheckHiddenFunctionModUpdate" Tag="UiHiddenFunctionModUpdate"
-                                              ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.ModUpdate.ToolTip}" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.FeatureHide}"
                                               x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden"
                                               ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.FeatureHide.ToolTip}" Change="CheckBoxChange" />

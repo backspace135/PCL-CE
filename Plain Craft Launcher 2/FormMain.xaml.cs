@@ -1256,7 +1256,6 @@ public partial class FormMain
         SetupLaunch = 0,
         SetupUI = 1,
         SetupGameManage = 2,
-        SetupLink = 3,
         SetupAbout = 4,
         SetupLog = 5,
         SetupUpdate = 8,

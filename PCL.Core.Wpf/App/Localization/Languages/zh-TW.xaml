@@ -1383,11 +1383,8 @@
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Launch">啟動</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Log">檢視日誌</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Misc">雜項</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.ModUpdate">模組更新</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.ModUpdate.ToolTip">禁止在模組管理頁面更新模組。</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.ResourcePack">資源包</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Save">存檔</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.Schematic">投影原理圖</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Screenshot">截圖</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Server">伺服器</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Settings">設定</sys:String>

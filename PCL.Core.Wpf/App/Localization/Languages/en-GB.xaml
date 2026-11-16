@@ -1375,11 +1375,8 @@
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Launch">Launch</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Log">Logs</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Misc">Miscellaneous</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.ModUpdate">Mod updates</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.ModUpdate.ToolTip">Prohibit mod updates on the mod management page.</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.ResourcePack">Resource packs</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Save">Saves</sys:String>
-    <sys:String x:Key="Setup.Ui.FeatureHide.Item.Schematic">Schematics</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Screenshot">Screenshots</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Server">Servers</sys:String>
     <sys:String x:Key="Setup.Ui.FeatureHide.Item.Settings">Settings</sys:String>

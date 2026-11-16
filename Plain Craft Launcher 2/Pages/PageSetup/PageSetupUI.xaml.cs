@@ -151,12 +151,10 @@ public partial class PageSetupUI : IPageView
             CheckHiddenVersionMod.Checked = uiHidden.InstanceMod;
             CheckHiddenVersionResourcePack.Checked = uiHidden.InstanceResourcePack;
             CheckHiddenVersionShader.Checked = uiHidden.InstanceShader;
-            CheckHiddenVersionSchematic.Checked = uiHidden.InstanceSchematic;
             CheckHiddenVersionServer.Checked = uiHidden.InstanceServer;
 
             // 特定功能
             CheckHiddenFunctionSelect.Checked = uiHidden.FunctionSelect;
-            CheckHiddenFunctionModUpdate.Checked = uiHidden.FunctionModUpdate;
             CheckHiddenFunctionHidden.Checked = uiHidden.FunctionHidden;
         }
         catch (NullReferenceException ex)
