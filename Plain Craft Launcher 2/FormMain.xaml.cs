@@ -1282,7 +1282,7 @@ public partial class FormMain
             }
             case PageType.CompDetail:
             {
-                return Lang.Text("Main.Title.ResourceDownload", stack.additional.Value.CompProject.TranslatedName);
+                return Lang.Text("Main.Title.ResourceDownload", stack.additional.Value.CompProject.RawName);
             }
             case PageType.HelpDetail:
             {

@@ -101,7 +101,7 @@ public sealed partial class FavoriteItemViewModel : ObservableObject
     /// <summary>工程类型，与 <see cref="FavoriteGroupViewModel.CompType" /> 对应。</summary>
     public int Type => (int)Project.Type;
 
-    public string Title => Project.TranslatedName;
+    public string Title => Project.RawName;
 
     public string Info => Project.Description.Replace("\r", "").Replace("\n", "");
 

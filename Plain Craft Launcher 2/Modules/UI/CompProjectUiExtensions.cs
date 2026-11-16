@@ -61,7 +61,7 @@ public static class CompProjectUiExtensions
         {
             return new MyListItem
             {
-                Title = project.TranslatedName,
+                Title = project.RawName,
                 Info = project
                     .Description
                     .Replace("\r", "")

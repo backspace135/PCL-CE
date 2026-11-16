@@ -17,9 +17,7 @@ public static partial class Launcher
     public static PageSpeedRight? frmSpeedRight;
     public static PageDownloadLeft? frmDownloadLeft;
     public static PageDownloadClient? frmDownloadClient;
-    public static PageDownloadMod? frmDownloadMod;
     public static PageDownloadDataPack? frmDownloadDataPack;
-    public static PageDownloadShader? frmDownloadShader;
     public static PageDownloadResourcePack? frmDownloadResourcePack;
     public static PageDownloadCompFavorites? frmDownloadCompFavorites;
     public static PageDownloadCompDetail? frmDownloadCompDetail;

@@ -79,13 +79,9 @@ public static partial class Config
         /// </summary>
         [ConfigGroup("Comp")] partial class CompConfigGroup
         {
-            [ConfigItem<int>("ToolDownloadTranslate", 0)] public partial int NameFormatV1 { get; set; }
-            [ConfigItem<int>("ToolDownloadTranslateV2", 1)] public partial int NameFormatV2 { get; set; }
             [ConfigItem<bool>("ToolDownloadIgnoreQuilt", true)] public partial bool IgnoreQuilt { get; set; }
-            [ConfigItem<bool>("ToolDownloadAutoInstallDependencies", true)] public partial bool AutoInstallDependencies { get; set; }
             [ConfigItem<bool>("ToolDownloadClipboard", false)] public partial bool ReadClipboard { get; set; }
             [ConfigItem<int>("ToolDownloadMod", 1)] public partial int CompSourceSolution { get; set; }
-            [ConfigItem<int>("ToolModLocalNameStyle", 0)] public partial int UiCompNameSolution { get; set; }
             [ConfigItem<int>("ToolDownloadQuickBehavior", 0)] public partial int QuickDownloadBehavior { get; set; }
         }
     }

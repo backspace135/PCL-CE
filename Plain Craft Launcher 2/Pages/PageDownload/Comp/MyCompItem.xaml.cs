@@ -361,13 +361,6 @@ public partial class MyCompItem
                 // 从下载页进入
                 switch (Launcher.frmMain.PageCurrentSub)
                 {
-                    case FormMain.PageSubType.DownloadMod:
-                        {
-                            targetType = Comp.CompType.Mod;
-                            targetVersion = Launcher.frmDownloadMod!.Content.loader.input!.gameVersion;
-                            targetLoader = Launcher.frmDownloadMod.Content.loader.input.modLoader;
-                            break;
-                        }
                     case FormMain.PageSubType.DownloadDataPack:
                         {
                             targetType = Comp.CompType.DataPack;
@@ -380,12 +373,6 @@ public partial class MyCompItem
                             targetType = Comp.CompType.ResourcePack;
                             targetVersion = Launcher.frmDownloadResourcePack!.Content.loader.input!
                                 .gameVersion;
-                            break;
-                        }
-                    case FormMain.PageSubType.DownloadShader:
-                        {
-                            targetType = Comp.CompType.Shader;
-                            targetVersion = Launcher.frmDownloadShader!.Content.loader.input!.gameVersion;
                             break;
                         }
                 }

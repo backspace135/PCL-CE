@@ -22,20 +22,6 @@ public partial class PageDownloadLeft : IRefreshable
     {
         switch (subType)
         {
-            case FormMain.PageSubType.DownloadMod:
-            {
-                Comp.compProjectCache.Clear();
-                Comp.compFilesCache.Clear();
-                if (Launcher.frmDownloadMod is not null)
-                {
-                    Launcher.frmDownloadMod.Content.storage = new Comp.CompProjectStorage();
-                    Launcher.frmDownloadMod.Content.page = 0;
-                    Launcher.frmDownloadMod.PageLoaderRestart();
-                }
-
-                ItemMod.Checked = true;
-                break;
-            }
             case FormMain.PageSubType.DownloadDataPack:
             {
                 Comp.compProjectCache.Clear();
@@ -63,20 +49,6 @@ public partial class PageDownloadLeft : IRefreshable
                 }
 
                 ItemResourcePack.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadShader:
-            {
-                Comp.compProjectCache.Clear();
-                Comp.compFilesCache.Clear();
-                if (Launcher.frmDownloadShader is not null)
-                {
-                    Launcher.frmDownloadShader.Content.storage = new Comp.CompProjectStorage();
-                    Launcher.frmDownloadShader.Content.page = 0;
-                    Launcher.frmDownloadShader.PageLoaderRestart();
-                }
-
-                ItemShader.Checked = true;
                 break;
             }
             case FormMain.PageSubType.DownloadClient:
@@ -127,12 +99,6 @@ public partial class PageDownloadLeft : IRefreshable
             id = PageId;
         switch (id)
         {
-            case FormMain.PageSubType.DownloadMod:
-            {
-                if (Launcher.frmDownloadMod is null)
-                    Launcher.frmDownloadMod = new PageDownloadMod();
-                return Launcher.frmDownloadMod;
-            }
             case FormMain.PageSubType.DownloadDataPack:
             {
                 if (Launcher.frmDownloadDataPack is null)
@@ -144,12 +110,6 @@ public partial class PageDownloadLeft : IRefreshable
                 if (Launcher.frmDownloadResourcePack is null)
                     Launcher.frmDownloadResourcePack = new PageDownloadResourcePack();
                 return Launcher.frmDownloadResourcePack;
-            }
-            case FormMain.PageSubType.DownloadShader:
-            {
-                if (Launcher.frmDownloadShader is null)
-                    Launcher.frmDownloadShader = new PageDownloadShader();
-                return Launcher.frmDownloadShader;
             }
             case FormMain.PageSubType.DownloadCompFavorites:
             {

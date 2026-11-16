@@ -9,42 +9,6 @@ public static partial class Comp
     public partial class CompProject
     {
         /// <summary>
-        ///     关联的数据库条目。若为 Nothing 则没有。
-        /// </summary>
-        private CompDatabaseEntry? DatabaseEntry
-        {
-            get
-            {
-                if (!_loadedDatabase)
-                {
-                    _loadedDatabase = true;
-                    if (Type is CompType.Mod or CompType.DataPack)
-                        field = GetCompWikiEntryBySlug(Slug);
-                }
-
-                return field;
-            }
-            set
-            {
-                _loadedDatabase = true;
-                field = value;
-            }
-        }
-
-        /// <summary>
-        ///     MC 百科的页面 ID。若为 0 则没有。
-        /// </summary>
-        public int WikiId => DatabaseEntry?.WikiId ?? 0;
-
-        /// <summary>
-        ///     翻译后的中文名。若数据库没有则等同于 RawName。
-        /// </summary>
-        public string TranslatedName =>
-            Lang.IsChineseMainland && DatabaseEntry?.ChineseName is { Length: > 0 } cn
-                ? cn
-                : RawName;
-
-        /// <summary>
         ///     中文描述。若为 Nothing 则没有。
         /// </summary>
         public Task<string?> ChineseDescription => GetChineseDescriptionAsync();
@@ -285,13 +249,7 @@ public static partial class Comp
         {
             subtitleList = [];
 
-            if (TranslatedName != RawName)
-            {
-                title = _GetTranslatedTitleParts(subtitleList);
-                return true;
-            }
-
-            var nameLists = TranslatedName
+            var nameLists = RawName
                 .Split(
                     [" | ", " - ", "(", ")", "[", "]", "{", "}"],
                     StringSplitOptions.RemoveEmptyEntries)
@@ -326,42 +284,6 @@ public static partial class Comp
 
             title = string.Join(" - ", normalNameList);
             return true;
-        }
-
-        private string _GetTranslatedTitleParts(List<string> subtitleList)
-        {
-            var title = TranslatedName.BeforeFirst(" (").BeforeFirst(" - ");
-
-            var suffix = "";
-            if (TranslatedName.AfterLast(")").Contains(" - "))
-                suffix = TranslatedName.AfterLast(")").AfterLast(" - ");
-
-            var englishName = TranslatedName;
-            if (!string.IsNullOrEmpty(suffix))
-                englishName = englishName.Replace($" - {suffix}", "");
-
-            englishName = englishName.Replace(title, "").Trim('(', ')', ' ');
-
-            subtitleList.AddRange(
-                englishName
-                    .Split(
-                        [" | ", " - ", "(", ")", "[", "]", "{", "}"],
-                        StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim(' ', '/'))
-                    .Where(w => !string.IsNullOrEmpty(w)));
-
-            if (subtitleList.Count > 1
-                && !subtitleList.Any(s => _IsModLoaderMarker(s.ToLower()))
-                && !(subtitleList.Count == 2
-                    && subtitleList.Last().ToUpper() == subtitleList.Last()))
-            {
-                subtitleList.Clear();
-                subtitleList.Add(englishName);
-            }
-
-            if (!string.IsNullOrEmpty(suffix)) subtitleList.Add(suffix);
-
-            return title;
         }
 
         private static string _BuildControlSubtitle(

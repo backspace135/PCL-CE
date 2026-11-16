@@ -29,22 +29,6 @@
             <TextBlock Text="{loc:Loc Download.Left.CommunityResources}" Margin="13,10,5,4"
                        Opacity="0.6"
                        FontSize="12" />
-            <local:MyListItem x:Name="ItemMod" Type="RadioBox" IsScaleAnimationEnabled="False" Tag="2"
-                              Check="PageCheck"
-                              MinPaddingRight="35" Height="36" VerticalAlignment="Top"
-                              Title="{loc:Loc Download.Left.Mod}"
-                              LogoScale="0.97"
-                              SvgIcon="lucide/puzzle">
-                <local:MyListItem.Buttons>
-                    <x:Array Type="{x:Type local:MyIconButton}">
-                        <local:MyIconButton Tag="2" ToolTip="{loc:Loc Common.Action.Refresh}"
-                                            ToolTipService.Placement="Right" Click="RefreshButton_Click"
-                                            ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
-                                            LogoScale="0.85"
-                                            SvgIcon="lucide/refresh-cw" />
-                    </x:Array>
-                </local:MyListItem.Buttons>
-            </local:MyListItem>
 
             <local:MyListItem x:Name="ItemDataPack" Type="RadioBox" IsScaleAnimationEnabled="False" Tag="4"
                               Check="PageCheck"
@@ -71,22 +55,6 @@
                 <local:MyListItem.Buttons>
                     <x:Array Type="{x:Type local:MyIconButton}">
                         <local:MyIconButton Tag="5" ToolTip="{loc:Loc Common.Action.Refresh}"
-                                            ToolTipService.Placement="Right" Click="RefreshButton_Click"
-                                            ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
-                                            LogoScale="0.85"
-                                            SvgIcon="lucide/refresh-cw" />
-                    </x:Array>
-                </local:MyListItem.Buttons>
-            </local:MyListItem>
-            <local:MyListItem x:Name="ItemShader" Type="RadioBox" IsScaleAnimationEnabled="False" Tag="6"
-                              Check="PageCheck"
-                              MinPaddingRight="35" Height="36" VerticalAlignment="Top"
-                              Title="{loc:Loc Download.Left.Shader}"
-                              LogoScale="1.04"
-                              SvgIcon="lucide/sparkles">
-                <local:MyListItem.Buttons>
-                    <x:Array Type="{x:Type local:MyIconButton}">
-                        <local:MyIconButton Tag="6" ToolTip="{loc:Loc Common.Action.Refresh}"
                                             ToolTipService.Placement="Right" Click="RefreshButton_Click"
                                             ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
                                             LogoScale="0.85"

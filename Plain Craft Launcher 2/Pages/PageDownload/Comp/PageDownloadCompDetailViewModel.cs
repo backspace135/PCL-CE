@@ -76,9 +76,6 @@ public partial class PageDownloadCompDetailViewModel : ViewModelBase
     public void ApplyProjectState(Comp.CompProject project)
     {
         IntroWebText = "Modrinth";
-        IntroWikiVisibility = Lang.IsChineseMainland && project.WikiId != 0
-            ? Visibility.Visible
-            : Visibility.Collapsed;
         TranslateVisibility = Lang.IsChineseMainland
             ? Visibility.Visible
             : Visibility.Collapsed;

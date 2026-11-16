@@ -99,9 +99,7 @@ public static partial class Comp
 
     public static string CompFileNameGet(CompProject proj, CompFile file)
     {
-        var fileName = (proj.TranslatedName ?? "") == (proj.RawName ?? "")
-            ? _BuildDefaultFileName(proj, file)
-            : _BuildLocalizedFileName(proj, file);
+        var fileName = _BuildDefaultFileName(proj, file);
 
         if (file.Type == CompType.Mod)
             fileName = fileName.Replace("~", "-");
@@ -118,47 +116,6 @@ public static partial class Comp
         return hasSourceName
             ? file.FileName
             : $"{fallbackBase}{defaultExtension}";
-    }
-
-    private static string _BuildLocalizedFileName(CompProject proj, CompFile file)
-    {
-        var hasSourceName = !string.IsNullOrWhiteSpace(file.FileName);
-        var defaultExtension = _GetDefaultExtension(file);
-        var chineseName = proj
-            .TranslatedName
-            .BeforeFirst(" (")
-            .BeforeFirst(" - ")
-            .Replace(@"\", "＼")
-            .Replace("/", "／")
-            .Replace("|", "｜")
-            .Replace(":", "：")
-            .Replace("<", "＜")
-            .Replace(">", "＞")
-            .Replace("*", "＊")
-            .Replace("?", "？")
-            .Replace("\"", "")
-            .Replace("： ", "：");
-        var extension = hasSourceName
-            ? Path.GetExtension(file.FileName)
-            : "";
-        var nameWithoutExtension = hasSourceName && !string.IsNullOrEmpty(extension)
-            ? file.FileName[..^extension.Length]
-            : file.FileName;
-        var sourcePart = hasSourceName
-            ? file.FileName
-            : defaultExtension;
-        return Config.Download.Comp.NameFormatV2 switch
-        {
-            0 => $"【{chineseName}】{sourcePart}",
-            1 => $"[{chineseName}] {sourcePart}",
-            2 => $"{chineseName}-{sourcePart}",
-            3 => !string.IsNullOrWhiteSpace(nameWithoutExtension)
-                ? $"{nameWithoutExtension}-{chineseName}{extension}"
-                : $"{chineseName}{defaultExtension}",
-            _ => hasSourceName
-                ? file.FileName
-                : $"{chineseName}{defaultExtension}"
-        };
     }
 
     private static string _GetDefaultExtension(CompFile file)

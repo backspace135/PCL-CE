@@ -68,8 +68,6 @@ public static partial class Comp
         /// </summary>
         public string? LogoUrl;
 
-        private bool _loadedDatabase;
-
         /// <summary>
         ///     从工程 Json 中初始化实例。若出错会抛出异常。
         /// </summary>

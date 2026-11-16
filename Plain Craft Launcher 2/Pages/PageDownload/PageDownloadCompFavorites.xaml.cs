@@ -1053,8 +1053,6 @@ public partial class PageDownloadCompFavorites : IPageView
                 var searchSource = new List<SearchService.SearchSource> { new(entry.RawName) };
                 if (!string.IsNullOrEmpty(entry.Description))
                     searchSource.Add(new SearchService.SearchSource(entry.Description, 0.4d));
-                if (entry.TranslatedName != entry.RawName)
-                    searchSource.Add(new SearchService.SearchSource(entry.TranslatedName));
                 searchSource.Add(new SearchService.SearchSource(string.Join("", entry.Tags), 0.2d));
                 queryList.Add(new SearchService.SearchEntry<FavoriteItemViewModel>
                 { item = item, searchSource = searchSource });
