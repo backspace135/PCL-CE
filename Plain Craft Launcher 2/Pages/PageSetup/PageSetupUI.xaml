@@ -379,8 +379,6 @@
                                               x:Name="CheckHiddenPageDownload" Tag="UiHiddenPageDownload" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Settings}"
                                               x:Name="CheckHiddenPageSetup" Tag="UiHiddenPageSetup" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Tools}"
-                                              x:Name="CheckHiddenPageTools" Tag="UiHiddenPageTools" Change="CheckBoxChange" />
                         </WrapPanel>
 
                         <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubSetup}"
@@ -392,8 +390,6 @@
                                               x:Name="CheckHiddenSetupJava" Tag="UiHiddenSetupJava" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.GameManage}"
                                               x:Name="CheckHiddenSetupGameManage" Tag="UiHiddenSetupGameManage" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.GameLink}"
-                                              x:Name="CheckHiddenSetupGameLink" Tag="UiHiddenSetupGameLink" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Ui}"
                                               x:Name="CheckHiddenSetupUI" Tag="UiHiddenSetupUi" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Language}"
@@ -408,15 +404,6 @@
                                               x:Name="CheckHiddenSetupFeedback" Tag="UiHiddenSetupFeedback" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Log}"
                                               x:Name="CheckHiddenSetupLog" Tag="UiHiddenSetupLog" Change="CheckBoxChange" />
-                        </WrapPanel>
-
-                        <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubTools}"
-                                   Opacity="0.6" FontSize="12" />
-                        <WrapPanel>
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Lobby}"
-                                              x:Name="CheckHiddenToolsGameLink" Tag="UiHiddenToolsGameLink" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Toolbox}"
-                                              x:Name="CheckHiddenToolsTest" Tag="UiHiddenToolsTest" Change="CheckBoxChange" />
                         </WrapPanel>
 
                         <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubInstance}"

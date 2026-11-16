@@ -26,12 +26,6 @@ public static class EventTypeMapper
             "刷新页面", "RefreshPage"
         },
         {
-            "今日人品", "DailyFortune"
-        },
-        {
-            "清理垃圾", "ClearTrash"
-        },
-        {
             "弹出窗口", "ShowDialog"
         },
         {
@@ -45,9 +39,6 @@ public static class EventTypeMapper
         },
         {
             "安装整合包", "InstallModpack"
-        },
-        {
-            "下载文件", "DownloadFile"
         },
         {
             "修改设置", "ModifySetting"
@@ -73,7 +64,10 @@ public static class EventTypeMapper
     {
         "内存优化",
         "加入房间",
-        "检查更新"
+        "检查更新",
+        "今日人品",
+        "清理垃圾",
+        "下载文件"
     };
 
     public static bool TryToEnglish(string chineseName, out string englishName)

@@ -198,8 +198,7 @@ public static partial class Launcher
         string text,
         Func<string?, string> replacer)
     {
-        text = text.RegexReplaceEach(@"\{hint\}", _ => replacer(PageToolsTest.GetRandomHint()));
-        text = text.RegexReplaceEach(@"\{cave\}", _ => replacer(PageToolsTest.GetRandomCave()));
+        text = text.RegexReplaceEach(@"\{hint\}", _ => replacer(PageLaunchRight.GetRandomHint()));
         text = text.RegexReplaceEach(
             @"\{setup:([a-zA-Z0-9]+)\}",
             m =>

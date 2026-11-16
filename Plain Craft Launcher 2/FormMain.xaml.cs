@@ -553,7 +553,6 @@ public partial class FormMain
         }
 
         // 关闭联机大厅
-        // Await LobbyController.CloseAsync().ConfigureAwait(False)
         // 关闭
         Common.RunInUiWait(() =>
         {
@@ -611,7 +610,6 @@ public partial class FormMain
     {
         // On Error Resume Next
         // 关闭联机大厅
-        // Await LobbyController.CloseAsync().ConfigureAwait(False)
         Common.isProgramEnded = true;
         Animations.AniBeginControl();
         if (UpdateManager.isUpdateWaitingRestart && !isUpdating)
@@ -1416,11 +1414,6 @@ public partial class FormMain
         Download = 1,
 
         /// <summary>
-        ///     联机。
-        /// </summary>
-        Tools = 3,
-
-        /// <summary>
         ///     设置。
         /// </summary>
         Setup = 2,
@@ -1492,14 +1485,11 @@ public partial class FormMain
         SetupAbout = 4,
         SetupLog = 5,
         SetupFeedback = 6,
-        SetupGameLink = 7,
         SetupUpdate = 8,
         SetupJava = 9,
         SetupLauncherMisc = 10,
         SetupLauncherLanguage = 11,
 
-        ToolsGameLink = 1,
-        ToolsTest = 3,
 
         VersionOverall = 0,
         VersionSetup = 1,
@@ -1907,13 +1897,6 @@ public partial class FormMain
                             subType = Launcher.frmDownloadLeft.PageId;
                         // PageGet 方法会在未设置 SubType 时指定默认值，并建立相关页面的实例
                         PageChangeAnim(Launcher.frmDownloadLeft, (FrameworkElement)Launcher.frmDownloadLeft.PageGet(subType));
-                        break;
-                    }
-                case PageType.Tools: // 联机
-                    {
-                        Launcher.frmToolsLeft ??= new PageToolsLeft();
-                        subType = Launcher.frmToolsLeft.pageID;
-                        PageChangeAnim(Launcher.frmToolsLeft, (FrameworkElement)Launcher.frmToolsLeft.PageGet(subType));
                         break;
                     }
                 case PageType.Setup: // 设置

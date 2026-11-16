@@ -31,14 +31,11 @@ public class CustomEvent
         [EventType.CopyText] = _CopyText,
         [EventType.RefreshHomepage] = _Refresh,
         [EventType.RefreshPage] = _Refresh,
-        [EventType.DailyFortune] = _DailyFortune,
-        [EventType.ClearTrash] = _ClearTrash,
         [EventType.ShowDialog] = _ShowDialog,
         [EventType.ShowHint] = _ShowHint,
         [EventType.SwitchPage] = _SwitchPage,
         [EventType.ImportModpack] = _ModpackInstall,
         [EventType.InstallModpack] = _ModpackInstall,
-        [EventType.DownloadFile] = _DownloadFile,
         [EventType.ModifySetting] = _WriteSetting,
         [EventType.WriteSetting] = _WriteSetting,
         [EventType.ModifyVariable] = _WriteVariable,
@@ -209,22 +206,6 @@ public class CustomEvent
     }
 
     /// <summary>
-    ///     今日人品。
-    /// </summary>
-    private static void _DailyFortune(string _, EventType __)
-    {
-        EventUi.ShowDailyFortune();
-    }
-
-    /// <summary>
-    ///     清理垃圾。异步执行 RubbishClear。
-    /// </summary>
-    private static void _ClearTrash(string _, EventType __)
-    {
-        EventUi.ClearTrash();
-    }
-
-    /// <summary>
     ///     弹出消息框。参数：Title|Content[|ButtonText]。
     /// </summary>
     private static void _ShowDialog(string arg, EventType type)
@@ -282,37 +263,6 @@ public class CustomEvent
     private static void _ModpackInstall(string _, EventType __)
     {
         EventUi.StartModpackInstall();
-    }
-
-    /// <summary>
-    ///     下载文件。参数：Url[|SavePath[|FileName]]，校验 http/https 前缀并弹安全确认。
-    /// </summary>
-    private static void _DownloadFile(string arg, EventType _)
-    {
-        var args = SplitArgs(arg);
-        args[0] = args[0].Replace('\\', '/');
-        if (!args[0].StartsWithF("http://", true) && !args[0].StartsWithF("https://", true))
-        {
-            LaunchUi.ShowMessageBox(
-                Lang.Text("Event.Error.DownloadUrlRequired"),
-                Lang.Text("Event.Error.Title"));
-            return;
-        }
-
-        if (!EventSafetyConfirm(Lang.Text("Event.Download.Confirm", args[0])))
-            return;
-
-        try
-        {
-            EventUi.StartCustomDownload(
-                args[0],
-                args.Length >= 2 ? args[1] : LauncherCommon.GetFileNameFromPath(args[0]),
-                args.Length >= 3 ? args[2] : null);
-        }
-        catch
-        {
-            EventUi.StartCustomDownload(args[0], Lang.Text("Common.State.Unknown"), null);
-        }
     }
 
     /// <summary>

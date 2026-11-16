@@ -11,16 +11,6 @@ public sealed class WpfEventUi : IEventUi
         return true;
     }
 
-    public void ShowDailyFortune()
-    {
-        PageToolsTest.Jrrp();
-    }
-
-    public void ClearTrash()
-    {
-        PageToolsTest.RubbishClear();
-    }
-
     public void SwitchPage(string pageType, string? subType)
     {
         PlatformServices.UiDispatcher?.Post(() =>
@@ -36,11 +26,6 @@ public sealed class WpfEventUi : IEventUi
     public void StartModpackInstall()
     {
         Modpack.ModpackInstall();
-    }
-
-    public void StartCustomDownload(string url, string savePath, string? fileName)
-    {
-        PageToolsTest.StartCustomDownload(url, savePath, fileName);
     }
 
     public void OpenHelp(string location)
