@@ -375,7 +375,7 @@ public class CustomEvent
         if (!Uri.TryCreate(args[0], UriKind.Absolute, out var uri)
             || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
         {
-            LauncherUi.Interaction?.OpenWebsite("https://docs.pclc.cc/ce");
+            LauncherUi.Interaction?.OpenWebsite("https://github.com/backspace135/PCL-CE");
             return;
         }
 

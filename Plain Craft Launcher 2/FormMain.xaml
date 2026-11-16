@@ -18,7 +18,7 @@
         Style="{StaticResource MyWindow}"
         AllowDrop="True"
         Topmost="True"
-        Title="Plain Craft Launcher Community Edition "
+        Title="PCL Horizon "
         MinHeight="470"
         MinWidth="810"
         ScrollViewer.VerticalScrollBarVisibility="Disabled"
