@@ -46,16 +46,6 @@ public sealed class WpfWatcherUi : IWatcherUi
 /// <summary>媒体服务桥接。</summary>
 public sealed class WpfMediaService : IMediaService
 {
-    public void PauseMusic()
-    {
-        Music.MusicPause();
-    }
-
-    public void ResumeMusic()
-    {
-        Music.MusicResume();
-    }
-
     public void SetVideoGaming(bool gaming)
     {
         VideoBackground.IsGaming = gaming;

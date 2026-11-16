@@ -202,48 +202,6 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardMusic" Margin="0,0,0,15" Title="{Binding MusicTitle}">
-                <StackPanel Margin="25,42,25,20">
-                    <Grid x:Name="PanMusicVolume" Visibility="{Binding MusicVolumeVisibility}" Height="22" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.Ui.Music.Volume}" Margin="0,0,25,0" />
-                        <local:MySlider x:Name="SliderMusicVolume" Tag="UiMusicVolume" MaxValue="1000" ValueByKey="10"
-                                        Grid.Column="1" Change="SliderChange" />
-                    </Grid>
-                    <StackPanel x:Name="PanMusicDetail" Visibility="{Binding MusicDetailVisibility}" Margin="-1,0,0,3">
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.Shuffle}" Margin="0,0,0,5" Height="22" x:Name="CheckMusicRandom"
-                                          Tag="UiMusicRandom" Change="CheckBoxChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.AutoStart}" Margin="0,0,0,5" Height="22" x:Name="CheckMusicAuto"
-                                          Tag="UiMusicAuto" Change="CheckBoxChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.StartInGame}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicStart" Tag="UiMusicStart" Change="CheckMusicStart_OnChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.StopInGame}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicStop" Tag="UiMusicStop" Change="CheckMusicStop_OnChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.Smtc}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicSMTC" Tag="UiMusicSMTC" Change="CheckBoxChange"
-                                          ToolTip="{loc:Loc Setup.Ui.Music.Smtc.ToolTip}" />
-                    </StackPanel>
-                    <Grid Height="35">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnMusicOpen" Text="{loc:Loc Common.Action.OpenFolder}" MinWidth="140" Padding="13,0"
-                                        Margin="0,0,20,0" Click="BtnMusicOpen_Click"
-                                        ToolTip="{loc:Loc Setup.Ui.Music.OpenFolder.ToolTip}" />
-                        <local:MyButton x:Name="BtnMusicRefresh" Text="{loc:Loc Setup.Ui.Music.Refresh}" MinWidth="140" Padding="13,0"
-                                        Margin="0,0,20,0" Click="BtnMusicRefresh_Click"
-                                        ToolTip="{loc:Loc Setup.Ui.Music.Refresh.ToolTip}" Grid.Column="1" />
-                        <local:MyButton x:Name="BtnMusicClear" Text="{loc:Loc Setup.Ui.Music.Clear}" MinWidth="140" Visibility="{Binding MusicClearVisibility}"
-                                        Padding="13,0" Margin="0,0,20,0" ColorType="Red" Click="BtnMusicClear_Click" IsEnabled="{Binding MusicClearEnabled}"
-                                        Grid.Column="2" />
-                    </Grid>
-                </StackPanel>
-            </local:MyCard>
             <local:MyCard x:Name="CardLogo" Margin="0,0,0,15" Title="{loc:Loc Setup.Ui.Logo.Title}">
                 <StackPanel Margin="25,40,25,15">
                     <Grid Margin="-1,0,0,0">

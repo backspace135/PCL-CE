@@ -112,16 +112,6 @@ public partial class PageSetupUI : IPageView
             PanLogoChange.Visibility = RadioLogoType3.Checked ? Visibility.Visible : Visibility.Collapsed;
             _vm.LogoText = Config.Preference.WindowTitleCustomText;
             CheckLogoLeft.Checked = Config.Preference.TopBarLeftAlign;
-
-            // 背景音乐
-            CheckMusicRandom.Checked = Config.Preference.Music.ShufflePlayback;
-            CheckMusicAuto.Checked = Config.Preference.Music.StartOnStartup;
-            CheckMusicStop.Checked = Config.Preference.Music.StopInGame;
-            CheckMusicStart.Checked = Config.Preference.Music.StartInGame;
-            CheckMusicSMTC.Checked = Config.Preference.Music.EnableSMTC;
-            SliderMusicVolume.Value = Config.Preference.Music.Volume;
-            MusicRefreshUI();
-
             // 主页
             try
             {
@@ -567,108 +557,6 @@ public partial class PageSetupUI : IPageView
                 userSummary: Lang.Text("Setup.Ui.Error.OperationFailed"));
         }
     }
-
-    // 背景音乐
-    private void BtnMusicOpen_Click(object sender, MouseButtonEventArgs e)
-    {
-        Common.OpenExplorer(Common.ExePath + @"PCL\Musics\");
-    }
-
-    private void BtnMusicRefresh_Click(object sender, MouseButtonEventArgs e)
-    {
-        Music.MusicRefreshPlay(true);
-    }
-
-    public void MusicRefreshUI()
-    {
-        if (PanBackgroundOpacity is null)
-            return;
-        var hasMusic = Music.musicAllList.Any();
-        var musicCount = Music.musicAllList.Count;
-        _vm.ApplyMusicState(hasMusic, hasMusic ? Common.EnumerateFiles(Common.ExePath + @"PCL\Musics\").Count() : 0);
-        LocalizedText.TryBind(
-            CardMusic,
-            "Title",
-            () => hasMusic
-                ? Lang.Text("Setup.Ui.Music.TitleWithCount", musicCount)
-                : Lang.Text("Setup.Ui.Music.Title"));
-        CardMusic.TriggerForceResize();
-    }
-
-    private async void BtnMusicClear_Click(object sender, MouseButtonEventArgs e)
-    {
-        _vm.MusicClearEnabled = false;
-        try
-        {
-            if (!await _vm.ConfirmMusicClearAsync())
-                return;
-            Common.RunInThread(() =>
-            {
-                HintService.Show(Hints.Info(Lang.Text("Setup.Ui.Music.Deleting")));
-                // 停止播放音乐
-                Music.musicNAudio = null;
-                Music.musicWaitingList = new List<string>();
-                Music.musicAllList = new List<string>();
-                Thread.Sleep(200);
-                // 删除文件
-                try
-                {
-                    Common.DeleteDirectory(Common.ExePath + @"PCL\Musics");
-                    // DisableSMTCSupport()
-                    HintService.Show(Hints.Success(Lang.Text("Setup.Ui.Music.Delete.Success")));
-                }
-                catch (Exception ex)
-                {
-                    Common.Log(
-                        ex,
-                        "删除背景音乐失败",
-                        Common.LogLevel.Msgbox,
-                        userSummary: Lang.Text("Setup.Ui.Error.OperationFailed"));
-                }
-
-                try
-                {
-                    Directory.CreateDirectory(Common.ExePath + @"PCL\Musics");
-                    Common.RunInUi(() => Music.MusicRefreshPlay(false));
-                }
-                catch (Exception ex)
-                {
-                    Common.Log(
-                        ex,
-                        "重建背景音乐文件夹失败",
-                        Common.LogLevel.Msgbox,
-                        userSummary: Lang.Text("Setup.Ui.Error.OperationFailed"));
-                }
-            });
-        }
-        catch (Exception ex)
-        {
-            Common.Log(ex, "清空背景音乐失败", Common.LogLevel.Feedback,
-                userSummary: Lang.Text("Setup.Ui.Error.OperationFailed"));
-        }
-        finally
-        {
-            _vm.MusicClearEnabled = true;
-        }
-    }
-
-    private void CheckMusicStart_Change(object sender, bool user)
-    {
-        CheckBoxChange(sender, user);
-        if (Animations.AniExitsAnyControl())
-            return;
-        if (CheckMusicStart.Checked == true)
-            CheckMusicStop.Checked = false;
-    }
-
-    private void CheckMusicStop_Change()
-    {
-        if (Animations.AniExitsAnyControl())
-            return;
-        if (CheckMusicStop.Checked == true)
-            CheckMusicStart.Checked = false;
-    }
-
     // 主页
 
     private void BtnCustomRefresh_Click(object sender, MouseButtonEventArgs e)
@@ -701,24 +589,11 @@ public partial class PageSetupUI : IPageView
     // 滑动条
     private void SliderLoad()
     {
-        SliderMusicVolume.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatMusicVolumeHint);
         SliderLauncherOpacity.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatLauncherOpacityHint);
         SliderBackgroundOpacity.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatBackgroundOpacityHint);
         SliderBackgroundBlur.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatPixelHint);
         SliderBlurValue.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatPixelHint);
         SliderBlurSamplingRate.getHintText = new Func<object, object>(PageSetupUIViewModel.FormatSamplingRateHint);
-    }
-
-    private void CheckMusicStart_OnChange(object sender, bool user)
-    {
-        CheckBoxChange(sender, user);
-        CheckMusicStart_Change(sender, user);
-    }
-
-    private void CheckMusicStop_OnChange(object sender, bool user)
-    {
-        CheckBoxChange(sender, user);
-        CheckMusicStop_Change();
     }
 
     #region 功能隐藏

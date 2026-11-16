@@ -329,42 +329,6 @@ public static partial class Config
         }
 
         /// <summary>
-        /// 背景音乐。
-        /// </summary>
-        [ConfigGroup("Music")] partial class MusicConfigGroup
-        {
-            /// <summary>
-            /// 音量。
-            /// </summary>
-            [ConfigItem<int>("UiMusicVolume", 500, ConfigSource.Local)] public partial int Volume { get; set; }
-
-            /// <summary>
-            /// 启动游戏后自动暂停。
-            /// </summary>
-            [ConfigItem<bool>("UiMusicStop", false, ConfigSource.Local)] public partial bool StopInGame { get; set; }
-
-            /// <summary>
-            /// 启动游戏后自动开始播放。
-            /// </summary>
-            [ConfigItem<bool>("UiMusicStart", false, ConfigSource.Local)] public partial bool StartInGame { get; set; }
-
-            /// <summary>
-            /// 自动开始播放。
-            /// </summary>
-            [ConfigItem<bool>("UiMusicAuto", true, ConfigSource.Local)] public partial bool StartOnStartup { get; set; }
-
-            /// <summary>
-            /// 随机播放。
-            /// </summary>
-            [ConfigItem<bool>("UiMusicRandom", true, ConfigSource.Local)] public partial bool ShufflePlayback { get; set; }
-
-            /// <summary>
-            /// 启用 SMTC。
-            /// </summary>
-            [ConfigItem<bool>("UiMusicSMTC", true, ConfigSource.Local)] public partial bool EnableSMTC { get; set; }
-        }
-
-        /// <summary>
         /// 功能隐藏。
         /// </summary>
         [ConfigGroup("Hide")]

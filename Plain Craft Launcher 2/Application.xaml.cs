@@ -57,7 +57,6 @@ public partial class Application
 
             // 初始化文件结构
             Directory.CreateDirectory(Common.ExePath + @"PCL\Pictures");
-            Directory.CreateDirectory(Common.ExePath + @"PCL\Musics");
             Directory.CreateDirectory(Path.Combine(Common.pathTemp, "Cache"));
             Directory.CreateDirectory(Path.Combine(Common.pathTemp, "Download"));
             Directory.CreateDirectory(Common.pathAppdata);

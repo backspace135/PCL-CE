@@ -160,7 +160,6 @@ public partial class FormMain
         Common.frmHandle = new WindowInteropHelper(this).Handle;
         // 读取设置
         PageSetupUI.BackgroundRefresh(false, true);
-        Music.MusicRefreshPlay(false, true);
         // 扩展按钮
         BtnExtraUpdateRestart.showCheck = BtnExtraUpdateRestart_ShowCheck;
         BtnExtraDownload.showCheck = BtnExtraDownload_ShowCheck;
@@ -2187,17 +2186,6 @@ public partial class FormMain
     private bool BtnExtraUpdateRestart_ShowCheck()
     {
         return UpdateManager.isUpdateWaitingRestart;
-    }
-
-    // 音乐
-    private void BtnExtraMusic_Click(object sender, MouseButtonEventArgs e)
-    {
-        Music.MusicControlPause();
-    }
-
-    private void BtnExtraMusic_RightClick(object sender, MouseButtonEventArgs e)
-    {
-        Music.MusicControlNext();
     }
 
     // 任务管理

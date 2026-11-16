@@ -28,8 +28,6 @@ public static class WatcherUi
 /// <summary>游戏启动/结束时对媒体播放的控制。</summary>
 public interface IMediaService
 {
-    void PauseMusic();
-    void ResumeMusic();
     void SetVideoGaming(bool gaming);
 }
 

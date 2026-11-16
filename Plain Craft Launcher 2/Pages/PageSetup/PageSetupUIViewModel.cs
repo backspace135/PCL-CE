@@ -27,16 +27,6 @@ public partial class PageSetupUIViewModel : ViewModelBase
 
     [ObservableProperty] private string _backgroundTitle = Lang.Text("Setup.Ui.Background.TitleDefault");
 
-    [ObservableProperty] private Visibility _musicVolumeVisibility = Visibility.Collapsed;
-
-    [ObservableProperty] private Visibility _musicDetailVisibility = Visibility.Collapsed;
-
-    [ObservableProperty] private Visibility _musicClearVisibility = Visibility.Collapsed;
-
-    [ObservableProperty] private bool _musicClearEnabled = true;
-
-    [ObservableProperty] private string _musicTitle = Lang.Text("Setup.Ui.Music.Title");
-
     [ObservableProperty] private Visibility _featureHideVisibility = Visibility.Visible;
 
     [ObservableProperty] private string _featureHideTitle = Lang.Text("Setup.Ui.FeatureHide.Title");
@@ -88,24 +78,6 @@ public partial class PageSetupUIViewModel : ViewModelBase
         }
     }
 
-    public void ApplyMusicState(bool hasMusic, int count)
-    {
-        if (hasMusic)
-        {
-            MusicVolumeVisibility = Visibility.Visible;
-            MusicDetailVisibility = Visibility.Visible;
-            MusicClearVisibility = Visibility.Visible;
-            MusicTitle = Lang.Text("Setup.Ui.Music.TitleWithCount", count);
-        }
-        else
-        {
-            MusicVolumeVisibility = Visibility.Collapsed;
-            MusicDetailVisibility = Visibility.Collapsed;
-            MusicClearVisibility = Visibility.Collapsed;
-            MusicTitle = Lang.Text("Setup.Ui.Music.Title");
-        }
-    }
-
     public void ApplyFeatureHideState(bool forceShow, bool functionHidden)
     {
         FeatureHideVisibility = !forceShow && functionHidden ? Visibility.Collapsed : Visibility.Visible;
@@ -123,22 +95,6 @@ public partial class PageSetupUIViewModel : ViewModelBase
             Buttons = DialogButtons.OkCancel,
             IsWarn = true
         })).IsConfirmed;
-    }
-
-    public async Task<bool> ConfirmMusicClearAsync()
-    {
-        return (await Dialog.ShowAsync(new TextDialogRequest
-        {
-            Title = Lang.Text("Common.Dialog.Warning"),
-            Content = Lang.Text("Setup.Ui.Music.Clear.Confirm.Message"),
-            Buttons = DialogButtons.OkCancel,
-            IsWarn = true
-        })).IsConfirmed;
-    }
-
-    public static object FormatMusicVolumeHint(object value)
-    {
-        return Lang.Number(Math.Ceiling(Convert.ToDouble(value) * 0.1d) / 100d, "P0");
     }
 
     public static object FormatLauncherOpacityHint(object value)

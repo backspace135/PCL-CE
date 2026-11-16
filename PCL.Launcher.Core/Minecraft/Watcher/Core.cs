@@ -50,19 +50,6 @@ public static partial class GameWatcher
         hasRunningMinecraft = false;
         WatcherUi.Current?.RefreshShutdownButton();
 
-        if (Config.Preference.Music.StopInGame)
-            LauncherCommon.RunInUi(() =>
-            {
-                MediaService.Current?.ResumeMusic();
-                LauncherCommon.Log("[Music] 已根据设置，在结束后开始音乐播放");
-            });
-        else if (Config.Preference.Music.StartInGame)
-            LauncherCommon.RunInUi(() =>
-            {
-                MediaService.Current?.PauseMusic();
-                LauncherCommon.Log("[Music] 已根据设置，在结束后暂停音乐播放");
-            });
-
         MediaService.Current?.SetVideoGaming(false);
 
         switch (Config.Launch.LauncherVisibility)

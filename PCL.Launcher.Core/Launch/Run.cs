@@ -570,29 +570,12 @@ public static partial class GameLaunch
     private static void McLaunchEnd()
     {
         McLaunchLog("开始启动结束处理");
-        _ApplyMusicState();
         MediaService.Current?.SetVideoGaming(true);
         McLaunchLog($"启动器可见性：{Config.Launch.LauncherVisibility}");
         _ApplyLauncherVisibility();
 
         States.System.LaunchCount += 1;
         _UpdateInstanceLaunchCount();
-    }
-
-    private static void _ApplyMusicState()
-    {
-        if (Config.Preference.Music.StopInGame)
-            LauncherCommon.RunInUi(() =>
-            {
-                MediaService.Current?.PauseMusic();
-                LauncherCommon.Log("[Music] 已根据设置，在启动后暂停音乐播放");
-            });
-        else if (Config.Preference.Music.StartInGame)
-            LauncherCommon.RunInUi(() =>
-            {
-                MediaService.Current?.ResumeMusic();
-                LauncherCommon.Log("[Music] 已根据设置，在启动后开始音乐播放");
-            });
     }
 
     private static void _ApplyLauncherVisibility()
