@@ -31,42 +31,7 @@ public static partial class States
 
         // [ConfigItem<int>("HintNotice", 0)] public partial int Notice { get; set; }
 
-        /// <summary>
-        /// 渲染器选择提示。
-        /// </summary>
-        [ConfigItem<bool>("HintRenderer", false)] public partial bool Renderer { get; set; }
-
-        /// <summary>
-        /// 使用调试级别 Log4j2 配置提示。
-        /// </summary>
-        [ConfigItem<bool>("HintDebugLog4j2Config", false)] public partial bool DebugLog4j2Config { get; set; }
-        
         // [ConfigItem<int>("HintDownload", 0)] public partial int Download { get; set; }
-
-        /// <summary>
-        /// 单击 Minecraft 返回游戏版本选择提示。
-        /// </summary>
-        [ConfigItem<bool>("HintInstallBack", false)] public partial bool InstallPageBack { get; set; }
-
-        /// <summary>
-        /// 隐藏实例提示。
-        /// </summary>
-        [ConfigItem<bool>("HintHide", false)] public partial bool HideGameInstance { get; set; }
-
-        /// <summary>
-        /// 手动安装版本提示。
-        /// </summary>
-        [ConfigItem<bool>("HintHandInstall", false)] public partial bool ManualInstall { get; set; }
-
-        /// <summary>
-        /// 清理垃圾提示。
-        /// </summary>
-        [ConfigItem<int>("HintClearRubbish", 0)] public partial int CleanJunkFile { get; set; }
-
-        /// <summary>
-        /// Mod 更新提示。
-        /// </summary>
-        [ConfigItem<bool>("HintUpdateMod", false)] public partial bool UpdateMod { get; set; }
 
         /// <summary>
         /// 执行自定义主页内含命令提示。
@@ -77,16 +42,6 @@ public static partial class States
         /// 非信任主页警告。
         /// </summary>
         [ConfigItem<bool>("HintCustomWarn", false)] public partial bool UntrustedHomepage { get; set; }
-
-        /// <summary>
-        /// 全局设置中在实例独立设置中寻找更多高级启动选项的提示。
-        /// </summary>
-        [ConfigItem<bool>("HintMoreAdvancedSetup", false)] public partial bool MoreInstanceSetup { get; set; }
-
-        /// <summary>
-        /// 进入实例独立设置提示。
-        /// </summary>
-        [ConfigItem<bool>("HintIndieSetup", false)] public partial bool IndieSetup { get; set; }
 
         /// <summary>
         /// 选择档案以启动游戏提示。
@@ -104,24 +59,9 @@ public static partial class States
         [ConfigItem<bool>("HintMaxLog", false)] public partial bool MaxGameLog { get; set; }
 
         /// <summary>
-        /// 非 ASCII 路径警告。 
-        /// </summary>
-        [ConfigItem<bool>("HintDisableGamePathCheckTip", false)] public partial bool NonAsciiGamePath { get; set; }
-
-        /// <summary>
-        /// 投影管理首次使用提示。
-        /// </summary>
-        [ConfigItem<bool>("UiSchematicFirstTimeHintShown", false)] public partial bool SchematicFirstTime { get; set; }
-
-        /// <summary>
         /// 已显示的公告。
         /// </summary>
         [ConfigItem<string>("SystemSystemAnnouncement", "")] public partial string ShowedAnnouncements { get; set; }
-
-        /// <summary>
-        /// 数据包更新警告。
-        /// </summary>
-        [ConfigItem<bool>("HintDatapackUpdate",false)] public partial bool FunctionDatapackUpdate { get; set; }
     }
 
     /// <summary>
@@ -143,11 +83,6 @@ public static partial class States
         /// 当前实例。
         /// </summary>
         [ConfigItem<string>("LaunchInstanceSelect", "", ConfigSource.Local)] public partial string SelectedInstance { get; set; }
-
-        /// <summary>
-        /// 当前文件夹。
-        /// </summary>
-        [ConfigItem<string>("LaunchFolderSelect", "", ConfigSource.Local)] public partial string SelectedFolder { get; set; }
 
         /// <summary>
         /// 所有文件夹。

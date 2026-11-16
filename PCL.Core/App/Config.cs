@@ -157,11 +157,6 @@ public static partial class Config
         [ConfigItem<string>("UiMotdFont", "", ConfigSource.Local)] public partial string MotdFont { get; set; }
 
         /// <summary>
-        /// 详细实例分类。
-        /// </summary>
-        [ConfigItem<bool>("DetailedInstanceClassification", false, ConfigSource.Local)] public partial bool DetailedInstanceClassification {  get; set; }
-
-        /// <summary>
         /// 本地化配置。
         /// </summary>
         [ConfigGroup("Localization", ConfigSource.Local)] partial class LocalizationConfigGroup
@@ -373,24 +368,13 @@ public static partial class Config
         [ConfigItem<bool>("LaunchAdvanceGraphicCard", true)] public partial bool SetGpuPreference { get; set; }
 
         /// <summary>
-        /// 渲染器。
-        /// </summary>
-        [ConfigItem<int>("LaunchAdvanceRenderer", 0 ,ConfigSource.Local)] public partial int Renderer { get; set; }
-
-        /// <summary>
         /// 选择的默认 Java 实例。
         /// </summary>
         [ConfigItem<string>("LaunchArgumentJavaSelect", "")] public partial string SelectedJava { get; set; }
 
         /// <summary>
-        /// 版本隔离 V2。
-        /// </summary>
-        [ConfigItem<int>("LaunchArgumentIndieV2", 4, ConfigSource.Local)] public partial int IndieSolutionV2 { get; set; }
-
-        /// <summary>
         /// 游戏启动后启动器可见性。
         /// </summary>
         [ConfigItem<LauncherVisibility>("LaunchArgumentVisible", LauncherVisibility.DoNothing)] public partial LauncherVisibility LauncherVisibility { get; set; }
-
     }
 }
