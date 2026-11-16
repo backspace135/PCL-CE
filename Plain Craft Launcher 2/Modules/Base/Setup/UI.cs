@@ -245,8 +245,6 @@ public partial class Setup
             main.LabTitleLogo.Visibility = ToVisibility(value == 2);
             main.ImageTitleLogo.Visibility = ToVisibility(value == 3);
 
-            main.CELogo.Visibility = ToVisibility(value != 0);
-
             if (ui is not null)
             {
                 ui.CheckLogoLeft.Visibility = ToVisibility(value == 0);

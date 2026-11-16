@@ -337,8 +337,6 @@ public partial class FormMain
         if ((int)Config.Launch.GameWindowMode == 5)
             Config.Launch.GameWindowMode = GameWindowSizeMode.Default;
 
-        // 更新后展示社区版提示
-        UpdateManager.ShowCeAnnounce();
         // 输出更新日志
         if (lastVersionCode <= 0)
             return;
