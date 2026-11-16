@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using PCL.Core.App;
 using PCL.Core.IO.Net;
 using PCL.Horizon;
@@ -11,6 +12,10 @@ public static class HorizonEnvironment
 {
     private static readonly Lock InstancesLock = new();
     private static IReadOnlyList<HorizonInstance>? _instances;
+    private static readonly ConcurrentDictionary<string, Task<HorizonBuildApi>> BuildApis = new();
+    private static readonly TimeSpan RegistryLifetime = TimeSpan.FromMinutes(10);
+    private static Task<HorizonRegistry>? _registry;
+    private static DateTime _registryFetchedAt;
 
     /// <summary>
     ///     数据目录。设置为空时使用启动器所在目录下的 <c>.horizon</c>。
@@ -31,6 +36,56 @@ public static class HorizonEnvironment
     /// </summary>
     public static IReadOnlyList<HorizonBuild> InstalledBuilds() =>
         HorizonReleaseService.ListInstalled(Paths);
+
+    /// <summary>
+    ///     已安装的构建增加或删除时触发。
+    /// </summary>
+    public static event Action? InstalledBuildsChanged;
+
+    /// <summary>
+    ///     安装或删除构建后调用，以刷新界面。
+    /// </summary>
+    public static void NotifyInstalledBuildsChanged()
+    {
+        BuildApis.Clear();
+        InstalledBuildsChanged?.Invoke();
+    }
+
+    /// <summary>
+    ///     实例使用的构建：固定的构建，或最新的已安装构建。没有可用构建时为 <see langword="null" />。
+    /// </summary>
+    public static HorizonBuild? ResolveBuild(HorizonInstance instance) =>
+        instance.ResolveBuild(InstalledBuilds());
+
+    /// <summary>
+    ///     构建的 Launch API，按构建目录缓存，失败的结果不缓存。
+    /// </summary>
+    public static Task<HorizonBuildApi> GetBuildApiAsync(HorizonBuild build)
+    {
+        var task = BuildApis.GetOrAdd(build.Directory, _ => build.QueryLaunchApiAsync());
+        if (!task.IsFaulted && !task.IsCanceled)
+            return task;
+        BuildApis.TryRemove(build.Directory, out _);
+        return BuildApis.GetOrAdd(build.Directory, _ => build.QueryLaunchApiAsync());
+    }
+
+    /// <summary>
+    ///     内容注册表，十分钟内重复使用同一份索引，获取失败的结果不缓存。
+    /// </summary>
+    public static Task<HorizonRegistry> GetRegistryAsync(bool forceRefresh = false)
+    {
+        lock (InstancesLock)
+        {
+            if (forceRefresh || _registry is null || _registry.IsFaulted || _registry.IsCanceled ||
+                DateTime.Now - _registryFetchedAt > RegistryLifetime)
+            {
+                _registry = HorizonRegistry.FetchAsync(NetworkService.GetClient());
+                _registryFetchedAt = DateTime.Now;
+            }
+
+            return _registry;
+        }
+    }
 
     /// <summary>
     ///     实例列表发生变化（新建、删除、改名、重新扫描）时触发。

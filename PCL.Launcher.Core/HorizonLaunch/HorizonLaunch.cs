@@ -259,6 +259,7 @@ public static partial class HorizonLaunch
             .GetAwaiter()
             .GetResult();
         Log($"已安装 Horizon 构建 {context.Build.Version}");
+        HorizonEnvironment.NotifyInstalledBuildsChanged();
     }
 
     private static void _StageApi(Loading.LoaderTask<int, int> task)
