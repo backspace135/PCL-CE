@@ -64,7 +64,6 @@ public partial class PageSetupUpdate : IPageView
             // 或者你可以尝试替换为 PCL.Core.App.SemVer.Parse(Common.VersionBaseName)
             if (await UpdateManager.remoteServer.IsLatestAsync(
                     UpdateManager.IsCurrentVersionBeta ? UpdateChannel.Beta : UpdateChannel.Stable,
-                    SystemInfo.IsArm64System ? UpdateArch.Arm64 : UpdateArch.X64,
                     SemVer.Parse(Common.VersionBaseName),
                     Common.VersionCode))
             {
@@ -103,7 +102,7 @@ public partial class PageSetupUpdate : IPageView
                     updateInfo = UpdateManager.remoteServer.GetLatestVersion(
                         UpdateManager.IsCurrentVersionBeta
                             ? UpdateChannel.Beta
-                            : UpdateChannel.Stable, SystemInfo.IsArm64System ? UpdateArch.Arm64 : UpdateArch.X64);
+                            : UpdateChannel.Stable);
                     _vm.UpdateNameText = "PCL Horizon " + VersionNameFormat(updateInfo.VersionName);
                     var summary = updateInfo.Changelog.Between("<summary>", "</summary>");
                     if (!updateInfo.Changelog.Contains("<summary>") || string.IsNullOrWhiteSpace(summary.Trim()))

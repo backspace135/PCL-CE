@@ -35,7 +35,7 @@ PCL Horizon 是 [Horizon](https://github.com/horizon-rust/horizon) 的啟動器�
 
 | 作業系統 | 支援情況 | 環境需求 |
 |---|---|---|
-| Windows 10 1809 (17763) 或更新版本，x64 / ARM64 | ✅ 支援 | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
+| Windows 10 1809 (17763) 或更新版本，x64 | ✅ 支援 | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
 | 更早的 Windows | ❌ 不支援 | / |
 | macOS / Linux | ⚠️ 只能編譯，無法執行 | [.NET 11 SDK](https://get.dot.net/11) |
 

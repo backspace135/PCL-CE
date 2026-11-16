@@ -8,7 +8,7 @@ namespace PCL;
 /// <summary>
 ///     从 GitHub Releases 获取启动器更新。<br />
 ///     正式版的标签为 <c>v&lt;版本&gt;</c>，Beta 版发布为预发布；每个版本带有
-///     <c>PCL-Horizon_&lt;配置&gt;_x64.exe</c> 与 <c>PCL-Horizon_&lt;配置&gt;_ARM64.exe</c>，
+///     <c>PCL-Horizon_&lt;配置&gt;_x64.exe</c>，
 ///     SHA-256 取自 GitHub 为资源计算的 <c>digest</c>。
 /// </summary>
 public class UpdatesGitHubModel : IUpdateSource
@@ -39,9 +39,9 @@ public class UpdatesGitHubModel : IUpdateSource
         return true;
     }
 
-    public VersionDataModel GetLatestVersion(UpdateChannel channel, UpdateArch arch)
+    public VersionDataModel GetLatestVersion(UpdateChannel channel)
     {
-        var (release, asset) = FindLatest(channel, arch);
+        var (release, asset) = FindLatest(channel);
         return new VersionDataModel
         {
             VersionName = TagToVersion(release["tag_name"]!.GetValue<string>()),
@@ -54,11 +54,10 @@ public class UpdatesGitHubModel : IUpdateSource
 
     public bool IsLatest(
         UpdateChannel channel,
-        UpdateArch arch,
         SemVer currentVersion,
         int currentVersionCode)
     {
-        var latest = GetLatestVersion(channel, arch);
+        var latest = GetLatestVersion(channel);
         return currentVersion >= SemVer.Parse(latest.VersionName);
     }
 
@@ -69,7 +68,6 @@ public class UpdatesGitHubModel : IUpdateSource
 
     public List<Loading.LoaderBase> GetDownloadLoader(
         UpdateChannel channel,
-        UpdateArch arch,
         string output)
     {
         return
@@ -78,7 +76,7 @@ public class UpdatesGitHubModel : IUpdateSource
                 Lang.Text("Update.Task.GetVersionInfo"),
                 load =>
                 {
-                    var (_, asset) = FindLatest(channel, arch);
+                    var (_, asset) = FindLatest(channel);
                     load.output =
                     [
                         new DownloadFile(
@@ -90,11 +88,11 @@ public class UpdatesGitHubModel : IUpdateSource
         ];
     }
 
-    private (JsonObject Release, JsonObject Asset) FindLatest(UpdateChannel channel, UpdateArch arch)
+    private (JsonObject Release, JsonObject Asset) FindLatest(UpdateChannel channel)
     {
         if (_releases is null)
             RefreshCache();
-        var suffix = arch == UpdateArch.Arm64 ? "_ARM64.exe" : "_x64.exe";
+        const string suffix = "_x64.exe";
         foreach (var release in _releases!.OfType<JsonObject>())
         {
             if (release["draft"]?.GetValue<bool>() == true)

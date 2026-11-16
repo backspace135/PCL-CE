@@ -35,7 +35,7 @@ It is forked from [PCL Community Edition](https://github.com/PCL-Community/PCL-C
 
 | Operating system | Support | Requirements |
 |---|---|---|
-| Windows 10 1809 (17763) or later, x64 / ARM64 | ✅ Supported | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
+| Windows 10 1809 (17763) or later, x64 | ✅ Supported | [.NET 10 Desktop Runtime](https://get.dot.net/10) |
 | Older Windows | ❌ Not supported | / |
 | macOS / Linux | ⚠️ Build only, cannot run | [.NET 11 SDK](https://get.dot.net/11) |
 

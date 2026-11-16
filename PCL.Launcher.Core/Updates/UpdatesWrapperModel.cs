@@ -47,7 +47,7 @@ public class UpdatesWrapperModel : IUpdateSource
         return _versionSource is not null;
     }
 
-    public VersionDataModel GetLatestVersion(UpdateChannel channel, UpdateArch arch)
+    public VersionDataModel GetLatestVersion(UpdateChannel channel)
     {
         foreach (var item in _sources)
             try
@@ -55,14 +55,14 @@ public class UpdatesWrapperModel : IUpdateSource
                 if (_versionSource is not null)
                     try
                     {
-                        return _versionSource.GetLatestVersion(channel, arch);
+                        return _versionSource.GetLatestVersion(channel);
                     }
                     catch (Exception ex)
                     {
                         LauncherCommon.Log(ex, $"[Update] 缓存的版本源 {_versionSource.SourceName} 不可用");
                     }
 
-                var ret = item.GetLatestVersion(channel, arch);
+                var ret = item.GetLatestVersion(channel);
                 _versionSource = item;
                 return ret;
             }
@@ -77,7 +77,6 @@ public class UpdatesWrapperModel : IUpdateSource
 
     public bool IsLatest(
         UpdateChannel channel,
-        UpdateArch arch,
         SemVer currentVersion,
         int currentVersionCode)
     {
@@ -89,7 +88,6 @@ public class UpdatesWrapperModel : IUpdateSource
                     {
                         return _versionSource.IsLatest(
                             channel,
-                            arch,
                             currentVersion,
                             currentVersionCode);
                     }
@@ -98,7 +96,7 @@ public class UpdatesWrapperModel : IUpdateSource
                         LauncherCommon.Log(ex, $"[Update] 缓存的版本源 {_versionSource.SourceName} 不可用");
                     }
 
-                var ret = item.IsLatest(channel, arch, currentVersion, currentVersionCode);
+                var ret = item.IsLatest(channel, currentVersion, currentVersionCode);
                 _versionSource = item;
                 return ret;
             }
@@ -143,7 +141,6 @@ public class UpdatesWrapperModel : IUpdateSource
 
     public List<Loading.LoaderBase> GetDownloadLoader(
         UpdateChannel channel,
-        UpdateArch arch,
         string output)
     {
         foreach (var item in _sources)
@@ -152,14 +149,14 @@ public class UpdatesWrapperModel : IUpdateSource
                 if (_versionSource is not null)
                     try
                     {
-                        return _versionSource.GetDownloadLoader(channel, arch, output);
+                        return _versionSource.GetDownloadLoader(channel, output);
                     }
                     catch (Exception ex)
                     {
                         LauncherCommon.Log(ex, $"[Update] 缓存的版本源 {_versionSource.SourceName} 不可用");
                     }
 
-                var ret = item.GetDownloadLoader(channel, arch, output);
+                var ret = item.GetDownloadLoader(channel, output);
                 _versionSource = item;
                 return ret;
             }
@@ -174,10 +171,9 @@ public class UpdatesWrapperModel : IUpdateSource
 
     public async Task<bool> IsLatestAsync(
         UpdateChannel channel,
-        UpdateArch arch,
         SemVer currentVersion,
         int currentVersionCode)
     {
-        return await Task.Run(() => IsLatest(channel, arch, currentVersion, currentVersionCode));
+        return await Task.Run(() => IsLatest(channel, currentVersion, currentVersionCode));
     }
 }
