@@ -2,3 +2,6 @@
 # Mojang's files (game jars, assets, decompiled sources, prepared resources) never get committed.
 /.local/
 /datagen/
+
+# PCL-CE 根目录的 [Bb]in/ 规则会忽略 Rust 的 src/bin/ 目录
+!**/src/bin/
