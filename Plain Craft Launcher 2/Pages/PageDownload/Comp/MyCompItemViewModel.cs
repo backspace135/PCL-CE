@@ -23,7 +23,7 @@ public partial class MyCompItemViewModel : ViewModelBase
     /// <summary>标签列表（本地化资源键）。</summary>
     public List<string>? Tags { get; set; }
 
-    /// <summary>来源显示名，例如 CurseForge、Modrinth。</summary>
+    /// <summary>来源显示名，例如 Modrinth。</summary>
     public string SourceText { get; set; } = "";
 
     /// <summary>是否显示游戏版本 / 加载器描述列。</summary>

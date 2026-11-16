@@ -17,35 +17,14 @@ public static partial class Comp
     public static ConcurrentDictionary<string, CompProject> compProjectCache = new();
 
     /// <summary>
-    ///     CurseForge 分类 URL 段 → classId 映射。提为 static 避免每次解析重新分配。
-    /// </summary>
-    private static readonly Dictionary<string, string> CurseForgeCategoryClassIds = new()
-    {
-        {
-            "mc-mods", "6"
-        },
-        {
-            "modpacks", "4471"
-        },
-        {
-            "texture-packs", "12"
-        },
-        {
-            "shaders", "6552"
-        }
-    };
-
-    /// <summary>
-    ///     用 Uri 解析单个 token 是否为受支持的 CurseForge/Modrinth 资源链接。
-    ///     成功时输出站点、分类段与 slug（query、fragment 会被自动丢弃）。
+    ///     用 Uri 解析单个 token 是否为受支持的 Modrinth 资源链接。
+    ///     成功时输出分类段与 slug（query、fragment 会被自动丢弃）。
     /// </summary>
     private static bool TryParseResourceLink(
         string token,
-        out ResourceSite site,
         out string category,
         out string slug)
     {
-        site = ResourceSite.None;
         category = string.Empty;
         slug = string.Empty;
 
@@ -57,21 +36,9 @@ public static partial class Comp
 
         var segments = uri.AbsolutePath.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
 
-        if (IsHostOf(uri.Host, "curseforge.com"))
-        {
-            if (segments.Length < 3
-                || !segments[0].Equals("minecraft", StringComparison.OrdinalIgnoreCase))
-                return false;
-            site = ResourceSite.CurseForge;
-            category = segments[1];
-            slug = segments[2];
-            return true;
-        }
-
         if (IsHostOf(uri.Host, "modrinth.com"))
         {
             if (segments.Length < 2) return false;
-            site = ResourceSite.Modrinth;
             category = segments[0];
             slug = segments[1];
             return true;
@@ -80,7 +47,7 @@ public static partial class Comp
         return false;
     }
 
-    /// <summary>host 等于 domain 或为其子域，避免 evilcurseforge.com 之类的伪装域名。</summary>
+    /// <summary>host 等于 domain 或为其子域，避免 evilmodrinth.com 之类的伪装域名。</summary>
     private static bool IsHostOf(string host, string domain)
     {
         return host.Equals(domain, StringComparison.OrdinalIgnoreCase)
@@ -97,48 +64,22 @@ public static partial class Comp
                 .FirstOrDefault(token => TryParseResourceLink(
                     token,
                     out _,
-                    out _,
                     out _));
     }
 
     /// <summary>
-    ///     从单条 CurseForge / Modrinth 资源链接解析出 projectId。无法识别或获取失败时返回 null。
+    ///     从单条 Modrinth 资源链接解析出 projectId。无法识别或获取失败时返回 null。
     /// </summary>
     public static string? ResolveLinkToProjectId(string url)
     {
         if (!TryParseResourceLink(
                 url,
-                out var site,
-                out var category,
+                out _,
                 out var slug))
         {
             var token = FindFirstResourceLinkToken(url);
-            if (token is null || !TryParseResourceLink(token, out site, out category, out slug))
+            if (token is null || !TryParseResourceLink(token, out _, out slug))
                 return null;
-        }
-
-        if (site == ResourceSite.CurseForge)
-        {
-            var encodedSlug = WebUtility.UrlEncode(slug);
-            var json = GameDownload.DlModRequest<JsonObject>(
-                $"https://api.curseforge.com/v1/mods/search?gameId=432&slug={encodedSlug}");
-            var dataArray = json["data"] as JsonArray ?? [];
-            if (!dataArray.Any())
-                return null;
-
-            var firstData = dataArray[0];
-            if (firstData is null) return null;
-            var receivedClassId = firstData["classId"]?.ToString();
-            if (!CurseForgeCategoryClassIds.TryGetValue(category, out var targetClassId)
-                || receivedClassId == targetClassId)
-                return firstData["id"]?.ToString();
-
-            var filteredJson = GameDownload.DlModRequest<JsonObject>(
-                $"https://api.curseforge.com/v1/mods/search?gameId=432&slug={encodedSlug}&classId={targetClassId}");
-            var filteredDatas = filteredJson["data"] as JsonArray ?? [];
-            return filteredDatas.Any()
-                ? filteredDatas[0]?["id"]?.ToString()
-                : null;
         }
 
         var mr = GameDownload.DlModRequest<JsonObject>(
@@ -147,7 +88,7 @@ public static partial class Comp
     }
 
     /// <summary>
-    ///     若输入文本中恰好含 1 条 CurseForge/Modrinth 资源链接，返回该链接；含 0 条或 ≥2 条时返回 null。
+    ///     若输入文本中恰好含 1 条 Modrinth 资源链接，返回该链接；含 0 条或 ≥2 条时返回 null。
     /// </summary>
     public static string? TryExtractSingleResourceLink(string? text)
     {
@@ -157,7 +98,7 @@ public static partial class Comp
         string? found = null;
         foreach (var token in tokens)
         {
-            if (!TryParseResourceLink(token, out _, out _, out _))
+            if (!TryParseResourceLink(token, out _, out _))
                 continue;
             if (found is not null)
                 return null;
@@ -212,16 +153,6 @@ public static partial class Comp
         var isChineseSearch = Lang.IsChineseMainland
             && RegexPatterns.HasChineseChar.IsMatch(rawFilter)
             && !string.IsNullOrEmpty(rawFilter);
-        if (isChineseSearch && request.type is CompType.Mod or CompType.DataPack)
-            _ApplyChineseSearch(request, rawFilter);
-
-        if (request.curseForgeAltSearchText is not null)
-        {
-            request.curseForgeAltSearchText =
-                _ProcessKeywords(request.curseForgeAltSearchText, rawFilter)!;
-            LogWrapper.Debug(
-                $"[Comp] 工程列表搜索最终文本（CurseForge）：{request.curseForgeAltSearchText}");
-        }
 
         request.searchText = _ProcessKeywords(request.searchText, rawFilter)!;
         LogWrapper.Debug($"[Comp] 工程列表搜索最终文本：{request.searchText}");
@@ -275,221 +206,7 @@ public static partial class Comp
             throw new Exception(Lang.Text("Download.Comp.List.NoMatchingResults"));
 
         storage.results.Add(project);
-        storage.curseForgeTotal = 0;
         storage.modrinthTotal = 0;
-    }
-
-    private static void _ApplyChineseSearch(CompProjectRequest request, string rawFilter)
-    {
-        var searchEntries = new List<SearchService.SearchEntry<CompDatabaseEntry>>();
-        using (var conn = CompDb)
-        {
-            var likeEscaped = rawFilter
-                .Replace("\\", @"\\")
-                .Replace("%", "\\%")
-                .Replace("_", "\\_");
-            var searchRes = conn
-                .Query<CompDatabaseEntry>(
-                    @"SELECT * FROM ModTranslation WHERE ChineseName LIKE @p ESCAPE '\' OR CurseForgeSlug LIKE @p ESCAPE '\' OR ModrinthSlug LIKE @p ESCAPE '\'",
-                    new
-                    {
-                        p = $"%{likeEscaped}%"
-                    })
-                .ToList();
-            searchEntries.AddRange(
-                from searchItem in searchRes
-                where !searchItem.ChineseName.Contains("动态的树")
-                select new SearchService.SearchEntry<CompDatabaseEntry>
-                {
-                    item = searchItem,
-                    searchSource =
-                    [
-                        new SearchService.SearchSource(
-                            searchItem
-                                .ChineseName
-                                .BeforeFirst(" (")
-                                .Split(['/'], StringSplitOptions.RemoveEmptyEntries)),
-                        new SearchService.SearchSource(
-                            searchItem.ChineseName.AfterFirst(" (")
-                            + (searchItem.CurseForgeSlug ?? "")
-                            + (searchItem.ModrinthSlug ?? ""),
-                            0.5)
-                    ]
-                });
-        }
-
-        var searchResults = SearchService.Search(
-            searchEntries,
-            request.searchText,
-            40,
-            0.2);
-        if (searchResults.Count == 0)
-            throw new Exception(Lang.Text("Download.Comp.List.NoResults"));
-
-        var wordModCount = new Dictionary<string, HashSet<int>>();
-        foreach (var result in searchResults)
-        foreach (var word in _ExtractSearchWords(result))
-        {
-            if (result.item is not { } item) continue;
-            if (!wordModCount.TryGetValue(word, out var mods))
-                wordModCount[word] = mods = [];
-            mods.Add(item.WikiId);
-        }
-
-        if (wordModCount.Count == 0)
-            throw new Exception(Lang.Text("Download.Comp.List.NoResults"));
-
-        var normalizedQuery = _NormalizeSearchName(rawFilter);
-        var exactNameEntries = searchResults
-            .Where(r => r.item is not null
-                && _CanonicalSearchName(r.item.ChineseName) == normalizedQuery)
-            .ToList();
-        var exactNameMods = exactNameEntries
-            .Select(r => r.item)
-            .OfType<CompDatabaseEntry>()
-            .Select(item => item.WikiId)
-            .Distinct()
-            .Count();
-
-        if (exactNameMods == 1)
-        {
-            var canonicalEntry = exactNameEntries
-                .OrderByDescending(r => r.absoluteRight)
-                .ThenByDescending(r => r.similarity)
-                .ThenBy(r =>
-                    (r.item?.CurseForgeSlug
-                        ?? r.item?.ModrinthSlug
-                        ?? r.item?.ChineseName
-                        ?? "").Length)
-                .First();
-            var canonicalWords = _ExtractSearchWords(canonicalEntry);
-            request.searchText = canonicalWords.Length != 0
-                ? string.Join(" ", canonicalWords)
-                : string.Join(
-                    " ",
-                    wordModCount
-                        .OrderByDescending(w => w.Value.Count)
-                        .Take(2)
-                        .Select(w => w.Key));
-            var cfSlugs = exactNameEntries
-                .Select(r => r.item?.CurseForgeSlug)
-                .OfType<string>()
-                .Distinct()
-                .ToList();
-            if (cfSlugs.Count == 1)
-                request.curseForgeAltSearchText = cfSlugs[0];
-        }
-        else
-        {
-            var maxCount = wordModCount.Values.Max(mods => mods.Count);
-            if (maxCount <= 1)
-            {
-                var best = searchResults
-                    .OrderByDescending(r => r.absoluteRight)
-                    .ThenByDescending(r => r.similarity)
-                    .ThenBy(r =>
-                        (r.item?.CurseForgeSlug
-                            ?? r.item?.ModrinthSlug
-                            ?? r.item?.ChineseName
-                            ?? "")
-                        .Length)
-                    .First();
-                request.searchText = string.Join(" ", _ExtractSearchWords(best));
-            }
-            else
-            {
-                var tied = wordModCount
-                    .Where(w => w.Value.Count == maxCount)
-                    .OrderBy(w => w.Key.Length)
-                    .ToList();
-                var anchorMods = tied[0].Value;
-                request.searchText = string.Join(
-                    " ",
-                    tied
-                        .Where(w => w.Value.Overlaps(anchorMods))
-                        .Take(3)
-                        .Select(w => w.Key));
-            }
-        }
-
-        LogWrapper.Debug($"[Comp] 中文搜索基础关键词：{request.searchText}");
-    }
-
-    private static string[] _ExtractSearchWords(SearchService.SearchEntry<CompDatabaseEntry> result)
-    {
-        if (result.item is not { } item) return [];
-        var word = "";
-        if (item.CurseForgeSlug is not null)
-            word += $"{item.CurseForgeSlug
-                .Replace("-", " ")
-                .Replace("/", " ")} ";
-        if (item.ModrinthSlug is not null)
-            word += $"{item.ModrinthSlug
-                .Replace("-", " ")
-                .Replace("/", " ")} ";
-        word += item
-            .ChineseName
-            .AfterLast(" (")
-            .TrimEnd(')', ' ')
-            .BeforeFirst(" - ")
-            .Replace(":", "")
-            .Replace("(", "")
-            .Replace(")", "")
-            .ToLower()
-            .Replace("/", " ")
-            .Replace("-", " ");
-        var words = word
-            .ToLower()
-            .Split([' '], StringSplitOptions.RemoveEmptyEntries);
-        words =
-        [
-            .. words
-                .Select(w => w
-                    .TrimStart('{', '[', '(')
-                    .TrimEnd('}', ']', ')'))
-                .Where(w =>
-                {
-                    if (w.Length <= 1)
-                        return false;
-
-                    if (!w.Any(char.IsLetterOrDigit))
-                        return false;
-
-                    if (new[]
-                        {
-                            "the",
-                            "of",
-                            "for",
-                            "mod",
-                            "and",
-                            "forge",
-                            "fabric",
-                            "quilt",
-                            "neoforge"
-                        }.Contains(w))
-                        return false;
-
-                    if (LauncherText.Val(w) > 0)
-                        return false;
-
-                    return w.Split(' ').Length <= 3 || !w.Contains("ftb");
-                })
-                .Distinct()
-        ];
-        return words;
-    }
-
-    private static string _NormalizeSearchName(string name)
-    {
-        return new string(
-            name
-                .Where(c => !char.IsWhiteSpace(c) && !char.IsSurrogate(c))
-                .ToArray());
-    }
-
-    private static string _CanonicalSearchName(string name)
-    {
-        return _NormalizeSearchName(name.BeforeFirst(" ("));
     }
 
     private static string? _ProcessKeywords(string? text, string rawFilter)
@@ -554,23 +271,10 @@ public static partial class Comp
             var isOldForgeRequest = request.modLoader == CompLoaderType.Forge
                 && gameVersionDrop is >= 0 and < 140;
             if (isOldForgeRequest) request.modLoader = CompLoaderType.Any;
-            var curseForgeUrl = request.GetCurseForgeAddress();
             var modrinthUrl = request.GetModrinthAddress();
             if (isOldForgeRequest) request.modLoader = CompLoaderType.Forge;
 
             var tasks = new List<Task>();
-
-            if (curseForgeUrl is not null)
-                tasks.Add(
-                    Task.Run(() =>
-                    {
-                        lastError = _FetchCurseForgePage(
-                            curseForgeUrl,
-                            request,
-                            storage,
-                            rawResults,
-                            resultsLock);
-                    }));
 
             if (modrinthUrl is not null)
                 tasks.Add(
@@ -601,7 +305,6 @@ public static partial class Comp
             }
 
             var processedResults = rawResults
-                .OrderBy(x => x.FromCurseForge)
                 .Where(r => !realResults.Any(r.IsLike) && !storage.results.Any(r.IsLike))
                 .ToList();
 
@@ -621,41 +324,6 @@ public static partial class Comp
         }
 
         return realResults;
-    }
-
-    private static Exception? _FetchCurseForgePage(
-        string curseForgeUrl,
-        CompProjectRequest request,
-        CompProjectStorage storage,
-        List<CompProject> rawResults,
-        object resultsLock)
-    {
-        try
-        {
-            LogWrapper.Info($"[Comp] 开始从 CurseForge 获取列表：{curseForgeUrl}");
-            var json = GameDownload.DlModRequest<JsonObject>(curseForgeUrl);
-            var projects = (json["data"]?.AsArray() ?? [])
-                .OfType<JsonObject>()
-                .Select(j => new CompProject(j))
-                .Where(p =>
-                    !(request.type == CompType.ResourcePack
-                        && p.Tags.Contains("Download.Comp.Type.DataPack")))
-                .ToList();
-            lock (resultsLock)
-            {
-                rawResults.AddRange(projects);
-            }
-
-            storage.curseForgeOffset += projects.Count;
-            storage.curseForgeTotal =
-                json["pagination"]?["totalCount"]?.ToObject<int>() ?? 0;
-            return null;
-        }
-        catch (Exception ex)
-        {
-            LogWrapper.Error(ex, "CurseForge 获取失败");
-            return ex;
-        }
     }
 
     private static Exception? _FetchModrinthPage(
@@ -709,8 +377,7 @@ public static partial class Comp
         {
             scores.Add(
                 res,
-                (Lang.IsChineseMainland && res.WikiId > 0 ? 0.2 : 0)
-                + Math.Log10(
+                Math.Log10(
                     Math.Max(res.DownloadCount, 1) * _GetDownloadCountMultiplier(request, res))
                 / 9);
             searchEntries.Add(
@@ -720,7 +387,7 @@ public static partial class Comp
                     searchSource =
                     [
                         new SearchService.SearchSource(
-                            (isChineseSearch ? res.TranslatedName : res.RawName)
+                            res.RawName
                             .Split(['/'], StringSplitOptions.RemoveEmptyEntries)),
                         new SearchService.SearchSource(res.Description, 0.05)
                     ]
@@ -747,17 +414,10 @@ public static partial class Comp
     {
         return request.type switch
         {
-            CompType.Mod or CompType.ModPack => project.FromCurseForge ? 1 : 7,
-            CompType.DataPack => project.FromCurseForge ? 10 : 1,
-            CompType.ResourcePack or CompType.Shader => project.FromCurseForge ? 1 : 5,
+            CompType.Mod or CompType.ModPack => 7,
+            CompType.ResourcePack or CompType.Shader => 5,
             _ => 1
         };
     }
 
-    private enum ResourceSite
-    {
-        None,
-        CurseForge,
-        Modrinth
-    }
 }

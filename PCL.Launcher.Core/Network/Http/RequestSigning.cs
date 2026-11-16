@@ -23,16 +23,11 @@ public static class RequestSigning
     {
         client.Version = HttpVersion.Version20;
         client.VersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
-        if (Uri.TryCreate(url, UriKind.Absolute, out var parsedUri)
-            && (parsedUri.Host == "api.curseforge.com"
-                || parsedUri.Host == "edge.forgecdn.net"
-                || parsedUri.Host == "mediafilez.forgecdn.net"))
-            client.Headers.Add("x-api-key", Secrets.CurseForgeAPIKey);
         var userAgent = !string.IsNullOrEmpty(customUserAgent)
             ? customUserAgent
             : useBrowserUserAgent
-                ? $"PCL2/{LauncherCommon.UpstreamVersion}.{LauncherCommon.VersionBranchCode} PCLCE/{LauncherCommon.VersionStandardCode} Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
-                : $"PCL2/{LauncherCommon.UpstreamVersion}.{LauncherCommon.VersionBranchCode} PCLCE/{LauncherCommon.VersionStandardCode}";
+                ? $"PCL2/{LauncherCommon.UpstreamVersion}.{LauncherCommon.VersionBranchCode} PCLHorizon/{LauncherCommon.VersionStandardCode} Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
+                : $"PCL2/{LauncherCommon.UpstreamVersion}.{LauncherCommon.VersionBranchCode} PCLHorizon/{LauncherCommon.VersionStandardCode}";
         client.Headers.Add("User-Agent", userAgent);
     }
 }

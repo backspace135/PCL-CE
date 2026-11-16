@@ -26,8 +26,7 @@ public static class HttpSenderExtension
             if(addMetedata)
             {
                 request
-                    .WithHeader("User-Agent", $"PCL-Community/PCL2-CE/{Basics.VersionName} (pclc.cc)")
-                    .WithHeader("Referer", $"https://{Basics.VersionCode}.ce.open.pcl2.server/");
+                    .WithHeader("User-Agent", $"PCL-Horizon/{Basics.VersionName} (github.com/backspace135/PCL-CE)");
             }
 
             var requestId = Guid.NewGuid().ToString();

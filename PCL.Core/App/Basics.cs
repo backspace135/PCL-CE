@@ -39,11 +39,6 @@ public static class Basics
     /// </summary>
     public static string VersionBranch => Metadata.Version.BranchName;
 
-    /// <summary>
-    /// 当前日期是否为愚人节。
-    /// </summary>
-    public static bool IsAprilFool => DateTime.Now is { Month: 4, Day: 1 };
-
     #endregion
 
     #region 程序路径信息
@@ -180,7 +175,7 @@ public static class Basics
     /// 获取程序打包资源的输入流。该资源必须声明为 <c>Resource</c> 类型，否则将会报错，<c>Images</c>
     /// 和 <c>Resources</c> 目录已默认声明该类型。
     /// </summary>
-    /// <param name="path">资源路径，例如 "Resources/java-wrapper.jar"</param>
+    /// <param name="path">资源路径，例如 "Resources/Font.ttf"</param>
     /// <returns>资源输入流，若资源不存在则为 <c>null</c></returns>
     public static Stream? GetResourceStream(string path)
     {

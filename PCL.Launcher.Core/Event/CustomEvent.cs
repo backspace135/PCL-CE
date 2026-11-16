@@ -31,14 +31,9 @@ public class CustomEvent
         [EventType.CopyText] = _CopyText,
         [EventType.RefreshHomepage] = _Refresh,
         [EventType.RefreshPage] = _Refresh,
-        [EventType.DailyFortune] = _DailyFortune,
-        [EventType.ClearTrash] = _ClearTrash,
         [EventType.ShowDialog] = _ShowDialog,
         [EventType.ShowHint] = _ShowHint,
         [EventType.SwitchPage] = _SwitchPage,
-        [EventType.ImportModpack] = _ModpackInstall,
-        [EventType.InstallModpack] = _ModpackInstall,
-        [EventType.DownloadFile] = _DownloadFile,
         [EventType.ModifySetting] = _WriteSetting,
         [EventType.WriteSetting] = _WriteSetting,
         [EventType.ModifyVariable] = _WriteVariable,
@@ -157,27 +152,26 @@ public class CustomEvent
     }
 
     /// <summary>
-    ///     启动游戏。支持 \current 指代当前选中实例，可选 ServerIp。
+    ///     启动游戏。参数：实例名称（\current 指代当前选中实例）[|服务器地址]。
     /// </summary>
     private static void _LaunchGame(string arg, EventType type)
     {
         var args = SplitArgs(arg);
-        if (args[0] == "\\current")
-        {
-            if (InstanceList.McMcInstanceSelected is null)
-                throw new InvalidOperationException(Lang.Text("Event.LaunchGame.SelectVersion"));
-            args[0] = InstanceList.McMcInstanceSelected.Name;
-        }
+        var instance = args[0] == "\\current"
+            ? HorizonEnvironment.SelectedInstance
+                ?? throw new InvalidOperationException(Lang.Text("Event.LaunchGame.SelectVersion"))
+            : HorizonEnvironment.Instances.FirstOrDefault(i => i.Name == args[0] || i.Id == args[0])
+                ?? throw new InvalidOperationException(Lang.Text("Event.LaunchGame.InstanceNotFound", args[0]));
 
         LauncherCommon.RunInUi(() =>
         {
-            var launchOptions = new GameLaunch.McLaunchOptions
+            var options = new HorizonLaunchOptions
             {
-                ServerIp = args.Length >= 2 ? args[1] : null,
-                instance = new McInstance(args[0])
+                Instance = instance,
+                QuickPlayServer = args.Length >= 2 && !string.IsNullOrWhiteSpace(args[1]) ? args[1] : null
             };
-            if (GameLaunch.McLaunchStart(launchOptions))
-                LauncherUi.Interaction?.ShowHint(Lang.Text("Event.LaunchGame.Starting", args[0]));
+            if (HorizonLaunch.Start(options))
+                LauncherUi.Interaction?.ShowHint(Lang.Text("Event.LaunchGame.Starting", instance.Name));
         });
     }
 
@@ -206,22 +200,6 @@ public class CustomEvent
             LauncherUi.Interaction?.ShowHint(
                 Lang.Text("Event.Refresh.Success"),
                 NotificationType.Success);
-    }
-
-    /// <summary>
-    ///     今日人品。
-    /// </summary>
-    private static void _DailyFortune(string _, EventType __)
-    {
-        EventUi.ShowDailyFortune();
-    }
-
-    /// <summary>
-    ///     清理垃圾。异步执行 RubbishClear。
-    /// </summary>
-    private static void _ClearTrash(string _, EventType __)
-    {
-        EventUi.ClearTrash();
     }
 
     /// <summary>
@@ -277,45 +255,6 @@ public class CustomEvent
     }
 
     /// <summary>
-    ///     导入 / 安装整合包。触发 Modpack.ModpackInstall()。
-    /// </summary>
-    private static void _ModpackInstall(string _, EventType __)
-    {
-        EventUi.StartModpackInstall();
-    }
-
-    /// <summary>
-    ///     下载文件。参数：Url[|SavePath[|FileName]]，校验 http/https 前缀并弹安全确认。
-    /// </summary>
-    private static void _DownloadFile(string arg, EventType _)
-    {
-        var args = SplitArgs(arg);
-        args[0] = args[0].Replace('\\', '/');
-        if (!args[0].StartsWithF("http://", true) && !args[0].StartsWithF("https://", true))
-        {
-            LaunchUi.ShowMessageBox(
-                Lang.Text("Event.Error.DownloadUrlRequired"),
-                Lang.Text("Event.Error.Title"));
-            return;
-        }
-
-        if (!EventSafetyConfirm(Lang.Text("Event.Download.Confirm", args[0])))
-            return;
-
-        try
-        {
-            EventUi.StartCustomDownload(
-                args[0],
-                args.Length >= 2 ? args[1] : LauncherCommon.GetFileNameFromPath(args[0]),
-                args.Length >= 3 ? args[2] : null);
-        }
-        catch
-        {
-            EventUi.StartCustomDownload(args[0], Lang.Text("Common.State.Unknown"), null);
-        }
-    }
-
-    /// <summary>
     ///     写入 / 修改设置。参数：SettingName|Value。
     /// </summary>
     private static void _WriteSetting(string arg, EventType type)
@@ -329,7 +268,7 @@ public class CustomEvent
         {
             if (!CanWriteSettingFromCustomEvent(args[0]))
                 return;
-            item.SetValueNoType(args[1], InstanceList.McMcInstanceSelected?.PathInstance);
+            item.SetValueNoType(args[1]);
         }
 
         if (args.Length == 2)
@@ -375,7 +314,7 @@ public class CustomEvent
         if (!Uri.TryCreate(args[0], UriKind.Absolute, out var uri)
             || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
         {
-            LauncherUi.Interaction?.OpenWebsite("https://docs.pclc.cc/ce");
+            LauncherUi.Interaction?.OpenWebsite("https://github.com/backspace135/PCL-CE");
             return;
         }
 

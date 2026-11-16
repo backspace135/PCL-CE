@@ -32,16 +32,6 @@
                                             Tag="UiLauncherTransparent" MaxValue="600" ValueByKey="10" Grid.Column="1"
                                             Change="SliderChange" />
                         </Grid>
-                        <Border Background="{DynamicResource ColorBrushToolTip}" Margin="0,5,0,12" CornerRadius="4"
-                                Name="PanLauncherHide" Visibility="{Binding LauncherHideVisibility}">
-                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20">
-                                <TextBlock Text="{loc:Loc Setup.Ui.Basic.BlueHint}" FontSize="13" Margin="0,0,0,0"
-                                           TextWrapping="Wrap" />
-                                <local:MyButton Height="35" x:Name="BtnLauncherDonate" MinWidth="140" Text="{loc:Loc Setup.Ui.Basic.GetSnapshot}"
-                                                Padding="13,0" HorizontalAlignment="Center" Margin="0,9,0,0"
-                                                ColorType="Highlight" Click="BtnLauncherDonate_Click" />
-                            </StackPanel>
-                        </Border>
                         <Grid Height="28" Margin="0,0,0,7">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" SharedSizeGroup="Name1" />
@@ -202,48 +192,6 @@
                     </Grid>
                 </StackPanel>
             </local:MyCard>
-            <local:MyCard x:Name="CardMusic" Margin="0,0,0,15" Title="{Binding MusicTitle}">
-                <StackPanel Margin="25,42,25,20">
-                    <Grid x:Name="PanMusicVolume" Visibility="{Binding MusicVolumeVisibility}" Height="22" Margin="0,0,0,10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                            <ColumnDefinition />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.Ui.Music.Volume}" Margin="0,0,25,0" />
-                        <local:MySlider x:Name="SliderMusicVolume" Tag="UiMusicVolume" MaxValue="1000" ValueByKey="10"
-                                        Grid.Column="1" Change="SliderChange" />
-                    </Grid>
-                    <StackPanel x:Name="PanMusicDetail" Visibility="{Binding MusicDetailVisibility}" Margin="-1,0,0,3">
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.Shuffle}" Margin="0,0,0,5" Height="22" x:Name="CheckMusicRandom"
-                                          Tag="UiMusicRandom" Change="CheckBoxChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.AutoStart}" Margin="0,0,0,5" Height="22" x:Name="CheckMusicAuto"
-                                          Tag="UiMusicAuto" Change="CheckBoxChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.StartInGame}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicStart" Tag="UiMusicStart" Change="CheckMusicStart_OnChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.StopInGame}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicStop" Tag="UiMusicStop" Change="CheckMusicStop_OnChange" />
-                        <local:MyCheckBox Text="{loc:Loc Setup.Ui.Music.Smtc}" Margin="0,0,0,5" Height="22"
-                                          x:Name="CheckMusicSMTC" Tag="UiMusicSMTC" Change="CheckBoxChange"
-                                          ToolTip="{loc:Loc Setup.Ui.Music.Smtc.ToolTip}" />
-                    </StackPanel>
-                    <Grid Height="35">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="Button" />
-                        </Grid.ColumnDefinitions>
-                        <local:MyButton x:Name="BtnMusicOpen" Text="{loc:Loc Common.Action.OpenFolder}" MinWidth="140" Padding="13,0"
-                                        Margin="0,0,20,0" Click="BtnMusicOpen_Click"
-                                        ToolTip="{loc:Loc Setup.Ui.Music.OpenFolder.ToolTip}" />
-                        <local:MyButton x:Name="BtnMusicRefresh" Text="{loc:Loc Setup.Ui.Music.Refresh}" MinWidth="140" Padding="13,0"
-                                        Margin="0,0,20,0" Click="BtnMusicRefresh_Click"
-                                        ToolTip="{loc:Loc Setup.Ui.Music.Refresh.ToolTip}" Grid.Column="1" />
-                        <local:MyButton x:Name="BtnMusicClear" Text="{loc:Loc Setup.Ui.Music.Clear}" MinWidth="140" Visibility="{Binding MusicClearVisibility}"
-                                        Padding="13,0" Margin="0,0,20,0" ColorType="Red" Click="BtnMusicClear_Click" IsEnabled="{Binding MusicClearEnabled}"
-                                        Grid.Column="2" />
-                    </Grid>
-                </StackPanel>
-            </local:MyCard>
             <local:MyCard x:Name="CardLogo" Margin="0,0,0,15" Title="{loc:Loc Setup.Ui.Logo.Title}">
                 <StackPanel Margin="25,40,25,15">
                     <Grid Margin="-1,0,0,0">
@@ -361,8 +309,6 @@
                             <local:MyComboBoxItem Content="{loc:Loc Setup.Ui.Homepage.Preset.MinecraftKnowledge}" />
                             <local:MyComboBoxItem Content="{loc:Loc Setup.Ui.Homepage.Preset.ModpackRecommendation}" />
                             <local:MyComboBoxItem Content="{loc:Loc Setup.Ui.Homepage.Preset.Bangumi}" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.Ui.Homepage.Preset.PclAnnouncement}"/>
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.Ui.Homepage.Preset.McOfficialFeed}"/>
                         </local:MyComboBox>
                     </Grid>
                 </StackPanel>
@@ -379,8 +325,6 @@
                                               x:Name="CheckHiddenPageDownload" Tag="UiHiddenPageDownload" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Settings}"
                                               x:Name="CheckHiddenPageSetup" Tag="UiHiddenPageSetup" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Tools}"
-                                              x:Name="CheckHiddenPageTools" Tag="UiHiddenPageTools" Change="CheckBoxChange" />
                         </WrapPanel>
 
                         <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubSetup}"
@@ -392,8 +336,6 @@
                                               x:Name="CheckHiddenSetupJava" Tag="UiHiddenSetupJava" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.GameManage}"
                                               x:Name="CheckHiddenSetupGameManage" Tag="UiHiddenSetupGameManage" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.GameLink}"
-                                              x:Name="CheckHiddenSetupGameLink" Tag="UiHiddenSetupGameLink" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Ui}"
                                               x:Name="CheckHiddenSetupUI" Tag="UiHiddenSetupUi" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Language}"
@@ -404,28 +346,13 @@
                                               x:Name="CheckHiddenSetupUpdate" Tag="UiHiddenSetupUpdate" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.About}"
                                               x:Name="CheckHiddenSetupAbout" Tag="UiHiddenSetupAbout" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Feedback}"
-                                              x:Name="CheckHiddenSetupFeedback" Tag="UiHiddenSetupFeedback" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Log}"
                                               x:Name="CheckHiddenSetupLog" Tag="UiHiddenSetupLog" Change="CheckBoxChange" />
-                        </WrapPanel>
-
-                        <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubTools}"
-                                   Opacity="0.6" FontSize="12" />
-                        <WrapPanel>
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Lobby}"
-                                              x:Name="CheckHiddenToolsGameLink" Tag="UiHiddenToolsGameLink" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Toolbox}"
-                                              x:Name="CheckHiddenToolsTest" Tag="UiHiddenToolsTest" Change="CheckBoxChange" />
                         </WrapPanel>
 
                         <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubInstance}"
                                    Opacity="0.6" FontSize="12" />
                         <WrapPanel>
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Edit}"
-                                              x:Name="CheckHiddenVersionEdit" Tag="UiHiddenVersionEdit" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Export}"
-                                              x:Name="CheckHiddenVersionExport" Tag="UiHiddenVersionExport" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Save}"
                                               x:Name="CheckHiddenVersionSave" Tag="UiHiddenVersionSave" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Screenshot}"
@@ -436,8 +363,6 @@
                                               x:Name="CheckHiddenVersionResourcePack" Tag="UiHiddenVersionResourcePack" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Shader}"
                                               x:Name="CheckHiddenVersionShader" Tag="UiHiddenVersionShader" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Schematic}"
-                                              x:Name="CheckHiddenVersionSchematic" Tag="UiHiddenVersionSchematic" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Server}"
                                               x:Name="CheckHiddenVersionServer" Tag="UiHiddenVersionServer" Change="CheckBoxChange" />
                         </WrapPanel>
@@ -448,9 +373,6 @@
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.InstanceSelect}"
                                               x:Name="CheckHiddenFunctionSelect" Tag="UiHiddenFunctionSelect"
                                               ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.InstanceSelect.ToolTip}" Change="CheckBoxChange" />
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.ModUpdate}"
-                                              x:Name="CheckHiddenFunctionModUpdate" Tag="UiHiddenFunctionModUpdate"
-                                              ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.ModUpdate.ToolTip}" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.FeatureHide}"
                                               x:Name="CheckHiddenFunctionHidden" Tag="UiHiddenFunctionHidden"
                                               ToolTip="{loc:Loc Setup.Ui.FeatureHide.Item.FeatureHide.ToolTip}" Change="CheckBoxChange" />

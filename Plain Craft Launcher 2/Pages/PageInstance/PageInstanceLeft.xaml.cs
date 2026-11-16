@@ -1,13 +1,15 @@
 using PCL.Core.App.Localization;
-using PCL.Core.UI.Dialogs;
-using System.Windows;
+using PCL.Horizon;
 using System.Windows.Controls;
 
 namespace PCL;
 
 public partial class PageInstanceLeft : IRefreshable, IPageView
 {
-    public static McInstance McInstance = null;
+    /// <summary>
+    ///     正在查看设置的实例。
+    /// </summary>
+    public static HorizonInstance Instance = null!;
 
     private readonly PageInstanceLeftViewModel _vm = new();
     private bool _refreshed;
@@ -38,7 +40,7 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
         if (_refreshed)
             return;
         _refreshed = true;
-        RefreshModDisabled();
+        _vm.RefreshVisibility();
     }
 
     public void Refresh()
@@ -46,20 +48,10 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
         Refresh(Launcher.frmMain.PageCurrentSub);
     }
 
-    public void RefreshModDisabled()
-    {
-        _vm.RefreshModDisabled(McInstance);
-    }
-
     public void Refresh(FormMain.PageSubType subType)
     {
         switch (subType)
         {
-            case FormMain.PageSubType.VersionMod:
-                {
-                    PageInstanceCompResource.Refresh(Comp.CompType.Mod);
-                    break;
-                }
             case FormMain.PageSubType.VersionScreenshot:
                 {
                     _ = PageInstanceScreenshot.RefreshAsync();
@@ -70,44 +62,19 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     PageInstanceSaves.Refresh();
                     break;
                 }
+            case FormMain.PageSubType.VersionMod:
+                {
+                    Launcher.frmInstanceMod?.Refresh();
+                    break;
+                }
             case FormMain.PageSubType.VersionResourcePack:
                 {
-                    PageInstanceCompResource.Refresh(Comp.CompType.ResourcePack);
+                    Launcher.frmInstanceResourcePack?.Refresh();
                     break;
                 }
             case FormMain.PageSubType.VersionShader:
                 {
-                    PageInstanceCompResource.Refresh(Comp.CompType.Shader);
-                    break;
-                }
-            case FormMain.PageSubType.VersionSchematic:
-                {
-                    PageInstanceCompResource.Refresh(Comp.CompType.Schematic);
-                    break;
-                }
-            case FormMain.PageSubType.VersionInstall:
-                {
-                    GameDownload.dlClientListLoader.Start(isForceRestart: true);
-                    GameDownload.DlOptiFineListLoader.Start(isForceRestart: true);
-                    GameDownload.DlForgeListLoader.Start(isForceRestart: true);
-                    GameDownload.DlNeoForgeListLoader.Start(isForceRestart: true);
-                    GameDownload.DlCleanroomListLoader.Start(isForceRestart: true);
-                    GameDownload.DlLiteLoaderListLoader.Start(isForceRestart: true);
-                    GameDownload.DlFabricListLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlFabricApiLoader.Start(isForceRestart: true);
-                    GameDownload.DlLegacyFabricListLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlLegacyFabricApiLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlOptiFabricLoader.Start(isForceRestart: true);
-                    GameDownload.DlLabyModListLoader.Start(isForceRestart: true);
-                    ItemInstall.Checked = true;
-                    Launcher.frmInstanceInstall.GetCurrentInfo();
-                    break;
-                }
-            case FormMain.PageSubType.VersionExport:
-                {
-                    if (Launcher.frmInstanceExport is not null)
-                        Launcher.frmInstanceExport.RefreshAll();
-                    ItemExport.Checked = true;
+                    Launcher.frmInstanceShader?.Refresh();
                     break;
                 }
             case FormMain.PageSubType.VersionServer:
@@ -120,39 +87,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
         }
     }
 
-    public async void Reset(object sender, EventArgs e)
-    {
-        var control = sender as FrameworkElement;
-        if (control is not null)
-            control.IsEnabled = false;
-        try
-        {
-            var choice = (await DialogService.Instance.ShowAsync(new TextDialogRequest
-            {
-                Title = PageInstanceLeftViewModel.GetResetConfirmTitle(),
-                Content = PageInstanceLeftViewModel.GetResetConfirmMessage(),
-                Buttons = DialogButtons.From(DialogButton.Create(Lang.Text("Common.Action.Confirm")), DialogButton.Create(PageInstanceLeftViewModel.GetCancelText())),
-                IsWarn = true,
-                ForceWait = false
-            }).ConfigureAwait(true)).Button;
-            if (choice != 1)
-                return;
-            if (Launcher.frmInstanceSetup is null)
-                Launcher.frmInstanceSetup = new PageInstanceSetup();
-            Launcher.frmInstanceSetup.Reset();
-            ItemSetup.Checked = true;
-        }
-        catch (Exception ex)
-        {
-            Common.Log(ex, "初始化实例设置失败", Common.LogLevel.Msgbox,
-                userSummary: Lang.Text("Instance.Error.OperationFailed"));
-        }
-        finally
-        {
-            if (control is not null)
-                control.IsEnabled = true;
-        }
-    }
 
     private void PageCheck(object sender, Common.RouteEventArgs e)
     {
@@ -171,21 +105,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     Launcher.frmInstanceOverall ??= new PageInstanceOverall();
                     return Launcher.frmInstanceOverall;
                 }
-            case FormMain.PageSubType.VersionMod:
-                {
-                    Launcher.frmInstanceMod ??= new PageInstanceCompResource(Comp.CompType.Mod);
-                    return Launcher.frmInstanceMod;
-                }
-            case FormMain.PageSubType.VersionModDisabled:
-                {
-                    Launcher.frmInstanceModDisabled ??= new PageInstanceModDisabled();
-                    return Launcher.frmInstanceModDisabled;
-                }
-            case FormMain.PageSubType.VersionModJarInJar:
-                {
-                    Launcher.frmInstanceModJarInJar ??= new PageInstanceCompJarInJar();
-                    return Launcher.frmInstanceModJarInJar;
-                }
             case FormMain.PageSubType.VersionSetup:
                 {
                     Launcher.frmInstanceSetup ??= new PageInstanceSetup();
@@ -201,30 +120,20 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     Launcher.frmInstanceScreenshot ??= new PageInstanceScreenshot();
                     return Launcher.frmInstanceScreenshot;
                 }
+            case FormMain.PageSubType.VersionMod:
+                {
+                    Launcher.frmInstanceMod ??= new PageInstanceMod();
+                    return Launcher.frmInstanceMod;
+                }
             case FormMain.PageSubType.VersionResourcePack:
                 {
-                    Launcher.frmInstanceResourcePack ??= new PageInstanceCompResource(Comp.CompType.ResourcePack);
+                    Launcher.frmInstanceResourcePack ??= new PageInstanceResourcePack();
                     return Launcher.frmInstanceResourcePack;
                 }
             case FormMain.PageSubType.VersionShader:
                 {
-                    Launcher.frmInstanceShader ??= new PageInstanceCompResource(Comp.CompType.Shader);
+                    Launcher.frmInstanceShader ??= new PageInstanceShader();
                     return Launcher.frmInstanceShader;
-                }
-            case FormMain.PageSubType.VersionSchematic:
-                {
-                    Launcher.frmInstanceSchematic ??= new PageInstanceCompResource(Comp.CompType.Schematic);
-                    return Launcher.frmInstanceSchematic;
-                }
-            case FormMain.PageSubType.VersionInstall:
-                {
-                    Launcher.frmInstanceInstall ??= new PageInstanceInstall();
-                    return Launcher.frmInstanceInstall;
-                }
-            case FormMain.PageSubType.VersionExport:
-                {
-                    Launcher.frmInstanceExport ??= new PageInstanceExport();
-                    return Launcher.frmInstanceExport;
                 }
             case FormMain.PageSubType.VersionServer:
                 {

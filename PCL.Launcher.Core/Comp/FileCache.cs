@@ -15,15 +15,15 @@ public static partial class Comp
     ///     获取某个工程下的全部文件列表。
     ///     必须在工作线程执行，失败会抛出异常。
     /// </summary>
-    public static List<CompFile> CompFilesGet(string projectId, bool fromCurseForge)
+    public static List<CompFile> CompFilesGet(string projectId)
     {
         if (!compProjectCache.TryGetValue(projectId, out var targetProject))
-            targetProject = _FetchCompProject(projectId, fromCurseForge);
+            targetProject = _FetchCompProject(projectId);
 
         if (!compFilesCache.TryGetValue(projectId, out var currentFiles))
         {
             LauncherCommon.Log($"[Comp] 开始获取文件列表：{projectId}");
-            currentFiles = _FetchCompFiles(projectId, fromCurseForge, targetProject.Type);
+            currentFiles = _FetchCompFiles(projectId, targetProject.Type);
             compFilesCache[projectId] = currentFiles;
         }
 
@@ -32,7 +32,7 @@ public static partial class Comp
             .Distinct()
             .ToList();
 
-        _LoadMissingDependencyProjects(projectId, allRawDeps, fromCurseForge);
+        _LoadMissingDependencyProjects(projectId, allRawDeps);
 
         var availableDeps = allRawDeps
             .Where(id =>
@@ -54,17 +54,8 @@ public static partial class Comp
         return currentFiles;
     }
 
-    private static CompProject _FetchCompProject(string projectId, bool fromCurseForge)
+    private static CompProject _FetchCompProject(string projectId)
     {
-        if (fromCurseForge)
-        {
-            var json = GameDownload.DlModRequest<JsonObject>(
-                $"https://api.curseforge.com/v1/mods/{projectId}");
-            return new CompProject(
-                json["data"] as JsonObject
-                ?? throw new InvalidOperationException("CurseForge 工程数据无效。"));
-        }
-
         return new CompProject(
             GameDownload.DlModRequest<JsonObject>(
                 $"https://api.modrinth.com/v2/project/{projectId}"));
@@ -72,22 +63,10 @@ public static partial class Comp
 
     private static List<CompFile> _FetchCompFiles(
         string projectId,
-        bool fromCurseForge,
         CompType projectType)
     {
-        JsonArray resultJsonArray;
-        if (fromCurseForge)
-        {
-            var response = GameDownload.DlModRequest<JsonObject>(
-                $"https://api.curseforge.com/v1/mods/{projectId}/files?pageSize=10000");
-            resultJsonArray = response["data"] as JsonArray
-                ?? throw new InvalidOperationException("CurseForge 文件列表数据无效。");
-        }
-        else
-        {
-            resultJsonArray = GameDownload.DlModRequest<JsonArray>(
-                $"https://api.modrinth.com/v2/project/{projectId}/version?include_changelog=false");
-        }
+        var resultJsonArray = GameDownload.DlModRequest<JsonArray>(
+            $"https://api.modrinth.com/v2/project/{projectId}/version?include_changelog=false");
 
         return
         [
@@ -102,8 +81,7 @@ public static partial class Comp
 
     private static void _LoadMissingDependencyProjects(
         string projectId,
-        List<string> allRawDeps,
-        bool fromCurseForge)
+        List<string> allRawDeps)
     {
         var undoneDeps = allRawDeps
             .Where(id => !compProjectCache.ContainsKey(id))
@@ -112,22 +90,8 @@ public static partial class Comp
 
         LauncherCommon.Log($"[Comp] {projectId} 需要补全信息的依赖项共 {undoneDeps.Count} 个");
 
-        JsonArray projects;
-        if (fromCurseForge)
-        {
-            var response = GameDownload.DlModRequest<JsonObject>(
-                "https://api.curseforge.com/v1/mods",
-                "POST",
-                "{\"modIds\": [" + string.Join(",", undoneDeps) + "]}",
-                "application/json");
-            projects = response["data"] as JsonArray
-                ?? throw new InvalidOperationException("CurseForge 依赖工程数据无效。");
-        }
-        else
-        {
-            projects = GameDownload.DlModRequest<JsonArray>(
-                $"https://api.modrinth.com/v2/projects?ids=[\"{undoneDeps.Join("\",\"")}\"]");
-        }
+        var projects = GameDownload.DlModRequest<JsonArray>(
+            $"https://api.modrinth.com/v2/projects?ids=[\"{undoneDeps.Join("\",\"")}\"]");
 
         foreach (var project in projects.OfType<JsonObject>())
             _ = new CompProject(project);
@@ -135,9 +99,7 @@ public static partial class Comp
 
     public static string CompFileNameGet(CompProject proj, CompFile file)
     {
-        var fileName = (proj.TranslatedName ?? "") == (proj.RawName ?? "")
-            ? _BuildDefaultFileName(proj, file)
-            : _BuildLocalizedFileName(proj, file);
+        var fileName = _BuildDefaultFileName(proj, file);
 
         if (file.Type == CompType.Mod)
             fileName = fileName.Replace("~", "-");
@@ -156,53 +118,12 @@ public static partial class Comp
             : $"{fallbackBase}{defaultExtension}";
     }
 
-    private static string _BuildLocalizedFileName(CompProject proj, CompFile file)
-    {
-        var hasSourceName = !string.IsNullOrWhiteSpace(file.FileName);
-        var defaultExtension = _GetDefaultExtension(file);
-        var chineseName = proj
-            .TranslatedName
-            .BeforeFirst(" (")
-            .BeforeFirst(" - ")
-            .Replace(@"\", "＼")
-            .Replace("/", "／")
-            .Replace("|", "｜")
-            .Replace(":", "：")
-            .Replace("<", "＜")
-            .Replace(">", "＞")
-            .Replace("*", "＊")
-            .Replace("?", "？")
-            .Replace("\"", "")
-            .Replace("： ", "：");
-        var extension = hasSourceName
-            ? Path.GetExtension(file.FileName)
-            : "";
-        var nameWithoutExtension = hasSourceName && !string.IsNullOrEmpty(extension)
-            ? file.FileName[..^extension.Length]
-            : file.FileName;
-        var sourcePart = hasSourceName
-            ? file.FileName
-            : defaultExtension;
-        return Config.Download.Comp.NameFormatV2 switch
-        {
-            0 => $"【{chineseName}】{sourcePart}",
-            1 => $"[{chineseName}] {sourcePart}",
-            2 => $"{chineseName}-{sourcePart}",
-            3 => !string.IsNullOrWhiteSpace(nameWithoutExtension)
-                ? $"{nameWithoutExtension}-{chineseName}{extension}"
-                : $"{chineseName}{defaultExtension}",
-            _ => hasSourceName
-                ? file.FileName
-                : $"{chineseName}{defaultExtension}"
-        };
-    }
-
     private static string _GetDefaultExtension(CompFile file)
     {
         return file.Type switch
         {
             CompType.Mod => ".jar",
-            CompType.ModPack => file.FromCurseForge ? ".zip" : ".mrpack",
+            CompType.ModPack => ".mrpack",
             _ => ".zip"
         };
     }

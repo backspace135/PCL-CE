@@ -62,7 +62,7 @@ public partial class PageLaunchLeftViewModel : ViewModelBase
     [RelayCommand]
     private void SelectInstance()
     {
-        if (GameLaunch.mcLaunchLoader.State == LoadState.Loading)
+        if (HorizonLaunch.LaunchLoader.State == LoadState.Loading)
             return;
         Launcher.frmMain.PageChange(FormMain.PageType.InstanceSelect);
     }
@@ -71,43 +71,24 @@ public partial class PageLaunchLeftViewModel : ViewModelBase
     [RelayCommand]
     private void CancelLaunch()
     {
-        if (GameLaunch.mcLaunchLoaderReal is not null)
-        {
-            GameLaunch.mcLaunchLoaderReal.Abort();
-            GameLaunch.McLaunchLog("已取消启动");
-            try
-            {
-                if (GameLaunch.mcLaunchWatcher is not null)
-                    GameLaunch.mcLaunchWatcher.Kill();
-                else if (GameLaunch.mcLaunchProcess is not null)
-                    if (!GameLaunch.mcLaunchProcess.HasExited)
-                        GameLaunch.mcLaunchProcess.Kill();
-            }
-            catch (Exception ex)
-            {
-                Common.Log(
-                    ex,
-                    Lang.Text("Minecraft.Launch.Error.CancelProcess"),
-                    Common.LogLevel.Hint,
-                    userSummary: Lang.Text("Minecraft.Launch.Error.CancelProcess"));
-            }
-        }
+        if (HorizonLaunch.LaunchLoaderReal is not { } loader)
+            return;
+        loader.Abort();
+        HorizonLaunch.Log("已取消启动");
     }
 
     // 实例设置按钮
     [RelayCommand]
     private void OpenInstanceSettings()
     {
-        if (GameLaunch.mcLaunchLoader.State == LoadState.Loading)
+        if (HorizonLaunch.LaunchLoader.State == LoadState.Loading)
             return;
-        InstanceList.McMcInstanceSelected.Load();
-        PageInstanceLeft.McInstance = InstanceList.McMcInstanceSelected;
-        if (File.Exists(InstanceList.McMcInstanceSelected.PathInstance + ".pclignore"))
+        if (HorizonEnvironment.SelectedInstance is not { } instance)
         {
-            HintService.Show(Hints.Error(Lang.Text("Launch.Home.Instance.InstallingCannotSetup")));
+            Launcher.frmMain.PageChange(FormMain.PageType.InstanceSelect);
             return;
         }
 
-        Launcher.frmMain.PageChange(FormMain.PageType.InstanceSetup);
+        PageSelectRight.OpenSettings(instance);
     }
 }

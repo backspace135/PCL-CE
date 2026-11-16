@@ -46,23 +46,19 @@ internal static class Program
         // 加载框架的 UI 通知由 WPF 层接管（任务栏、下载按钮、左侧任务列表）
         LoadingUi.Current = new LoadingUiBridge();
         LauncherUi.Interaction = new WpfUserInteraction();
-        DownloadUserInteraction.Current = new WpfDownloadInteraction();
         UpdateUi.Current = new WpfUpdateUi();
         AnnouncementActions.Current = new WpfAnnouncementActions();
         WatcherUi.Current = new WpfWatcherUi();
         MediaService.Current = new WpfMediaService();
-        CrashAnalysisService.Current = new WpfCrashAnalysisService();
+        HorizonGames.ExitUi = new WpfGameExitUi();
         CompNavigation.Current = new WpfCompNavigationService();
         CompUi.Current = new WpfCompUi();
-        CompLocalUi.Current = new WpfCompLocalUi();
-        MemorySettings.Current = new WpfMemorySettings();
         LaunchUi.Current = new WpfLaunchUi();
         LoginProfile.Current = new WpfProfileUi();
         LogFilter.Current = new WpfLogFilter();
         RestrictedFeatures.Current = new WpfRestrictedFeatures();
-        ModpackUi.Current = new WpfModpackUi();
         EventUi.Current = new WpfEventUi();
-        LauncherState.InstanceSelectionChanged += _ => PageDownloadCompDetail.cachedFolder.Clear();
+        HorizonEnvironment.SelectedInstanceChanged += () => PageDownloadCompDetail.cachedFolder.Clear();
 
         // 业务层日志的 UI 提示桥接：Launcher.Core 只负责记录，弹窗/提示仍由 WPF 层处理
         LauncherCommon.UiLogHandler = static (ex, text, level, title, userSummary) =>

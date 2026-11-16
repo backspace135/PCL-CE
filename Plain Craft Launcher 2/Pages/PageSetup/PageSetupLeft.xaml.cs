@@ -30,13 +30,11 @@ public partial class PageSetupLeft : IPageView
         if (ItemLaunch.Checked && hide.SetupLaunch) isHiddenPage = true;
         if (ItemJava.Checked && hide.SetupJava) isHiddenPage = true;
         if (ItemGameManage.Checked && hide.SetupGameManage)  isHiddenPage = true;
-        if (ItemGameLink.Checked && hide.SetupGameLink) isHiddenPage = true;
         if (ItemUI.Checked && hide.SetupUi) isHiddenPage = true;
         if (ItemLauncherLanguage.Checked && hide.SetupLauncherLanguage) isHiddenPage = true;
         if (ItemLauncherMisc.Checked && hide.SetupLauncherMisc) isHiddenPage = true;
         if (ItemAbout.Checked && hide.SetupAbout) isHiddenPage = true;
         if (ItemUpdate.Checked && hide.SetupUpdate) isHiddenPage = true;
-        if (ItemFeedback.Checked && hide.SetupFeedback) isHiddenPage = true;
         if (ItemLog.Checked && hide.SetupLog) isHiddenPage = true;
         if (PageSetupUI.HiddenForceShow)
             isHiddenPage = false;
@@ -56,8 +54,6 @@ public partial class PageSetupLeft : IPageView
             ItemJava.SetChecked(true, false, false);
         else if (!hideCfg.SetupGameManage)
             ItemGameManage.SetChecked(true, false, false);
-        else if (!hideCfg.SetupGameLink)
-            ItemGameLink.SetChecked(true, false, false);
         else if (!hideCfg.SetupUi)
             ItemUI.SetChecked(true, false, false);
         else if (!hideCfg.SetupLauncherLanguage)
@@ -68,8 +64,6 @@ public partial class PageSetupLeft : IPageView
             ItemAbout.SetChecked(true, false, false);
         else if (!hideCfg.SetupUpdate)
             ItemUpdate.SetChecked(true, false, false);
-        else if (!hideCfg.SetupFeedback)
-            ItemFeedback.SetChecked(true, false, false);
         else if (!hideCfg.SetupLog)
             ItemLog.SetChecked(true, false, false);
         else
@@ -120,14 +114,6 @@ public partial class PageSetupLeft : IPageView
                     ItemGameManage.Checked = true;
                     break;
                 }
-                case FormMain.PageSubType.SetupGameLink:
-                {
-                    if (Launcher.frmSetupGameLink is null)
-                        Launcher.frmSetupGameLink = new PageSetupGameLink();
-                    Launcher.frmSetupGameLink.Reset();
-                    ItemGameLink.Checked = true;
-                    break;
-                }
                 case FormMain.PageSubType.SetupLauncherLanguage:
                 {
                     if (Launcher.frmSetupLauncherLanguage is null)
@@ -160,44 +146,10 @@ public partial class PageSetupLeft : IPageView
         }
     }
 
-    public static void TryFeedback() // Handles ItemFeedback.Click
-    {
-        Common.RunInNewThread(() =>
-        {
-            if (!Common.CanFeedback(true))
-                return;
-            switch ((DialogService.Instance.Show(new TextDialogRequest
-            {
-                Title = Lang.Text("Setup.Left.Feedback.Title"),
-                Content = Lang.Text("Setup.Left.Feedback.Message"),
-                Buttons = DialogButtons.Create("Setup.Left.Feedback.SubmitNew", "Setup.Left.Feedback.ViewList", "Common.Action.Cancel"),
-                ForceWait = true
-            }).Result?.Button ?? 0))
-            {
-                case 1:
-                {
-                    Common.Feedback();
-                    break;
-                }
-                case 2:
-                {
-                    Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/issues/");
-                    break;
-                }
-            }
-        });
-    }
-
     public void Refresh(object sender, EventArgs e) // 由边栏按钮匿名调用
     {
         switch (Common.Val(((MyIconButton)sender).Tag))
         {
-            case (double)FormMain.PageSubType.SetupFeedback:
-            {
-                if (Launcher.frmSetupFeedback is not null) Launcher.frmSetupFeedback.Loader.Start(isForceRestart: true);
-                ItemFeedback.Checked = true;
-                break;
-            }
             case (double)FormMain.PageSubType.SetupJava:
             {
                 if (Launcher.frmSetupJava is not null) Launcher.frmSetupJava.loader.Start(isForceRestart: true);
@@ -283,18 +235,6 @@ public partial class PageSetupLeft : IPageView
                 if (Launcher.frmSetupLog is null)
                     Launcher.frmSetupLog = new PageSetupLog();
                 return Launcher.frmSetupLog;
-            }
-            case FormMain.PageSubType.SetupFeedback:
-            {
-                if (Launcher.frmSetupFeedback is null)
-                    Launcher.frmSetupFeedback = new PageSetupFeedback();
-                return Launcher.frmSetupFeedback;
-            }
-            case FormMain.PageSubType.SetupGameLink:
-            {
-                if (Launcher.frmSetupGameLink is null)
-                    Launcher.frmSetupGameLink = new PageSetupGameLink();
-                return Launcher.frmSetupGameLink;
             }
             case FormMain.PageSubType.SetupLauncherLanguage:
             {

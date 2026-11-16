@@ -31,42 +31,7 @@ public static partial class States
 
         // [ConfigItem<int>("HintNotice", 0)] public partial int Notice { get; set; }
 
-        /// <summary>
-        /// 渲染器选择提示。
-        /// </summary>
-        [ConfigItem<bool>("HintRenderer", false)] public partial bool Renderer { get; set; }
-
-        /// <summary>
-        /// 使用调试级别 Log4j2 配置提示。
-        /// </summary>
-        [ConfigItem<bool>("HintDebugLog4j2Config", false)] public partial bool DebugLog4j2Config { get; set; }
-        
         // [ConfigItem<int>("HintDownload", 0)] public partial int Download { get; set; }
-
-        /// <summary>
-        /// 单击 Minecraft 返回游戏版本选择提示。
-        /// </summary>
-        [ConfigItem<bool>("HintInstallBack", false)] public partial bool InstallPageBack { get; set; }
-
-        /// <summary>
-        /// 隐藏实例提示。
-        /// </summary>
-        [ConfigItem<bool>("HintHide", false)] public partial bool HideGameInstance { get; set; }
-
-        /// <summary>
-        /// 手动安装版本提示。
-        /// </summary>
-        [ConfigItem<bool>("HintHandInstall", false)] public partial bool ManualInstall { get; set; }
-
-        /// <summary>
-        /// 清理垃圾提示。
-        /// </summary>
-        [ConfigItem<int>("HintClearRubbish", 0)] public partial int CleanJunkFile { get; set; }
-
-        /// <summary>
-        /// Mod 更新提示。
-        /// </summary>
-        [ConfigItem<bool>("HintUpdateMod", false)] public partial bool UpdateMod { get; set; }
 
         /// <summary>
         /// 执行自定义主页内含命令提示。
@@ -77,16 +42,6 @@ public static partial class States
         /// 非信任主页警告。
         /// </summary>
         [ConfigItem<bool>("HintCustomWarn", false)] public partial bool UntrustedHomepage { get; set; }
-
-        /// <summary>
-        /// 全局设置中在实例独立设置中寻找更多高级启动选项的提示。
-        /// </summary>
-        [ConfigItem<bool>("HintMoreAdvancedSetup", false)] public partial bool MoreInstanceSetup { get; set; }
-
-        /// <summary>
-        /// 进入实例独立设置提示。
-        /// </summary>
-        [ConfigItem<bool>("HintIndieSetup", false)] public partial bool IndieSetup { get; set; }
 
         /// <summary>
         /// 选择档案以启动游戏提示。
@@ -104,29 +59,9 @@ public static partial class States
         [ConfigItem<bool>("HintMaxLog", false)] public partial bool MaxGameLog { get; set; }
 
         /// <summary>
-        /// 非 ASCII 路径警告。 
-        /// </summary>
-        [ConfigItem<bool>("HintDisableGamePathCheckTip", false)] public partial bool NonAsciiGamePath { get; set; }
-
-        /// <summary>
-        /// 启动时的社区版提示。
-        /// </summary>
-        [ConfigItem<bool>("UiLauncherCEHint", true)] public partial bool CEMessage { get; set; }
-
-        /// <summary>
-        /// 投影管理首次使用提示。
-        /// </summary>
-        [ConfigItem<bool>("UiSchematicFirstTimeHintShown", false)] public partial bool SchematicFirstTime { get; set; }
-
-        /// <summary>
         /// 已显示的公告。
         /// </summary>
         [ConfigItem<string>("SystemSystemAnnouncement", "")] public partial string ShowedAnnouncements { get; set; }
-
-        /// <summary>
-        /// 数据包更新警告。
-        /// </summary>
-        [ConfigItem<bool>("HintDatapackUpdate",false)] public partial bool FunctionDatapackUpdate { get; set; }
     }
 
     /// <summary>
@@ -148,11 +83,6 @@ public static partial class States
         /// 当前实例。
         /// </summary>
         [ConfigItem<string>("LaunchInstanceSelect", "", ConfigSource.Local)] public partial string SelectedInstance { get; set; }
-
-        /// <summary>
-        /// 当前文件夹。
-        /// </summary>
-        [ConfigItem<string>("LaunchFolderSelect", "", ConfigSource.Local)] public partial string SelectedFolder { get; set; }
 
         /// <summary>
         /// 所有文件夹。
@@ -194,7 +124,6 @@ public static partial class States
         /// 窗口宽度。
         /// </summary>
         [ConfigItem<double>("WindowWidth", 900, ConfigSource.Local)] public partial double WindowWidth { get; set; }
-
     }
 
     /// <summary>
@@ -258,7 +187,6 @@ public static partial class States
         /// 启动器公告。
         /// </summary>
         [ConfigItem<int>("SystemSystemActivity", 0, ConfigSource.Local)] public partial int AnnounceSolution { get; set; }
-
     }
 
     /// <summary>
@@ -275,82 +203,5 @@ public static partial class States
         /// 自定义下载 UA。
         /// </summary>
         [ConfigItem<string>("ToolDownloadCustomUserAgent", "")] public partial string DownloadUserAgent { get; set; }
-        
-        /// <summary>
-        /// 最新 MC 正式版
-        /// </summary>
-        [ConfigItem<string>("ToolUpdateReleaseLast", "")] public partial string LastRelease { get; set; }
-        
-        /// <summary>
-        /// 最新 MC 快照版
-        /// </summary>
-        [ConfigItem<string>("ToolUpdateSnapshotLast", "")] public partial string LastSnapshot { get; set; }
-    }
-
-    /// <summary>
-    /// 联机大厅状态。
-    /// </summary>
-    [ConfigGroup("Link")] partial class LinkStatesGroup
-    {
-        /// <summary>
-        /// 大厅最终用户许可协议。
-        /// </summary>
-        [ConfigItem<bool>("LinkEula", false)] public partial bool LinkEula { get; set; }
-
-        /// <summary>
-        /// 公告缓存。
-        /// </summary>
-        [ConfigItem<string>("LinkAnnounceCache", "", ConfigSource.SharedEncrypt)] public partial string AnnounceCache { get; set; }
-
-        /// <summary>
-        /// 公告缓存版本。
-        /// </summary>
-        [ConfigItem<int>("LinkAnnounceCacheVer", 0)] public partial int AnnounceCacheVer { get; set; }
-
-        /// <summary>
-        /// Natayark ID 刷新令牌。
-        /// </summary>
-        [ConfigItem<string>("LinkNaidRefreshToken", "", ConfigSource.SharedEncrypt)] public partial string NaidRefreshToken { get; set; }
-
-        /// <summary>
-        /// Natayark ID 令牌过期时间。
-        /// </summary>
-        [ConfigItem<string>("LinkNaidRefreshExpiresAt", "", ConfigSource.SharedEncrypt)] public partial string NaidRefreshExpireTime { get; set; }
-
-        /// <summary>
-        /// 首次网络测试状态。
-        /// </summary>
-        [ConfigItem<bool>("LinkFirstTimeNetTest", true, ConfigSource.SharedEncrypt)] public partial bool DoFirstTimeNetTest { get; set; }
-
-    }
-
-    /// <summary>
-    /// 实例独立状态
-    /// </summary>
-    [ConfigGroup("Instance", ConfigSource.GameInstance)] partial class InstanceStatesGroup
-    {
-        [ConfigItem<int>("VersionLaunchCount", 0)] public partial ArgConfig<int> LaunchCount { get; }
-        [ConfigItem<bool>("IsStar", false)] public partial ArgConfig<bool> Starred { get; }
-        [ConfigItem<int>("DisplayType", 0)] public partial ArgConfig<int> CardType { get; }
-        [ConfigItem<string>("Logo", "")] public partial ArgConfig<string> LogoPath { get; }
-        [ConfigItem<bool>("LogoCustom", false)] public partial ArgConfig<bool> IsLogoCustom { get; }
-        [ConfigItem<string>("CustomInfo", "")] public partial ArgConfig<string> CustomInfo { get; }
-        [ConfigItem<string>("Info", "")] public partial ArgConfig<string> Info { get; }
-        [ConfigItem<string>("ReleaseTime", "")] public partial ArgConfig<string> ReleaseTime { get; }
-        [ConfigItem<int>("State", 0)] public partial ArgConfig<int> State { get; }
-        [ConfigItem<string>("VersionFabric", "")] public partial ArgConfig<string> FabricVersion { get; }
-        [ConfigItem<string>("VersionLegacyFabric", "")] public partial ArgConfig<string> LegacyFabricVersion { get; }
-        [ConfigItem<string>("VersionQuilt", "")] public partial ArgConfig<string> QuiltVersion { get; }
-        [ConfigItem<string>("VersionLabyMod", "")] public partial ArgConfig<string> LabyModVersion { get; }
-        [ConfigItem<string>("VersionOptiFine", "")] public partial ArgConfig<string> OptiFineVersion { get; }
-        [ConfigItem<bool>("VersionLiteLoader", false)] public partial ArgConfig<bool> HasLiteLoader { get; }
-        [ConfigItem<string>("VersionForge", "")] public partial ArgConfig<string> ForgeVersion { get; }
-        [ConfigItem<string>("VersionNeoForge", "")] public partial ArgConfig<string> NeoForgeVersion { get; }
-        [ConfigItem<string>("VersionCleanroom", "")] public partial ArgConfig<string> CleanroomVersion { get; }
-        [ConfigItem<string>("VersionVanillaName", "Unknown")] public partial ArgConfig<string> VanillaVersionName { get; }
-        [ConfigItem<string>("VersionVanilla", "0.0.0")] public partial ArgConfig<string> VanillaVersion { get; }
-        [ConfigItem<string>("VersionModpackVersion", "")] public partial ArgConfig<string> ModpackVersion { get; }
-        [ConfigItem<string>("VersionModpackSource", "")] public partial ArgConfig<string> ModpackSource { get; }
-        [ConfigItem<string>("VersionModpackId", "")] public partial ArgConfig<string> ModpackId { get; }
     }
 }

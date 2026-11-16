@@ -140,32 +140,6 @@ public partial class PageComp
     /// </summary>
     public ItemCollection SearchTags => ComboSearchTag.Items;
 
-    public static readonly DependencyProperty SupportCurseForgeProperty =
-        DependencyProperty.Register(nameof(SupportCurseForge), typeof(bool), typeof(PageComp),
-            new PropertyMetadata(true, OnSupportCurseForgeChanged));
-
-    public bool SupportCurseForge
-    {
-        get => (bool)GetValue(SupportCurseForgeProperty);
-        set => SetValue(SupportCurseForgeProperty, value);
-    }
-
-    public static readonly DependencyProperty SupportModrinthProperty =
-        DependencyProperty.Register(nameof(SupportModrinth), typeof(bool), typeof(PageComp),
-            new PropertyMetadata(true, OnSupportModrinthChanged));
-
-    public bool SupportModrinth
-    {
-        get => (bool)GetValue(SupportModrinthProperty);
-        set => SetValue(SupportModrinthProperty, value);
-    }
-
-    private static void OnSupportCurseForgeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((PageComp)d).ViewModel.SupportCurseForge = (bool)e.NewValue;
-
-    private static void OnSupportModrinthChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        => ((PageComp)d).ViewModel.SupportModrinth = (bool)e.NewValue;
-
     /// <summary>
     ///     英文前后不含空格的可读资源类型名，例如 "Mod"、"整合包"。
     /// </summary>
@@ -187,7 +161,6 @@ public partial class PageComp
             if (field == value)
                 return;
             field = value;
-            ViewModel.IsInstallModPackVisible = value == Comp.CompType.ModPack;
             loader.name = Lang.Text("Download.Comp.List.Source.ResourceFetch", TypeName);
             PanSearchBox.HintText = Comp.GetCompSearchName(value);
             ViewModel.LoadingText = Comp.GetCompLoadingName(value);
@@ -197,11 +170,6 @@ public partial class PageComp
     #endregion
 
     #region 加载
-
-    /// <summary>
-    ///     在切换到页面时，应自动将筛选项设置为与该目标 MC 版本和加载器相同。
-    /// </summary>
-    public static McInstance? targetVersion;
 
     public Loading.LoaderTask<Comp.CompProjectRequest, int> loader;
 
@@ -222,36 +190,6 @@ public partial class PageComp
 
     private void PageCompControls_Inited(object sender, EventArgs e)
     {
-        // 不知道从 Initialized 改成 Loaded 会不会有问题，但用 Initialized 会导致初始的筛选器修改被覆盖回默认值
-        if (targetVersion is not null)
-        {
-            // 设置目标
-            ResetFilter(); // 重置筛选器
-            TextSearchVersion.Text = targetVersion.Info.VanillaName;
-
-            MyComboBoxItem GetTargetItemByName(string name)
-            {
-                foreach (MyComboBoxItem item in ComboSearchLoader.Items)
-                    if (string.Equals(item.Content?.ToString(), name, StringComparison.OrdinalIgnoreCase))
-                        return item;
-                return (MyComboBoxItem)ComboSearchLoader.Items[0]!;
-            }
-
-            ;
-            if (targetVersion.Info.HasForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Forge");
-            else if (targetVersion.Info.HasFabric)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Fabric");
-            else if (targetVersion.Info.HasNeoForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge");
-            else if (targetVersion.Info.HasQuilt) ComboSearchLoader.SelectedItem = GetTargetItemByName("Quilt");
-            targetVersion = null;
-            // 如果已经完成请求，则重新开始
-            if (_isLoaderInited)
-                StartNewSearch();
-            ScrollToHome();
-        }
-
         // 加载器初始化
         if (_isLoaderInited)
             return;
@@ -316,7 +254,6 @@ public partial class PageComp
         request.modLoader = PageType is Comp.CompType.Mod or Comp.CompType.ModPack
             ? (Comp.CompLoaderType)Common.Val(((MyComboBoxItem)ComboSearchLoader.SelectedItem).Tag)
             : Comp.CompLoaderType.Any;
-        request.source = (Comp.CompSourceType)Common.Val(((MyComboBoxItem)ComboSearchSource.SelectedItem).Tag);
         request.sort = (Comp.CompSortType)Common.Val(((MyComboBoxItem)ComboSearchSort.SelectedItem).Tag);
         return request;
     }
@@ -346,7 +283,6 @@ public partial class PageComp
         PanSearchBox.Text = "";
         TextSearchVersion.Text = Lang.Text("Download.Comp.Filter.Version.AllInputAvailable");
         TextSearchVersion.SelectedIndex = 0;
-        ComboSearchSource.SelectedIndex = 0;
         ComboSearchTag.SelectedIndex = 0;
         ComboSearchLoader.SelectedIndex = 0;
         ComboSearchShaderLoader.SelectedIndex = 0;

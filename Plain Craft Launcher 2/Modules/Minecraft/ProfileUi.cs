@@ -197,98 +197,15 @@ public static class ProfileUi
         return completion.Task;
     }
 
-    public static object McLoginMojangUuid(string name, bool throwOnNotFound)
+    /// <summary>
+    ///     新建档案：Horizon 只支持微软账户，直接进入微软登录页。
+    /// </summary>
+    public static Task CreateProfileAsync()
     {
-        if (string.IsNullOrWhiteSpace(name)) return Common.StrFill("", "0", 32);
-        var uuid = Common.ReadIni(Common.pathTemp + @"Cache\Uuid\Mojang.ini", name);
-        if (uuid?.Length == 32) return uuid;
-        try
-        {
-            JsonObject? json = null;
-            var finished = false;
-            Common.RunInNewThread(() =>
-            {
-                try { json = (JsonObject)NetFacade.NetGetCodeByRequestRetry("https://api.mojang.com/users/profiles/minecraft/" + name, isJson: true); }
-                catch { }
-                finally { finished = true; }
-            }, $"{name} Uuid Get");
-            while (!finished) Thread.Sleep(50);
-            if (json is null) throw new FileNotFoundException("正版玩家档案不存在（" + name + "）");
-            uuid = json["id"]?.ToString() ?? string.Empty;
-        }
-        catch (Exception ex)
-        {
-            Common.Log(ex, "从官网获取正版 UUID 失败（" + name + "）");
-            if (!throwOnNotFound && ex is FileNotFoundException) uuid = GetOfflineUuid(name, isLegacy: true);
-            else throw;
-        }
-        if (uuid.Length != 32) throw new FormatException("获取的正版 UUID 长度不足（" + uuid + "）");
-        Common.WriteIni(Common.pathTemp + @"Cache\Uuid\Mojang.ini", name, uuid);
-        return uuid;
-    }
-
-    public static bool CanCreateOtherProfile()
-    {
-#if DEBUG || DEBUGCI
-        return true;
-#else
-        return ProfileService.HasMicrosoftProfile || (Lang.IsFeaturesUnrestricted && ProfileService.Profiles.Count > 0) || NetworkHelper.IsNetworkAvailable() is false;
-#endif
-    }
-
-    public static async Task CreateProfileAsync()
-    {
-        var includeOthers = Common.RunInUiWait(CanCreateOtherProfile);
-        var selectedDialog = await DialogService.Instance.ShowAsync(new SelectDialogRequest
-        {
-            Title = Lang.Text("Launch.Account.Profile.Create.SelectAuthType.Title"),
-            Options = PCL.DialogOptions.From(_GetAvailableProfileSelection(includeOthers)),
-            Buttons = DialogButtons.From(
-                DialogButton.Create(Lang.Text("Common.Action.Continue")),
-                DialogButton.Create(Lang.Text("Common.Action.Cancel"))),
-            HighLight = false,
-            ForceWait = false
-        });
-        var selected = selectedDialog.IsConfirmed ? selectedDialog.SelectedIndex : null;
-        if (selected is null) return;
         ProfileService.IsCreatingProfile = true;
-        var type = selected.Value switch
-        {
-            0 => GameLaunch.McLoginType.Ms,
-            1 => GameLaunch.McLoginType.Auth,
-            _ => GameLaunch.McLoginType.Legacy
-        };
-        if (type == GameLaunch.McLoginType.Auth)
-        {
-            var serverDialog = await DialogService.Instance.ShowAsync(new AuthServerDialogRequest
-            {
-                Title = Lang.Text("Launch.Account.Auth.SelectServer"),
-                DefaultServer = PageLoginAuth.DefaultAuthServer,
-                Presets = PageLoginAuth.PredefinedAuthServers,
-                Buttons = DialogButtons.OkCancel,
-                HighLight = false,
-                ForceWait = false
-            });
-            var server = serverDialog.IsConfirmed ? serverDialog.InputText ?? "" : "";
-            if (string.IsNullOrWhiteSpace(server))
-            {
-                ProfileService.IsCreatingProfile = false;
-                return;
-            }
-            PageLoginAuth.draggedAuthServerOAuthSupported =
-                await PageLoginAuth.IsOAuthSupportedAsync(server);
-            PageLoginAuth.draggedAuthServer = server;
-        }
-        Common.RunInUi(() => Launcher.frmLaunchLeft.RefreshPage(true, type));
+        Common.RunInUi(() => Launcher.frmLaunchLeft.ShowMicrosoftLogin());
+        return Task.CompletedTask;
     }
-
-    private static List<IMyRadio> _GetAvailableProfileSelection(bool includeOthers) => includeOthers
-        ? [
-            new MyListItem { Title = Lang.Text("Launch.Account.Type.Microsoft"), Type = MyListItem.CheckType.RadioBox, SvgIcon = "lucide/shield-check" },
-            new MyListItem { Title = Lang.Text("Launch.Account.Type.ThirdParty"), Type = MyListItem.CheckType.RadioBox, SvgIcon = "lucide/network" },
-            new MyListItem { Title = Lang.Text("Launch.Account.Type.Offline"), Type = MyListItem.CheckType.RadioBox, SvgIcon = "lucide/link-2-off" }
-        ]
-        : [new MyListItem { Title = Lang.Text("Launch.Account.Type.Microsoft"), Type = MyListItem.CheckType.RadioBox, SvgIcon = "lucide/shield-check" }];
 
     public static void EditProfileId() => _ = EditProfileIdAsync();
 
@@ -296,7 +213,6 @@ public static class ProfileUi
     {
         var profile = ProfileService.Current;
         if (profile is null) return;
-        if (profile.ProfileType == ProfileType.Microsoft)
         {
             var usernameDialog = await DialogService.Instance.ShowAsync(new InputDialogRequest
             {
@@ -371,90 +287,6 @@ public static class ProfileUi
             });
             return;
         }
-        if (profile.ProfileType == ProfileType.Authlib || profile.ProfileType == ProfileType.YggdrasilConnect)
-        {
-            if (!string.IsNullOrWhiteSpace(profile.Server))
-                Common.OpenWebsite(profile.Server.Replace("/api/yggdrasil/authserver", "/user/profile"));
-            return;
-        }
-
-        var newNameDialog = await DialogService.Instance.ShowAsync(new InputDialogRequest
-        {
-            Title = Lang.Text("Launch.Account.Profile.EditPlayerId.Title"),
-            DefaultValue = profile.UserName,
-            ValidateRules = [new StringLengthValidator(3, 16), new RegexValidator("([A-z]|[0-9]|_)+")],
-            HintText = Lang.Text("Launch.Account.Profile.EditPlayerId.Hint"),
-            Buttons = DialogButtons.OkCancel,
-            HighLight = false,
-            ForceWait = false
-        });
-        var newName = newNameDialog.IsConfirmed ? newNameDialog.InputText : null;
-        if (!string.IsNullOrWhiteSpace(newName)) EditOfflineUuid(profile, GetOfflineUuid(newName));
-    }
-
-    public static void EditOfflineUuid(McProfile profile, string? uuid = null) =>
-        _ = EditOfflineUuidAsync(profile, uuid);
-
-    private static async Task EditOfflineUuidAsync(McProfile profile, string? uuid = null)
-    {
-        var current = ProfileService.Profiles.FirstOrDefault(p => p.ProfileId == profile.ProfileId);
-        if (current is null) return;
-        string? newUuid = uuid;
-        if (newUuid is null)
-        {
-            int? type = null;
-            var typeDialog = await DialogService.Instance.ShowAsync(new SelectDialogRequest
-            {
-                Title = Lang.Text("Launch.Account.Profile.Uuid.SelectType.Title"),
-                Options =
-                [
-                    new DialogOption { Text = Lang.Text("Launch.Account.Profile.Uuid.Standard") },
-                    new DialogOption { Text = Lang.Text("Launch.Account.Profile.Uuid.Legacy") },
-                    new DialogOption { Text = Lang.Text("Common.Option.Customize") }
-                ],
-                Buttons = DialogButtons.From(
-                    DialogButton.Create(Lang.Text("Common.Action.Continue")),
-                    DialogButton.Create(Lang.Text("Common.Action.Cancel"))),
-                HighLight = false,
-                ForceWait = false
-            });
-            type = typeDialog.IsConfirmed ? typeDialog.SelectedIndex : null;
-            if (type is null) return;
-            newUuid = type switch
-            {
-                0 => GetOfflineUuid(current.UserName),
-                1 => GetOfflineUuid(current.UserName, isLegacy: true),
-                _ => (await DialogService.Instance.ShowAsync(new InputDialogRequest
-                    {
-                        Title = Lang.Text("Launch.Account.Profile.Uuid.ChangeTitle", current.UserName),
-                        DefaultValue = current.Uuid,
-                        HintText = Lang.Text("Launch.Account.Profile.Uuid.Hint"),
-                        ValidateRules = [new StringLengthValidator(32, 32), new RegexValidator("([A-z]|[0-9]){32}", Lang.Text("Launch.Account.Profile.Uuid.InvalidChars"))],
-                        Buttons = DialogButtons.OkCancel,
-                        HighLight = false,
-                        ForceWait = false
-                    })) is { IsConfirmed: true } confirm
-                    ? confirm.InputText
-                    : null
-            };
-        }
-        if (string.IsNullOrWhiteSpace(newUuid)) return;
-        var updated = current.Clone();
-        updated.Uuid = newUuid;
-        ProfileService.Update(current, updated);
-        ProfileService.Select(updated);
-        HintService.Show(Hints.Success(Lang.Text("Launch.Account.Profile.Saved")));
-    }
-
-    public static void EditAuthServerName(McProfile profile, string serverName)
-    {
-        var current = ProfileService.Profiles.FirstOrDefault(p => p.ProfileId == profile.ProfileId);
-        if (current is null) return;
-        var updated = current.Clone();
-        updated.ServerName = serverName;
-        ProfileService.Update(current, updated);
-        if (ReferenceEquals(ProfileService.Current, current)) ProfileService.Select(updated);
-        HintService.Show(Hints.Success(Lang.Text("Launch.Account.Profile.Saved")));
     }
 
     public static void RemoveProfile(McProfile profile)
@@ -496,60 +328,14 @@ public static class ProfileUi
 
     public static string GetProfileInfo(McProfile profile)
     {
-        var info = profile.ProfileType switch
-        {
-            ProfileType.Authlib => Lang.Text("Launch.Account.Type.ThirdParty") + (string.IsNullOrWhiteSpace(profile.ServerName) ? "" : $" / {profile.ServerName}"),
-            ProfileType.YggdrasilConnect => Lang.Text("Launch.Account.Type.ThirdParty") + (string.IsNullOrWhiteSpace(profile.ServerName) ? " / Yggdrasil Connect" : $" / {profile.ServerName}"),
-            ProfileType.Microsoft => Lang.Text("Launch.Account.Type.Microsoft"),
-            _ => Lang.Text("Launch.Account.Type.Offline")
-        };
+        var info = Lang.Text("Launch.Account.Type.Microsoft");
         return string.IsNullOrWhiteSpace(profile.Description) ? info : $"{info}，{profile.Description}";
-    }
-
-    public static GameLaunch.McLoginData GetLoginData(GameLaunch.McLoginType targetAuthType = default)
-    {
-        var profile = ProfileService.Current;
-        if (profile is null)
-        {
-            return targetAuthType switch
-            {
-                GameLaunch.McLoginType.Ms => new GameLaunch.McLoginMs(),
-                GameLaunch.McLoginType.Auth => new GameLaunch.McLoginServer(GameLaunch.McLoginType.Auth) { Description = "Authlib-Injector", IsExist = false },
-                _ => new GameLaunch.McLoginLegacy()
-            };
-        }
-        return profile.ProfileType switch
-        {
-            ProfileType.Microsoft => new GameLaunch.McLoginMs(),
-            ProfileType.Authlib => new GameLaunch.McLoginServer(GameLaunch.McLoginType.Auth)
-            {
-                BaseUrl = profile.Server,
-                UserName = profile.LoginName,
-                Password = profile.Password,
-                Description = profile.ServerName ?? "Authlib-Injector",
-                IsExist = true
-            },
-            ProfileType.YggdrasilConnect => new GameLaunch.McLoginServer(GameLaunch.McLoginType.Auth)
-            {
-                BaseUrl = profile.Server,
-                Description = profile.ServerName ?? "Yggdrasil Connect",
-                IsExist = true,
-                ProviderType = ProfileType.YggdrasilConnect,
-                DiscoveryAddress = profile.DiscoveryAddress
-            },
-            _ => new GameLaunch.McLoginLegacy { UserName = profile.UserName, Uuid = profile.Uuid }
-        };
     }
 
     public static string IsProfileValid()
     {
         var profile = ProfileService.Current;
         if (profile is null) return Lang.Text("Minecraft.Launch.Precheck.NoProfile");
-        if (profile.ProfileType != ProfileType.Offline) return string.Empty;
-        if (string.IsNullOrWhiteSpace(profile.UserName)) return Lang.Text("Launch.Account.Profile.Validation.EmptyUsername");
-        if (profile.UserName.Contains('"')) return Lang.Text("Launch.Account.Profile.Validation.QuoteInUsername");
-        if (InstanceList.McMcInstanceSelected is not null && InstanceList.McMcInstanceSelected.Info.Drop >= 203 && profile.UserName.Trim().Length > 16)
-            return Lang.Text("Launch.Account.Profile.Validation.UsernameTooLong");
         return string.Empty;
     }
 
@@ -568,7 +354,7 @@ public static class ProfileUi
             return;
         }
         var profileId = profile.ProfileId;
-        if (GameLaunch.mcLoginLoader.State == LoadState.Failed)
+        if (HorizonLogin.LoginLoader.State == LoadState.Failed)
         {
             Interlocked.Exchange(ref _isMsSkinChanging, 0);
             HintService.Show(Hints.Error(Lang.Text("Launch.Skin.Change.LoginFailed")));
@@ -588,9 +374,9 @@ public static class ProfileUi
                 var hasRetriedAuthentication = false;
                 while (true)
                 {
-                    if (GameLaunch.mcLoginMsLoader.State == LoadState.Loading) GameLaunch.mcLoginMsLoader.WaitForExit();
-                    if (GameLaunch.mcLoginMsLoader.State != LoadState.Finished) GameLaunch.mcLoginMsLoader.WaitForExit(GetLoginData());
-                    if (GameLaunch.mcLoginMsLoader.State != LoadState.Finished)
+                    if (HorizonLogin.LoginLoader.State == LoadState.Loading) HorizonLogin.LoginLoader.WaitForExit();
+                    if (HorizonLogin.LoginLoader.State != LoadState.Finished) HorizonLogin.LoginLoader.WaitForExit(false);
+                    if (HorizonLogin.LoginLoader.State != LoadState.Finished)
                         throw new InvalidOperationException("Microsoft login failed");
                     var latestProfile = ProfileService.Profiles.FirstOrDefault(item => item.ProfileId == profileId)
                                         ?? throw new InvalidOperationException("Microsoft profile no longer exists.");
@@ -610,7 +396,7 @@ public static class ProfileUi
                             throw new IdentityModelAuthenticationException("invalid_token", "Microsoft authentication remained invalid.");
                         hasRetriedAuthentication = true;
                         HintService.Show(Hints.Info(Lang.Text("Launch.Skin.Change.Reauthenticating")));
-                        GameLaunch.mcLoginMsLoader.Start(GetLoginData(), true);
+                        HorizonLogin.LoginLoader.Start(true, true);
                         continue;
                     }
                     var json = (JsonObject)Common.GetJson(result);

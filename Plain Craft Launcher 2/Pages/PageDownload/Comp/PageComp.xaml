@@ -30,17 +30,6 @@
                     <RowDefinition Height="8" />
                     <RowDefinition Height="28" />
                 </Grid.RowDefinitions>
-                <!--来源-->
-                <TextBlock x:Name="LabSource" VerticalAlignment="Center" Grid.Row="0" Grid.Column="0"
-                           HorizontalAlignment="Left" Text="{loc:Loc Download.Comp.Filter.Source}"
-                           Margin="5,0,5,0" />
-                <local:MyComboBox x:Name="ComboSearchSource" Grid.Row="0" Grid.Column="1">
-                    <local:MyComboBoxItem Content="{loc:Loc Common.Option.All}" Tag="3" IsSelected="True" />
-                    <local:MyComboBoxItem Content="CurseForge" Tag="1"
-                                          Visibility="{Binding SupportCurseForge, Converter={StaticResource VisibilityConverter}}" />
-                    <local:MyComboBoxItem Content="Modrinth" Tag="2"
-                                          Visibility="{Binding SupportModrinth, Converter={StaticResource VisibilityConverter}}" />
-                </local:MyComboBox>
                 <!--Tags-->
                 <TextBlock x:Name="LabTag" VerticalAlignment="Center" Grid.Column="2" HorizontalAlignment="Left"
                            Text="{loc:Loc Download.Comp.Filter.Tag}" Margin="5,0,5,0" />
@@ -61,8 +50,8 @@
                 <!--版本-->
                 <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left"
                            Text="{loc:Loc Download.Comp.Filter.Version}" Margin="5,0,5,0"
-                           Grid.Row="2" />
-                <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="2" Grid.Column="1" IsEditable="True"
+                           Grid.Row="0" />
+                <local:MyComboBox x:Name="TextSearchVersion" Grid.Row="0" Grid.Column="1" IsEditable="True"
                                   MaxDropDownHeight="320" KeyDown="EnterTrigger">
                     <local:MyComboBoxItem Content="{loc:Loc Download.Comp.Filter.Version.Any}"
                                           IsSelected="True" />
@@ -110,13 +99,6 @@
                                         SvgIcon="lucide/rotate-ccw"
                                         ToolTip="{loc:Loc Download.Comp.Filter.Reset}" LogoScale="0.9"
                                         Margin="3,0,0,0" Click="BtnSearchReset_Click" />
-                    <local:MyIconButton x:Name="BtnSearchInstallModPack"
-                                        SvgIcon="lucide/download"
-                                        Command="{Binding InstallModPackCommand}"
-                                        Visibility="{Binding IsInstallModPackVisible, Converter={StaticResource VisibilityConverter}}"
-                                        ToolTip="{loc:Loc Download.Comp.Filter.InstallModpack.ToolTip}"
-                                        LogoScale="0.9"
-                                        ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
                 </StackPanel>
             </Grid>
         </local:MyCard>

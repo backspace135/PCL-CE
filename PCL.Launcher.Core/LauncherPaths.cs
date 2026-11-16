@@ -5,9 +5,6 @@ namespace PCL;
 /// <summary>业务层使用的路径常量。</summary>
 public static class LauncherPaths
 {
-    /// <summary>Mesa Loader Windows 版本。</summary>
-    public const string MesaLoaderWindowsVersion = "26.0.4";
-
     /// <summary>程序内嵌图片根路径。</summary>
     public const string ImageRoot =
         "pack://application:,,,/Plain Craft Launcher 2;component/Images/";

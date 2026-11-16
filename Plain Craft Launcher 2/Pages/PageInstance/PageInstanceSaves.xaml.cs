@@ -311,7 +311,7 @@ public partial class PageInstanceSaves : IRefreshable, IPageView
             })
         };
         var loader = new Loading.LoaderCombo<int>(
-            $"{PageInstanceLeft.McInstance.Name} - {Lang.Text("Instance.Saves.CopySave")}", loaders)
+            $"{PageInstanceLeft.Instance.Name} - {Lang.Text("Instance.Saves.CopySave")}", loaders)
         {
             OnStateChanged = DownloadUi.LoaderStateChangedHintOnly
         };

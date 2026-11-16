@@ -12,7 +12,6 @@ public interface ILaunchUi
         bool forceWait = false,
         Action? button1Action = null);
 
-    void SetGpuPreference(string javaExePath, bool preference);
     int? ShowSelect(string caption, IReadOnlyList<string> options);
     void OpenExplorer(string path);
     void PrepareLaunchNavigation();
@@ -23,7 +22,6 @@ public interface ILaunchUi
     void ShowLoginPage();
     void ShowLaunchingPage();
     void RefreshLaunching();
-    void AttachLogPage(GameWatcher.Watcher watcher);
     void SetMainWindowState(LaunchWindowState state);
     (double Width, double Height) GetMainPanSize();
 }
@@ -59,11 +57,6 @@ public static class LaunchUi
                 forceWait,
                 button1Action)
             ?? 0;
-    }
-
-    public static void SetGpuPreference(string javaExePath, bool preference)
-    {
-        Current?.SetGpuPreference(javaExePath, preference);
     }
 
     public static int? ShowSelect(string caption, IReadOnlyList<string> options)
@@ -114,11 +107,6 @@ public static class LaunchUi
     public static void RefreshLaunching()
     {
         Current?.RefreshLaunching();
-    }
-
-    public static void AttachLogPage(GameWatcher.Watcher watcher)
-    {
-        Current?.AttachLogPage(watcher);
     }
 
     public static void SetMainWindowState(LaunchWindowState state)

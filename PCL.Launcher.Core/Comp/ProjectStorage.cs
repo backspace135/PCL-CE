@@ -4,9 +4,6 @@ public static partial class Comp
 {
     public class CompProjectStorage
     {
-        public int curseForgeOffset;
-        public int curseForgeTotal = -1;
-
         /// <summary>
         ///     当前的错误信息。如果没有则为 Nothing。
         /// </summary>

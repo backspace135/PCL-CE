@@ -197,7 +197,7 @@ public partial class PageSetupAboutViewModel : ViewModelBase
     private static async Task<List<PageSetupAbout.GitHubContributor>> FetchContributorsAsync()
     {
         using var response = await HttpRequest
-            .Create("https://api.github.com/repos/PCL-Community/PCL2-CE/contributors").SendAsync();
+            .Create("https://api.github.com/repos/backspace135/PCL-CE/contributors").SendAsync();
         response.EnsureSuccessStatusCode();
         return await response.AsJsonAsync<List<PageSetupAbout.GitHubContributor>>(JsonCompat.SerializerOptions) ?? [];
     }

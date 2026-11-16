@@ -108,8 +108,6 @@ public static class Skin
         {
             "Mojang" => "https://sessionserver.mojang.com/session/minecraft/profile/",
             "Ms" => "https://sessionserver.mojang.com/session/minecraft/profile/",
-            "Auth" => (ProfileService.Current?.Server ?? string.Empty).Replace("/authserver", "")
-                + "/sessionserver/session/minecraft/profile/",
             _ => throw new ArgumentException(
                 Lang.Text(
                     "Minecraft.Skin.Error.InvalidSkinType",

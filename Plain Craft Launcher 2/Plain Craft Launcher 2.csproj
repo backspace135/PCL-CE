@@ -24,9 +24,9 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Images\icon.ico</ApplicationIcon>
-        <AssemblyTitle>Plain Craft Launcher Community Edition</AssemblyTitle>
-        <Description>Minecraft 启动器 (作者: 龙腾猫跃; 经社区二次开发版本)</Description>
-        <Product>Plain Craft Launcher Community Edition</Product>
+        <AssemblyTitle>PCL Horizon</AssemblyTitle>
+        <Description>Horizon 启动器（基于 Plain Craft Launcher 社区版）</Description>
+        <Product>PCL Horizon</Product>
         <Copyright>Copyright © 龙腾猫跃 2016. All Rights Reserved.</Copyright>
         <AssemblyVersion>2.15.1.0</AssemblyVersion>
         <FileVersion>2.15.1.0</FileVersion>
@@ -71,13 +71,14 @@
         <PackageReference Include="Downloader" Version="5.9.4" />
         <PackageReference Include="Markdig.Wpf" Version="0.5.0.1" />
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9" />
-        <PackageReference Include="NAudio" Version="2.3.0" />
         <PackageReference Include="protobuf-net" Version="3.2.56" />
         <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.3" />
         <PackageReference Include="System.Net.Http" Version="4.3.4" />
         <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
     </ItemGroup>
     <ItemGroup>
+        <!-- ClipboardInterceptor 使用 WinForms 剪贴板（自带重试） -->
+        <FrameworkReference Include="Microsoft.WindowsDesktop.App.WindowsForms" />
         <ProjectReference Include="..\PCL.Core\PCL.Core.csproj" />
         <ProjectReference Include="..\PCL.Core.Wpf\PCL.Core.Wpf.csproj" />
         <ProjectReference Include="..\PCL.Launcher.Core\PCL.Launcher.Core.csproj" />

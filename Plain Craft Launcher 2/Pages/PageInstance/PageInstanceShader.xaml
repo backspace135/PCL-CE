@@ -1,0 +1,27 @@
+<local:MyPageRight
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:PCL"
+    xmlns:loc="https://ce.pclc.cc/core/localization"
+    x:Class="PCL.PageInstanceShader"
+    PanScroll="{Binding ElementName=PanBack}">
+    <local:MyScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" x:Name="PanBack">
+        <StackPanel Margin="25,10">
+            <local:MyCard Margin="0,15,0,15">
+                <WrapPanel Margin="20,12,0,12">
+                    <local:MyButton Text="{loc:Loc Horizon.Shader.OpenFolder}" MinWidth="140" Padding="13,0"
+                                    Height="35" Margin="0,0,20,0" ColorType="Highlight" Click="BtnOpenFolder_Click" />
+                    <local:MyButton Text="{loc:Loc Instance.Resource.DownloadNew}" MinWidth="140" Padding="13,0"
+                                    Height="35" Margin="0,0,20,0" Click="BtnDownload_Click" />
+                    <local:MyButton Text="{loc:Loc Common.Action.Refresh}" MinWidth="140" Padding="13,0"
+                                    Height="35" Margin="0,0,20,0" Click="BtnRefresh_Click" />
+                </WrapPanel>
+            </local:MyCard>
+            <local:MyCard x:Name="CardList" Margin="0,0,0,15">
+                <StackPanel x:Name="PanList" Margin="12,38,12,12" />
+            </local:MyCard>
+            <local:MyHint x:Name="HintEmpty" Theme="Blue" Text="{loc:Loc Horizon.Shader.Empty}" Margin="0,0,0,15" />
+            <TextBlock Text="{loc:Loc Horizon.Shader.Hint}" TextWrapping="Wrap" Opacity="0.6" Margin="5,0" />
+        </StackPanel>
+    </local:MyScrollViewer>
+</local:MyPageRight>

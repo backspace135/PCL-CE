@@ -28,8 +28,6 @@ public partial class NetworkService
     
     private const string MojangSessionServer = "https://sessionserver.mojang.com/";
 
-    private const string CurseForgeApiServer = "https://api.curseforge.com/v1/";
-
     private const string ModrinthApiServer = "https://api.modrinth.com/v2/";
 
     private const string MinecraftServiceServer = "https://api.minecraftservices.com/";
@@ -50,8 +48,6 @@ public partial class NetworkService
 
     public const string MojangSession = "mojang_session";
 
-    public const string CurseForgeApi = "curseforge_api";
-
     public const string ModrinthApi = "modrinth_api";
 
 
@@ -68,20 +64,12 @@ public partial class NetworkService
         services.ConfigureHttpClientDefaults(b => b
             .ConfigurePrimaryHttpMessageHandler(_GetSocketsHttpHandler)
             .ConfigureHttpClient(c => c.DefaultRequestHeaders
-                .UserAgent.Add(new ProductInfoHeaderValue("PCL-CE", Basics.VersionName)))
+                .UserAgent.Add(new ProductInfoHeaderValue("PCL-Horizon", Basics.VersionName)))
             .SetHandlerLifetime(TimeSpan.FromMinutes(LifeTime)));
         
         // 默认的 HTTP Client
         
         services.AddHttpClient(Default);
-        
-        // CurseForge
-
-        services.AddHttpClient(CurseForgeApi).ConfigureHttpClient(c =>
-        {
-            c.DefaultRequestHeaders.Add("x-api-key", Secrets.CurseForgeAPIKey);
-            c.BaseAddress = new Uri(CurseForgeApiServer);
-        });
         
         // Modrinth
 

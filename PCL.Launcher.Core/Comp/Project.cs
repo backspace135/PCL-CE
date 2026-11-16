@@ -5,17 +5,12 @@ public static partial class Comp
     public partial class CompProject
     {
         /// <summary>
-        ///     CurseForge 文件列表的数字 ID。Modrinth 工程的此项无效。
-        /// </summary>
-        public readonly List<int> CurseForgeFileIds;
-
-        /// <summary>
         ///     英文描述。
         /// </summary>
         public readonly string Description;
 
         /// <summary>
-        ///     下载量计数。注意，该计数仅为一个来源，无法反应两边加起来的下载量！
+        ///     下载量计数。
         /// </summary>
         public readonly int DownloadCount;
 
@@ -26,12 +21,7 @@ public static partial class Comp
         public readonly List<int> Drops;
 
         /// <summary>
-        ///     该工程信息来自 CurseForge 还是 Modrinth。
-        /// </summary>
-        public readonly bool FromCurseForge;
-
-        /// <summary>
-        ///     CurseForge 工程的数字 ID。Modrinth 工程的乱码 ID。
+        ///     Modrinth 工程的 ID。
         /// </summary>
         public readonly string Id;
 
@@ -68,7 +58,6 @@ public static partial class Comp
 
         /// <summary>
         ///     来源网站的工程页面网址。确保格式一定标准。
-        ///     CurseForge：https://www.curseforge.com/minecraft/mc-mods/jei
         ///     Modrinth：https://modrinth.com/mod/technical-enchant
         /// </summary>
         public readonly string Website;
@@ -79,8 +68,6 @@ public static partial class Comp
         /// </summary>
         public string? LogoUrl;
 
-        private bool _loadedDatabase;
-
         /// <summary>
         ///     从工程 Json 中初始化实例。若出错会抛出异常。
         /// </summary>
@@ -88,9 +75,7 @@ public static partial class Comp
         {
             var result = data.ContainsKey("Tags")
                 ? _BuildFromCompJson(data)
-                : data.ContainsKey("summary")
-                    ? _BuildFromCurseForge(data)
-                    : _BuildFromModrinth(data);
+                : _BuildFromModrinth(data);
 
             if (!data.ContainsKey("Tags"))
             {
@@ -108,11 +93,9 @@ public static partial class Comp
                 ];
             }
 
-            FromCurseForge = result.FromCurseForge;
             Type = result.Type;
             Slug = result.Slug;
             Id = result.Id;
-            CurseForgeFileIds = result.CurseForgeFileIds;
             RawName = result.RawName;
             Description = result.Description;
             Website = result.Website;

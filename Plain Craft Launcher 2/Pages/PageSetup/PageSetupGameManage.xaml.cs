@@ -46,19 +46,6 @@ public partial class PageSetupGameManage : IPageView
         Reload();
         SliderLoad();
 
-        if (!Lang.IsChineseMainland)
-        {
-            TextFilenameFormat.Visibility = Visibility.Collapsed;
-            ComboDownloadTranslateV2.Visibility = Visibility.Collapsed;
-            TextModManageStyle.Visibility = Visibility.Collapsed;
-            ComboModLocalNameStyle.Visibility = Visibility.Collapsed;
-
-            RowFilenameFormat.Height = new GridLength(0);
-            RowFilenameFormatGap.Height = new GridLength(0);
-            RowModManageStyle.Height = new GridLength(0);
-            RowModManageStyleGap.Height = new GridLength(0);
-        }
-
         Animations.AniEndControl();
     }
 
@@ -74,13 +61,7 @@ public partial class PageSetupGameManage : IPageView
         CheckFixAuthlib.Checked = Config.Download.FixAuthLib;
 
         // Mod 与整合包
-        CheckDownloadIgnoreQuilt.Checked = Config.Download.Comp.IgnoreQuilt;
-        CheckDownloadAutoInstallDependencies.Checked = Config.Download.Comp.AutoInstallDependencies;
         CheckDownloadClipboard.Checked = Config.Download.Comp.ReadClipboard;
-
-        // Minecraft 更新提示
-        CheckUpdateRelease.Checked = Config.Tool.ReleaseNotification;
-        CheckUpdateSnapshot.Checked = Config.Tool.SnapshotNotification;
 
         // 辅助设置
         CheckHelpLauncherLanguage.Checked = Config.Tool.AutoChangeLanguage;

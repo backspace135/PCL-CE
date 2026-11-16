@@ -53,7 +53,7 @@ public partial class FormMain
                 Buttons = DialogButtons.Create("Common.Action.Confirm", "Main.UpdateLog.FullChangelog"),
                 ForceWait = true
             }).Result?.Button ?? 0) ==
-                2) Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases");
+                2) Common.OpenWebsite("https://github.com/backspace135/PCL-CE/releases");
         }, "UpdateLog Output");
     }
 
@@ -78,15 +78,6 @@ public partial class FormMain
         var lastVersion = States.System.LastVersion;
         if (lastVersion < Common.VersionCode)
         {
-            // 重新询问是否启用遥测数据收集
-            if (lastVersion <= 511)
-            {
-                if (!Config.System.TelemetryConfig.IsDefault() && Config.System.Telemetry)
-                {
-                    Config.System.TelemetryConfig.Reset();
-                    Common.Log("[Start] 遥测策略变更：由旧版本升级到含新版遥测的版本，已重置遥测设置");
-                }
-            }
             // 触发升级
             UpgradeSub(lastVersion);
         }
@@ -144,10 +135,6 @@ public partial class FormMain
         // 调试模式提醒
         if (Common.modeDebug)
             HintService.Show(Hints.Info(Lang.Text("Main.DebugMode.Hint")));
-        // 尽早执行的加载池
-        GameFolders.McFolderListLoader
-            .Start(0); // 为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
-
         Common.Log("[Start] 第二阶段加载用时：" + (TimeUtils.GetTimeTick() - Common.applicationStartTick) + " ms");
         // 注册生命周期状态事件
         Lifecycle.When(LifecycleState.WindowCreated, FormMain_Loaded);
@@ -160,15 +147,11 @@ public partial class FormMain
         Common.frmHandle = new WindowInteropHelper(this).Handle;
         // 读取设置
         PageSetupUI.BackgroundRefresh(false, true);
-        Music.MusicRefreshPlay(false, true);
         // 扩展按钮
         BtnExtraUpdateRestart.showCheck = BtnExtraUpdateRestart_ShowCheck;
         BtnExtraDownload.showCheck = BtnExtraDownload_ShowCheck;
         BtnExtraBack.showCheck = BtnExtraBack_ShowCheck;
-        BtnExtraApril.showCheck = BtnExtraApril_ShowCheck;
         BtnExtraShutdown.showCheck = BtnExtraShutdown_ShowCheck;
-        BtnExtraLog.showCheck = BtnExtraLog_ShowCheck;
-        BtnExtraApril.ShowRefresh();
         // 初始化尺寸改变
         if (!Config.Preference.LockWindowSize)
             AddResizer();
@@ -253,7 +236,7 @@ public partial class FormMain
                         Content = $"{hint}{"\r\n"}{"\r\n"}{Lang.Text("Main.SpecialVersion.HideHintNotice")}",
                         Buttons = DialogButtons.From(DialogButton.Create(Lang.Text("Main.SpecialVersion.IUnderstand")), DialogButton.Create(Lang.Text("Main.SpecialVersion.OpenDownloadPageAndExit"), () =>
                         {
-                            Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases/latest");
+                            Common.OpenWebsite("https://github.com/backspace135/PCL-CE/releases/latest");
                             EndProgram(false);
                         })),
                         IsWarn = true,
@@ -285,18 +268,6 @@ public partial class FormMain
                             }
                     }
 
-                // 遥测提示
-                if (Config.System.TelemetryConfig.IsDefault())
-                {
-                    var selection = (DialogService.Instance.Show(new TextDialogRequest
-                    {
-                        Title = Lang.Text("Main.Telemetry.Title"),
-                        Content = Lang.Text("Main.Telemetry.Message"),
-                        Buttons = DialogButtons.AgreeDecline,
-                        ForceWait = true
-                    }).Result?.Button ?? 0);
-                    Config.System.TelemetryConfig.SetValue(selection == 1, forceNewValue: true);
-                }
                 // 启动加载器池
                 try
                 {
@@ -357,12 +328,6 @@ public partial class FormMain
             Common.Log($"[Start] 最高版本号从 {lowerVersionCode} 升高到 {Common.VersionCode}");
         }
 #endif
-        // 被移除的窗口设置选项 (Commit 3161488 2026/1/23)
-        if ((int)Config.Launch.GameWindowMode == 5)
-            Config.Launch.GameWindowMode = GameWindowSizeMode.Default;
-
-        // 更新后展示社区版提示
-        UpdateManager.ShowCeAnnounce();
         // 输出更新日志
         if (lastVersionCode <= 0)
             return;
@@ -370,18 +335,6 @@ public partial class FormMain
             return;
         ShowUpdateLog();
 
-        // 重置自定义主页配置
-        if (lastVersionCode < 521 && Config.Preference.Homepage.SelectedPreset >= 3)
-        {
-            Config.Preference.Homepage.SelectedPreset = 0;
-            DialogService.Instance.Show(new TextDialogRequest
-            {
-                Title = Lang.Text("Main.HomepageReset.Title"),
-                Content = Lang.Text("Main.HomepageReset.Content"),
-                Buttons = DialogButtons.Ok,
-                ForceWait = true
-            });
-        }
     }
 
     private void DowngradeSub(int lastVersionCode)
@@ -553,7 +506,6 @@ public partial class FormMain
         }
 
         // 关闭联机大厅
-        // Await LobbyController.CloseAsync().ConfigureAwait(False)
         // 关闭
         Common.RunInUiWait(() =>
         {
@@ -611,7 +563,6 @@ public partial class FormMain
     {
         // On Error Resume Next
         // 关闭联机大厅
-        // Await LobbyController.CloseAsync().ConfigureAwait(False)
         Common.isProgramEnded = true;
         Animations.AniBeginControl();
         if (UpdateManager.isUpdateWaitingRestart && !isUpdating)
@@ -621,7 +572,7 @@ public partial class FormMain
             if (!isLogShown)
             {
                 Common.FeedbackInfo();
-                Common.Log("请在 https://github.com/PCL-Community/PCL2-CE/issues 提交错误报告，以便于社区解决此问题！（这也有可能是原版 PCL 的问题）");
+                Common.Log("请在 https://github.com/backspace135/PCL-CE/issues 提交错误报告，以便于社区解决此问题！（这也有可能是原版 PCL 的问题）");
                 isLogShown = true;
                 Common.ShellOnly(LogWrapper.CurrentLogger.CurrentLogFiles.Last());
             }
@@ -701,11 +652,6 @@ public partial class FormMain
         WindowState = WindowState.Minimized;
     }
 
-    private void BtnTitleHelp_Click(object sender, EventArgs e)
-    {
-        Common.OpenWebsite("https://www.bilibili.com/video/BV1uT4y1P7CX");
-    }
-
     #endregion
 
     #region 窗体事件
@@ -778,15 +724,6 @@ public partial class FormMain
         // 按 ESC 返回上一级
         if (e.Key == Key.Escape)
             TriggerPageBack();
-        // 更改隐藏实例可见性
-        if (e.Key == Key.F11 && pageCurrent == PageType.InstanceSelect)
-        {
-            Launcher.frmSelectRight.showHidden = !Launcher.frmSelectRight.showHidden;
-            Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader, GameFolders.mcFolderSelected,
-                Loading.LoaderFolderRunType.ForceRun, 1, @"versions\");
-            return;
-        }
-
         // 更改功能隐藏可见性
         if (e.Key == Key.F12)
         {
@@ -812,10 +749,7 @@ public partial class FormMain
         // 调用启动游戏
         if (e.Key == Key.Enter && pageCurrent == PageType.Launch)
         {
-            if (Launcher.isAprilEnabled && !Launcher.isAprilGiveup)
-                HintService.Show(Hints.Info(Lang.Text("Main.April.Nope")));
-            else
-                Launcher.frmLaunchLeft.LaunchButtonClick();
+            Launcher.frmLaunchLeft.LaunchButtonClick();
         }
 
         // 修复按下 Alt 后误认为弹出系统菜单导致的冻结
@@ -834,14 +768,7 @@ public partial class FormMain
 
     private void TriggerPageBack()
     {
-        if (pageCurrent == PageType.Download && PageCurrentSub == PageSubType.DownloadInstall &&
-            Launcher.frmDownloadInstall.isInSelectPage)
-            Launcher.frmDownloadInstall.ExitSelectPage();
-        else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionInstall &&
-                 Launcher.frmInstanceInstall.isInSelectPage)
-            Launcher.frmInstanceInstall.ExitSelectPage();
-        else
-            PageBack();
+        PageBack();
     }
 
     // 切回窗口
@@ -851,40 +778,28 @@ public partial class FormMain
         {
             if (Config.Download.Comp.ReadClipboard)
                 Comp.CompClipboard.GetClipboardResource();
-            if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionMod)
-            {
-                // Mod 管理自动刷新
-                Launcher.frmInstanceMod.ReloadCompFileList();
-            }
-            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionResourcePack)
+            if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionResourcePack)
             {
                 // 资源包管理自动刷新
-                if (Launcher.frmInstanceResourcePack is not null)
-                    Launcher.frmInstanceResourcePack.ReloadCompFileList();
+                Launcher.frmInstanceResourcePack?.Refresh();
+            }
+            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionMod)
+            {
+                Launcher.frmInstanceMod?.Refresh();
             }
             else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionShader)
             {
-                // 光影包管理自动刷新
-                if (Launcher.frmInstanceShader is not null)
-                    Launcher.frmInstanceShader.ReloadCompFileList();
-            }
-            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSchematic)
-            {
-                // 投影原理图管理自动刷新
-                if (Launcher.frmInstanceSchematic is not null)
-                    Launcher.frmInstanceSchematic.ReloadCompFileList();
+                Launcher.frmInstanceShader?.Refresh();
             }
             else if (pageCurrent == PageType.InstanceSelect)
             {
                 // 实例选择自动刷新
-                Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader, GameFolders.mcFolderSelected,
-                    Loading.LoaderFolderRunType.RunOnUpdated, 1, @"versions\");
+                HorizonEnvironment.ReloadInstances();
             }
-            else if (Launcher.frmMain.pageRight is PageInstanceSavesDatapack &&
-                     Launcher.frmInstanceSavesDatapack is not null)
+            else if (Launcher.frmMain.pageRight is PageInstanceSavesDatapack datapackPage)
             {
                 // 数据包管理自动刷新
-                Launcher.frmInstanceSavesDatapack.ReloadDatapackFileList();
+                datapackPage.Refresh();
             }
         }
         catch (Exception ex)
@@ -955,38 +870,7 @@ public partial class FormMain
                 {
                     var str = (string)e.Data.GetData(DataFormats.Text);
                     Common.Log("[System] 接受文本拖拽：" + str);
-                    if (str.StartsWithF("authlib-injector:yggdrasil-server:"))
-                    {
-                        // Authlib 拖拽
-                        e.Handled = true;
-                        e.Effects = DragDropEffects.Copy;
-                        var authlibServer =
-                            WebUtility.UrlDecode(str.Substring("authlib-injector:yggdrasil-server:".Length));
-                        Common.Log("[System] Authlib 拖拽：" + authlibServer);
-                        if (!new HttpValidator().Validate(authlibServer).IsValid)
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.AuthlibInvalid", authlibServer)));
-                            return;
-                        }
-
-                        if ((DialogService.Instance.Show(new TextDialogRequest
-                        {
-                            Title = Lang.Text("Main.FileDrag.CreateAuthlibProfileTitle"),
-                            Content = Lang.Text("Main.FileDrag.CreateAuthlibProfile", authlibServer),
-                            Buttons = DialogButtons.OkCancel,
-                            ForceWait = true
-                        }).Result?.Button ?? 0) == 2)
-                            return;
-                        Common.RunInUi(() =>
-                        {
-                            PageLoginAuth.draggedAuthServer = authlibServer;
-                            Launcher.frmLaunchLeft.RefreshPage(true, GameLaunch.McLoginType.Auth);
-                        });
-                        if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSetup)
-                            // 正在服务器选项页，需要刷新设置项显示
-                            Launcher.frmInstanceSetup.Reload();
-                    }
-                    else if (str.StartsWithF("file:///"))
+                    if (str.StartsWithF("file:///"))
                     {
                         // 文件拖拽（例如从浏览器下载窗口拖入）
                         var filePath = WebUtility.UrlDecode(str).Substring("file:///".Length).Replace("/", @"\");
@@ -1052,13 +936,15 @@ public partial class FormMain
                 var firstExtension = filePathList.First().AfterLast(".").ToLower();
                 var allSameType = filePathList.All(f => (f.AfterLast(".").ToLower() ?? "") == (firstExtension ?? ""));
 
-                if (allSameType &&
-                    new[] { "jar", "litemod", "disabled", "old", "litematic", "nbt", "schematic", "schem" }.Contains(
-                        firstExtension))
+                // 允许在资源包、光影与模组页批量拖入
+                var batchImport = pageCurrent == PageType.InstanceSetup && PageCurrentSub switch
                 {
-                }
-                // 允许同类型的 Mod 文件或投影文件批量拖拽
-                else
+                    PageSubType.VersionResourcePack => firstExtension == "zip",
+                    PageSubType.VersionShader => firstExtension is "zip" or "hshader",
+                    PageSubType.VersionMod => firstExtension == "hmod",
+                    _ => false
+                };
+                if (!allSameType || !batchImport)
                 {
                     HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameTypeOnly")));
                     return;
@@ -1090,31 +976,26 @@ public partial class FormMain
                 return;
             }
 
-            // 安装 Mod
-            if (PageInstanceCompResource.InstallMods(filePathList))
-                return;
-            // 安装投影文件
-            if (new[] { "litematic", "nbt", "schematic", "schem" }.Contains(extension))
+            // 处理资源安装
+            if (pageCurrent == PageType.InstanceSetup && extension == "hmod" && PageCurrentSub == PageSubType.VersionMod)
             {
-                Common.Log($"[System] 文件为 {extension} 格式，尝试作为原理图安装");
-                // 获取当前文件夹路径（如果在资源管理页面）
-                string targetFolderPath = null;
-                if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSchematic &&
-                    Launcher.frmInstanceSchematic is not null &&
-                    Launcher.frmInstanceSchematic is PageInstanceCompResource)
-                    targetFolderPath = Launcher.frmInstanceSchematic.CurrentFolderPath;
-                PageInstanceCompResource.InstallCompFiles(filePathList, Comp.CompType.Schematic, targetFolderPath);
+                Common.RunInUi(() => PageInstanceMod.Import(filePathList));
                 return;
             }
 
-            // 处理资源安装
-            if (pageCurrent == PageType.InstanceSetup && new[] { "zip" }.Any(i => (i ?? "") == (extension ?? "")))
+            if (pageCurrent == PageType.InstanceSetup && extension is "zip" or "hshader" &&
+                PageCurrentSub == PageSubType.VersionShader)
+            {
+                Common.RunInUi(() => PageInstanceShader.Import(filePathList));
+                return;
+            }
+
+            if (pageCurrent == PageType.InstanceSetup && extension == "zip")
                 switch (PageCurrentSub)
                 {
                     case PageSubType.VersionWorld:
                     {
-                        var destFolder = PageInstanceLeft.McInstance.PathIndie + @"saves\" +
-                                         Path.GetFileNameWithoutExtension(filePath);
+                        var destFolder = Path.Combine(PageInstanceLeft.Instance.SavesDir, Path.GetFileNameWithoutExtension(filePath));
                         var destLevelDat = Path.Combine(destFolder, "level.dat");
                         if (Directory.Exists(destFolder))
                         {
@@ -1166,102 +1047,10 @@ public partial class FormMain
                     }
                     case PageSubType.VersionResourcePack:
                     {
-                        var destFile = PageInstanceLeft.McInstance.PathIndie + @"resourcepacks\" +
-                                       Common.GetFileNameFromPath(filePath);
-                        if (File.Exists(destFile))
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                            return;
-                        }
-
-                        Common.CopyFile(filePath, destFile);
-                        HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                        if (Launcher.frmInstanceResourcePack is not null)
-                            Common.RunInUi(() => Launcher.frmInstanceResourcePack.ReloadCompFileList());
-                        return;
-                    }
-                    case PageSubType.VersionShader:
-                    {
-                        var destFile = PageInstanceLeft.McInstance.PathIndie + @"shaderpacks\" +
-                                       Common.GetFileNameFromPath(filePath);
-                        if (File.Exists(destFile))
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                            return;
-                        }
-
-                        Common.CopyFile(filePath, destFile);
-                        HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                        if (Launcher.frmInstanceShader is not null)
-                            Common.RunInUi(() => Launcher.frmInstanceShader.ReloadCompFileList());
+                        Common.RunInUi(() => PageInstanceResourcePack.Import(filePathList));
                         return;
                     }
                 }
-
-            // 处理投影文件
-            if (pageCurrent == PageType.InstanceSetup &&
-                new[] { "litematic", "nbt", "schematic", "schem" }.Contains(extension) &&
-                PageCurrentSub == PageSubType.VersionSchematic)
-            {
-                var destFile = PageInstanceLeft.McInstance.PathIndie + @"schematics\" +
-                               Common.GetFileNameFromPath(filePath);
-                if (File.Exists(destFile))
-                {
-                    HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameFileExists", destFile)));
-                    return;
-                }
-
-                Directory.CreateDirectory(PageInstanceLeft.McInstance.PathIndie + @"schematics\");
-                Common.CopyFile(filePath, destFile);
-                HintService.Show(Hints.Success(Lang.Text("Main.FileDrag.Imported", Common.GetFileNameFromPath(filePath))));
-                if (Launcher.frmInstanceSchematic is not null)
-                    Common.RunInUi(() => Launcher.frmInstanceSchematic.ReloadCompFileList());
-                return;
-            }
-
-            // 安装整合包
-            if (new[] { "zip", "rar", "mrpack" }.Any(t =>
-                    (t ?? "") == (extension ?? ""))) // 部分压缩包是 zip 格式但后缀为 rar，总之试一试
-            {
-                Common.Log("[System] 文件为压缩包，尝试作为整合包安装");
-                try
-                {
-                    Modpack.ModpackInstall(filePath);
-                    return;
-                }
-                catch (CancelledException ex)
-                {
-                    return; // 用户主动取消
-                }
-                catch (Exception ex)
-                {
-                    // 安装失败，继续往后尝试
-                }
-            }
-
-            // 错误报告分析
-            do
-            {
-                try
-                {
-                    Common.Log("[System] 尝试进行错误报告分析");
-                    var analyzer = new CrashAnalyzer(Common.GetUuid());
-                    analyzer.Import(filePath);
-                    if (!analyzer.Prepare())
-                        break;
-                    analyzer.Analyze();
-                    analyzer.Output(true, new List<string>());
-                    return;
-                }
-                catch (Exception ex)
-                {
-                    Common.Log(
-                        ex,
-                        "自主错误报告分析失败",
-                        Common.LogLevel.Feedback,
-                        userSummary: Lang.Text("Main.Error.OperationFailed"));
-                }
-            } while (false);
 
             // 未知操作
             HintService.Show(Hints.Info(Lang.Text("Main.FileDrag.UnknownOperation")));
@@ -1416,11 +1205,6 @@ public partial class FormMain
         Download = 1,
 
         /// <summary>
-        ///     联机。
-        /// </summary>
-        Tools = 3,
-
-        /// <summary>
         ///     设置。
         /// </summary>
         Setup = 2,
@@ -1450,10 +1234,6 @@ public partial class FormMain
         /// </summary>
         HelpDetail = 9,
 
-        /// <summary>
-        ///     游戏实时日志。这是一个副页面。
-        /// </summary>
-        GameLog = 10,
 
         /// <summary>
         ///     存档详细管理，这是一个副页面。
@@ -1467,53 +1247,31 @@ public partial class FormMain
     public enum PageSubType
     {
         Default = 0,
-        DownloadInstall = 1,
-        DownloadMod = 2,
-        DownloadPack = 3,
+        DownloadHorizonBuild = 1,
+        DownloadHorizonContent = 2,
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
-        DownloadShader = 6,
-        DownloadWorld = 7,
         DownloadCompFavorites = 8,
-        DownloadClient = 9,
-        DownloadOptiFine = 10,
-        DownloadForge = 11,
-        DownloadNeoForge = 12,
-        DownloadCleanroom = 13,
-        DownloadFabric = 14,
-        DownloadLiteLoader = 16,
-        DownloadLabyMod = 17,
-        DownloadLegacyFabric = 18,
 
         SetupLaunch = 0,
         SetupUI = 1,
         SetupGameManage = 2,
-        SetupLink = 3,
         SetupAbout = 4,
         SetupLog = 5,
-        SetupFeedback = 6,
-        SetupGameLink = 7,
         SetupUpdate = 8,
         SetupJava = 9,
         SetupLauncherMisc = 10,
         SetupLauncherLanguage = 11,
 
-        ToolsGameLink = 1,
-        ToolsTest = 3,
 
         VersionOverall = 0,
         VersionSetup = 1,
-        VersionExport = 2,
         VersionWorld = 3,
         VersionScreenshot = 4,
         VersionMod = 5,
-        VersionModDisabled = 6,
         VersionResourcePack = 7,
         VersionShader = 8,
-        VersionSchematic = 9,
-        VersionInstall = 10,
         VersionServer = 11,
-        VersionModJarInJar = 12,
         VersionSavesInfo = 0,
         VersionSavesDatapack = 1
     }
@@ -1533,17 +1291,13 @@ public partial class FormMain
             {
                 return Lang.Text("Main.Title.TaskManager");
             }
-            case PageType.GameLog:
-            {
-                return Lang.Text("Main.Title.GameLog");
-            }
             case PageType.InstanceSetup:
             {
-                return Lang.Text("Main.Title.InstanceSetup", PageInstanceLeft.McInstance is null ? Lang.Text("Common.State.Unknown") : PageInstanceLeft.McInstance.Name);
+                return Lang.Text("Main.Title.InstanceSetup", PageInstanceLeft.Instance is null ? Lang.Text("Common.State.Unknown") : PageInstanceLeft.Instance.Name);
             }
             case PageType.CompDetail:
             {
-                return Lang.Text("Main.Title.ResourceDownload", stack.additional.Value.CompProject.TranslatedName);
+                return Lang.Text("Main.Title.ResourceDownload", stack.additional.Value.CompProject.RawName);
             }
             case PageType.HelpDetail:
             {
@@ -1909,27 +1663,11 @@ public partial class FormMain
                         PageChangeAnim(Launcher.frmDownloadLeft, (FrameworkElement)Launcher.frmDownloadLeft.PageGet(subType));
                         break;
                     }
-                case PageType.Tools: // 联机
-                    {
-                        Launcher.frmToolsLeft ??= new PageToolsLeft();
-                        subType = Launcher.frmToolsLeft.pageID;
-                        PageChangeAnim(Launcher.frmToolsLeft, (FrameworkElement)Launcher.frmToolsLeft.PageGet(subType));
-                        break;
-                    }
                 case PageType.Setup: // 设置
                     {
                         Launcher.frmSetupLeft ??= new PageSetupLeft();
                         subType = Launcher.frmSetupLeft.pageID;
                         PageChangeAnim(Launcher.frmSetupLeft, (FrameworkElement)Launcher.frmSetupLeft.PageGet(subType));
-                        break;
-                    }
-                case PageType.GameLog: // 实时日志
-                    {
-                        if (Launcher.frmLogLeft is null)
-                            Launcher.frmLogLeft = new PageLogLeft();
-                        if (Launcher.frmLogLeft is null)
-                            Launcher.frmLogRight = new PageLogRight();
-                        PageChangeAnim(Launcher.frmLogLeft, Launcher.frmLogRight);
                         break;
                     }
                 case PageType.InstanceSelect: // 实例选择
@@ -1988,7 +1726,6 @@ public partial class FormMain
             #region 设置为最新状态
 
             BtnExtraDownload.ShowRefresh();
-            BtnExtraApril.ShowRefresh();
 
             #endregion
 
@@ -2218,17 +1955,6 @@ public partial class FormMain
         return UpdateManager.isUpdateWaitingRestart;
     }
 
-    // 音乐
-    private void BtnExtraMusic_Click(object sender, MouseButtonEventArgs e)
-    {
-        Music.MusicControlPause();
-    }
-
-    private void BtnExtraMusic_RightClick(object sender, MouseButtonEventArgs e)
-    {
-        Music.MusicControlNext();
-    }
-
     // 任务管理
     private void BtnExtraDownload_Click(object sender, MouseButtonEventArgs e)
     {
@@ -2240,38 +1966,14 @@ public partial class FormMain
         return NetFacade.HasDownloadingTask() && !(pageCurrent == PageType.TaskManager);
     }
 
-    // 投降
-    public void AprilGiveup()
-    {
-        if (Launcher.isAprilEnabled && !Launcher.isAprilGiveup)
-        {
-            HintService.Show(Hints.Success("=D"));
-            Launcher.isAprilGiveup = true;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleX = 1d;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleY = 1d;
-            BtnExtraApril.ShowRefresh();
-        }
-    }
-
-    private void BtnExtraApril_Click(object sender, MouseButtonEventArgs e)
-    {
-        AprilGiveup();
-    }
-
-    public bool BtnExtraApril_ShowCheck()
-    {
-        return Launcher.isAprilEnabled && !Launcher.isAprilGiveup && pageCurrent == PageType.Launch;
-    }
 
     // 关闭 Minecraft
     private void BtnExtraShutdown_Click(object sender, MouseButtonEventArgs e)
     {
         try
         {
-            if (GameLaunch.mcLaunchLoaderReal is not null)
-                GameLaunch.mcLaunchLoaderReal.Abort();
-            foreach (var Watcher in GameWatcher.mcWatcherList)
-                Watcher.Kill();
+            HorizonLaunch.LaunchLoaderReal?.Abort();
+            HorizonGames.KillAll();
             HintService.Show(Hints.Success(Lang.Text("Main.ShutdownMinecraft.Success")));
         }
         catch (Exception ex)
@@ -2286,22 +1988,8 @@ public partial class FormMain
 
     public bool BtnExtraShutdown_ShowCheck()
     {
-        return GameWatcher.hasRunningMinecraft;
+        return HorizonGames.HasRunningGame;
     }
-
-    // 游戏日志
-    private void BtnExtraLog_Click(object sender, MouseButtonEventArgs e)
-    {
-        PageChange(PageType.GameLog);
-    }
-
-    public bool BtnExtraLog_ShowCheck()
-    {
-        if (Launcher.frmLogLeft is null || Launcher.frmLogRight is null || pageCurrent == PageType.GameLog)
-            return false;
-        return Launcher.frmLogLeft.shownLogs.Count > 0;
-    }
-
     /// <summary>
     ///     返回顶部。
     /// </summary>

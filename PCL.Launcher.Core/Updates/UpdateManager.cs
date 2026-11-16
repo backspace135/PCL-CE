@@ -14,17 +14,7 @@ public static class UpdateManager
     public static UpdatesWrapperModel remoteServer = new(
         new List<IUpdateSource>
         {
-            new UpdatesMirrorChyanModel(),
-            new UpdatesRandomModel(
-            [
-                new UpdatesMinioModel("https://s3.pysio.online/pcl2-ce/", "Pysio"),
-                new UpdatesMinioModel(
-                    "https://staticassets.naids.com/resources/pclce/",
-                    "Naids")
-            ]),
-            new UpdatesMinioModel(
-                "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/",
-                "GitHub")
+            new UpdatesGitHubModel("backspace135/PCL-CE")
         });
 
     public static Loading.LoaderCombo<JsonObject> updateLoader;
@@ -98,7 +88,7 @@ public static class UpdateManager
         bool forceValidated = false)
     {
         var dlTargetPath =
-            $@"{LauncherPaths.ExecutableDirectory}PCL\Plain Craft Launcher Community Edition.exe";
+            $@"{LauncherPaths.ExecutableDirectory}PCL\PCL Horizon.exe";
         LauncherCommon.RunInNewThread(() =>
         {
             try
@@ -233,7 +223,7 @@ public static class UpdateManager
         try
         {
             var fileName = LauncherPaths.ExecutableDirectory
-                + @"PCL\Plain Craft Launcher Community Edition.exe";
+                + @"PCL\PCL Horizon.exe";
             if (!File.Exists(fileName))
             {
                 LauncherCommon.Log("[System] 更新失败：未找到更新文件");
@@ -338,17 +328,5 @@ public static class UpdateManager
                 LauncherCommon.Log("[Update] 更新设置: 不自动检查更新");
                 return;
         }
-    }
-
-    /// <summary>
-    ///     展示社区版提示
-    /// </summary>
-    /// <param name="IsUpdate">是否为更新时启动</param>
-    public static void ShowCeAnnounce()
-    {
-        UpdateUi.Current?.ShowMessageBox(
-            Lang.Text("Update.CommunityNotice.Body"),
-            Lang.Text("Update.CommunityNotice.Title"),
-            Lang.Text("Update.CommunityNotice.Confirm"));
     }
 }

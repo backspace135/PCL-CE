@@ -101,37 +101,29 @@ public static partial class Comp
         Default = 1,
 
         /// <summary>
-        ///     相关性 (CurseForge Name (4) / Modrinth relevance)
+        ///     相关性 (Modrinth relevance)
         /// </summary>
         Relevance = 2,
 
         /// <summary>
-        ///     下载量 (CurseForge TotalDownloads (6) / Modrinth downloads)
+        ///     下载量 (Modrinth downloads)
         /// </summary>
         Downloads = 3,
 
         /// <summary>
-        ///     关注量 (CurseForge Popularity (2) / Modrinth follows)
+        ///     关注量 (Modrinth follows)
         /// </summary>
         Follows = 4,
 
         /// <summary>
-        ///     最新发布 (CurseForge ReleasedDate (11) / Modrinth newest)
+        ///     最新发布 (Modrinth newest)
         /// </summary>
         Newest = 5,
 
         /// <summary>
-        ///     最近更新 (CurseForge LastUpdated (3) / Modrinth updated)
+        ///     最近更新 (Modrinth updated)
         /// </summary>
         Updated = 6
-    }
-
-    [Flags]
-    public enum CompSourceType
-    {
-        CurseForge = 1,
-        Modrinth = 2,
-        Any = CurseForge | Modrinth
     }
 
     public enum CompType
@@ -162,8 +154,7 @@ public static partial class Comp
         Shader = 3,
 
         /// <summary>
-        ///     CurseForge：数据包。
-        ///     Modrinth：数据包，或数据包与 Mod 的混合。
+        ///     数据包，或数据包与 Mod 的混合（Modrinth 混用两者）。
         /// </summary>
         DataPack = 4,
 

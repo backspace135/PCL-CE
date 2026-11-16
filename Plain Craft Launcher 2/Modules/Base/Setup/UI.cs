@@ -196,7 +196,7 @@ public partial class Setup
                 if (value == 2)
                     CustomEventService.SetEventData(
                         ui.HintCustom,
-                        "https://github.com/PCL-Community/PCL-CE/discussions");
+                        "https://github.com/backspace135/PCL-CE/discussions");
             }
         }
 
@@ -230,28 +230,20 @@ public partial class Setup
 
     /// <summary>
     ///     设置标题栏 Logo 类型。
-    ///     0：无，1：默认，2：文本，3：图片，4：HMCL。
+    ///     0：无，1：默认，2：文本，3：图片。
     /// </summary>
     public static void UiLogoType(int value)
     {
-        if (ThemeService.CurrentTheme == ColorTheme.HmclBlue)
-            value = 4;
-
         var main = Launcher.frmMain;
         var ui = Launcher.frmSetupUi;
         if (main is null)
             return;
 
-        if (value is >= 0 and <= 4)
+        if (value is >= 0 and <= 3)
         {
             main.ShapeTitleLogo.Visibility = ToVisibility(value == 1);
-            main.ShapeHMCLTitleLogo.Visibility = ToVisibility(value == 4);
-            main.BtnTitleHelp.Visibility = ToVisibility(value == 4);
             main.LabTitleLogo.Visibility = ToVisibility(value == 2);
             main.ImageTitleLogo.Visibility = ToVisibility(value == 3);
-
-            if (value != 4)
-                main.CELogo.Visibility = ToVisibility(value != 0);
 
             if (ui is not null)
             {

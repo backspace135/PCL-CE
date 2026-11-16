@@ -19,12 +19,6 @@
                                                 BorderBrush="{DynamicResource ColorBrush6}" BorderThickness="1"
                                                 SvgIcon="lucide/globe"
                                                 Margin="0,0,3,0" HorizontalAlignment="Left" Click="BtnIntroWeb_Click" />
-                        <local:MyIconTextButton x:Name="BtnIntroWiki"
-                                                Text="{loc:Loc Download.Comp.Detail.McMod}"
-                                                BorderBrush="{DynamicResource ColorBrush6}" BorderThickness="1"
-                                                SvgIcon="lucide/globe"
-                                                Margin="0,0,3,0" HorizontalAlignment="Left" Click="BtnIntroWiki_Click"
-                                                Visibility="{Binding IntroWikiVisibility}" />
                         <local:MyIconTextButton x:Name="BtnIntroCopy"
                                                 Text="{loc:Loc Download.Comp.Detail.CopyName}"
                                                 BorderBrush="{DynamicResource ColorBrush6}" BorderThickness="1"

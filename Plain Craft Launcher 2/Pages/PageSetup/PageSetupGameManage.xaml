@@ -106,10 +106,6 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="28" />
                             <RowDefinition Height="7" />
-                            <RowDefinition Height="28" x:Name="RowFilenameFormat" />
-                            <RowDefinition Height="7" x:Name="RowFilenameFormatGap" />
-                            <RowDefinition Height="28" x:Name="RowModManageStyle" />
-                            <RowDefinition Height="7" x:Name="RowModManageStyleGap" />
                             <RowDefinition Height="28" x:Name="RowQuickDownload" />
                             <RowDefinition Height="7" x:Name="RowQuickDownloadGap" />
                             <RowDefinition Height="Auto" />
@@ -124,32 +120,9 @@
                             <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.Source.PreferOfficialWithFallback}" IsSelected="True" />
                             <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Source.UseOfficial}" />
                         </local:MyComboBox>
-                        <TextBlock Grid.Row="2" x:Name="TextFilenameFormat" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Community.FilenameFormat}"
+                        <TextBlock Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Community.QuickDownload}"
                                    Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="2" x:Name="ComboDownloadTranslateV2" Grid.ColumnSpan="2"
-                                          Tag="ToolDownloadTranslateV2" Grid.Column="1"
-                                          SelectedIndex="{Binding TranslateFormatIndex, Mode=OneWay}"
-                                          SelectionChanged="ComboChange"
-                                          ToolTip="{loc:Loc Setup.GameManage.Community.FilenameFormat.ToolTip}">
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.FilenameFormat.Style0}" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.FilenameFormat.Style1}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.FilenameFormat.Style2}" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.FilenameFormat.Style3}" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.FilenameFormat.Style4}" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="4" x:Name="TextModManageStyle" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Community.ModManageStyle}"
-                                   Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="4" x:Name="ComboModLocalNameStyle" Grid.ColumnSpan="2"
-                                          Tag="ToolModLocalNameStyle" Grid.Column="1"
-                                          SelectedIndex="{Binding LocalNameStyleIndex, Mode=OneWay}"
-                                          SelectionChanged="ComboChange"
-                                          ToolTip="{loc:Loc Setup.GameManage.Community.ModManageStyle.ToolTip}">
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.ModManageStyle.TitleTranslation}" IsSelected="True" />
-                            <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.ModManageStyle.TitleFilename}" />
-                        </local:MyComboBox>
-                        <TextBlock Grid.Row="6" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Community.QuickDownload}"
-                                   Margin="0,0,25,0" />
-                        <local:MyComboBox Grid.Row="6" x:Name="ComboDownloadQuickBehavior" Grid.ColumnSpan="2"
+                        <local:MyComboBox Grid.Row="2" x:Name="ComboDownloadQuickBehavior" Grid.ColumnSpan="2"
                                           Tag="ToolDownloadQuickBehavior" Grid.Column="1"
                                           SelectedIndex="{Binding QuickBehaviorIndex, Mode=OneWay}"
                                           SelectionChanged="ComboChange"
@@ -159,21 +132,6 @@
                             <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.QuickDownload.AskInstance}" />
                             <local:MyComboBoxItem Content="{loc:Loc Setup.GameManage.Community.QuickDownload.AskPath}" />
                         </local:MyComboBox>
-                    </Grid>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto" />
-                            <RowDefinition Height="Auto" />
-                        </Grid.RowDefinitions>
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{loc:Loc Setup.GameManage.Community.HideQuilt}" ToolTip="{loc:Loc Setup.GameManage.Community.HideQuilt.ToolTip}"
-                                          Grid.Row="0" Height="22" Grid.Column="0" Change="CheckBoxChange"
-                                          x:Name="CheckDownloadIgnoreQuilt" Tag="ToolDownloadIgnoreQuilt" />
-                        <local:MyCheckBox Margin="0,2,0,4" Text="{loc:Loc Setup.GameManage.Community.AutoInstallDependencies}" ToolTip="{loc:Loc Setup.GameManage.Community.AutoInstallDependencies.ToolTip}"
-                                          Grid.Row="1" Height="22" Grid.Column="0" Change="CheckBoxChange"
-                                          x:Name="CheckDownloadAutoInstallDependencies" Tag="ToolDownloadAutoInstallDependencies" />
                     </Grid>
                 </StackPanel>
             </local:MyCard>
@@ -189,21 +147,12 @@
                         <RowDefinition Height="8" />
                         <RowDefinition Height="22" />
                         <RowDefinition Height="8" />
-                        <RowDefinition Height="22" />
-                        <RowDefinition Height="8" />
                     </Grid.RowDefinitions>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameUpdateNotice}" Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReleaseNotice}" Grid.Column="1" x:Name="CheckUpdateRelease"
-                                      Change="CheckBoxChange"
-                                      Tag="ToolUpdateRelease" ToolTip="{loc:Loc Setup.GameManage.Accessibility.ReleaseNotice.ToolTip}" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.SnapshotNotice}" Grid.Column="2" Height="22" x:Name="CheckUpdateSnapshot"
-                                      Change="CheckBoxChange"
-                                      Tag="ToolUpdateSnapshot" ToolTip="{loc:Loc Setup.GameManage.Accessibility.SnapshotNotice.ToolTip}" />
-                    <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameLanguage}"
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameLanguage}"
                                Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.AutoLauncherLanguage}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5"
+                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.AutoLauncherLanguage}" Grid.Column="1" Grid.ColumnSpan="5"
                                       x:Name="CheckHelpLauncherLanguage" Tag="ToolHelpChinese" Change="CheckBoxChange" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard}" Height="22" Grid.Row="4" Grid.Column="0"
+                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard}" Height="22" Grid.Row="2" Grid.Column="0"
                                       Grid.ColumnSpan="3" Change="CheckBoxChange"
                                       x:Name="CheckDownloadClipboard" Tag="ToolDownloadClipboard"
                                       ToolTip="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard.ToolTip}" />

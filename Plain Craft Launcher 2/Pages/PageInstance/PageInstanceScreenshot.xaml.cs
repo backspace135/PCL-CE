@@ -96,7 +96,7 @@ public partial class PageInstanceScreenshot : IRefreshable, IPageView
         _refreshed = true;
         // 重复加载部分
         PanBack.ScrollToHome();
-        _screenshotPath = PageInstanceLeft.McInstance.PathIndie + @"screenshots\";
+        _screenshotPath = PageInstanceLeft.Instance.ScreenshotsDir + @"\";
         if (!Directory.Exists(_screenshotPath))
             Directory.CreateDirectory(_screenshotPath);
         Dispatcher.BeginInvoke(new Func<Task>(ReloadAsync));

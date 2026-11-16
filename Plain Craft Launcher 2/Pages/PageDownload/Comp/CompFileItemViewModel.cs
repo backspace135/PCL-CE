@@ -55,7 +55,7 @@ public sealed partial class CompFileGroupViewModel : ObservableObject
     /// </summary>
     public static CompFileGroupViewModel Create(string title, List<Comp.CompFile> files, Comp.CompType type,
         bool isSwapped, bool showRecognitionHint,
-        MyListItem.ClickEventHandler installClick, MyListItem.ClickEventHandler worldClick,
+        MyListItem.ClickEventHandler worldClick,
         MyIconButton.ClickEventHandler saveClick)
     {
         files.Sort((a, b) => b.ReleaseDate.CompareTo(a.ReleaseDate));
@@ -71,7 +71,6 @@ public sealed partial class CompFileGroupViewModel : ObservableObject
         foreach (var file in files)
             group.Items.Add(type switch
             {
-                Comp.CompType.ModPack => new CompFileItemViewModel(file, installClick, saveClick, badDisplayName),
                 Comp.CompType.World => new CompFileItemViewModel(file, worldClick, saveClick, badDisplayName),
                 // 普通资源：点击整行即为「另存为」，且不显示单独的保存按钮（与改造前一致）
                 _ => new CompFileItemViewModel(file, (sender, e) => saveClick(sender, e), null, badDisplayName)

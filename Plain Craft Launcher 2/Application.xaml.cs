@@ -40,24 +40,8 @@ public partial class Application
             Thread.CurrentThread.Priority = ThreadPriority.Highest;
             StartupValidation.EnsureWpfFont();
 
-            // 检查参数调用
-            var args = Basics.CommandLineArguments;
-            if (args.Length > 0)
-                if (args[0] == "--gpu")
-                    // 调整显卡设置
-                    try
-                    {
-                        Launcher.SetGpuPreference(args[1].Trim('"'));
-                        Environment.Exit((int)Common.ProcessReturnValues.TaskDone);
-                    }
-                    catch (Exception)
-                    {
-                        Environment.Exit((int)Common.ProcessReturnValues.Fail);
-                    }
-
             // 初始化文件结构
             Directory.CreateDirectory(Common.ExePath + @"PCL\Pictures");
-            Directory.CreateDirectory(Common.ExePath + @"PCL\Musics");
             Directory.CreateDirectory(Path.Combine(Common.pathTemp, "Cache"));
             Directory.CreateDirectory(Path.Combine(Common.pathTemp, "Download"));
             Directory.CreateDirectory(Common.pathAppdata);

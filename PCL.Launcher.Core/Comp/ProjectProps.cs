@@ -9,51 +9,13 @@ public static partial class Comp
     public partial class CompProject
     {
         /// <summary>
-        ///     关联的数据库条目。若为 Nothing 则没有。
-        /// </summary>
-        private CompDatabaseEntry? DatabaseEntry
-        {
-            get
-            {
-                if (!_loadedDatabase)
-                {
-                    _loadedDatabase = true;
-                    if (Type is CompType.Mod or CompType.DataPack)
-                        field = GetCompWikiEntryBySlug(Slug);
-                }
-
-                return field;
-            }
-            set
-            {
-                _loadedDatabase = true;
-                field = value;
-            }
-        }
-
-        /// <summary>
-        ///     MC 百科的页面 ID。若为 0 则没有。
-        /// </summary>
-        public int WikiId => DatabaseEntry?.WikiId ?? 0;
-
-        /// <summary>
-        ///     翻译后的中文名。若数据库没有则等同于 RawName。
-        /// </summary>
-        public string TranslatedName =>
-            Lang.IsChineseMainland && DatabaseEntry?.ChineseName is { Length: > 0 } cn
-                ? cn
-                : RawName;
-
-        /// <summary>
         ///     中文描述。若为 Nothing 则没有。
         /// </summary>
         public Task<string?> ChineseDescription => GetChineseDescriptionAsync();
 
         private async Task<string?> GetChineseDescriptionAsync()
         {
-            var from = FromCurseForge
-                ? "curseforge"
-                : "modrinth";
+            const string from = "modrinth";
             string? result = null;
 
             var descHash = $"{Id}{LauncherCommon.GetStringMd5(Description)}";
@@ -114,17 +76,11 @@ public static partial class Comp
         {
             var json = new JsonObject
             {
-                ["DataSource"] = FromCurseForge ? "CurseForge" : "Modrinth",
+                ["DataSource"] = "Modrinth",
                 ["Type"] = (int)Type,
                 ["Slug"] = Slug,
                 ["Id"] = Id
             };
-
-            if (CurseForgeFileIds is not null)
-                json["CurseForgeFileIds"] = new JsonArray(
-                    CurseForgeFileIds
-                        .Select(i => (JsonNode)i)
-                        .ToArray());
 
             json["RawName"] = RawName;
             json["Description"] = Description;
@@ -163,7 +119,7 @@ public static partial class Comp
             var gameVersionDescription = _BuildGameVersionDescription();
 
             var modLoadersForDesc = ModLoaders.ToList();
-            if (Config.Download.Comp.IgnoreQuilt) modLoadersForDesc.Remove(CompLoaderType.Quilt);
+            modLoadersForDesc.Remove(CompLoaderType.Quilt);
 
             var (fullDesc, partDesc) = modLoadersForDesc.Count switch
             {
@@ -268,10 +224,7 @@ public static partial class Comp
             var newestDrop = Drops?.FirstOrDefault() ?? 9999;
             var isAny = ModLoaders.Contains(CompLoaderType.Forge)
                 && (newestDrop < 140 || ModLoaders.Contains(CompLoaderType.Fabric))
-                && (newestDrop < 200 || ModLoaders.Contains(CompLoaderType.NeoForge))
-                && (newestDrop < 140
-                    || ModLoaders.Contains(CompLoaderType.Quilt)
-                    || Config.Download.Comp.IgnoreQuilt);
+                && (newestDrop < 200 || ModLoaders.Contains(CompLoaderType.NeoForge));
 
             var joined = string.Join(" / ", modLoadersForDesc);
             return isAny
@@ -293,13 +246,7 @@ public static partial class Comp
         {
             subtitleList = [];
 
-            if (TranslatedName != RawName)
-            {
-                title = _GetTranslatedTitleParts(subtitleList);
-                return true;
-            }
-
-            var nameLists = TranslatedName
+            var nameLists = RawName
                 .Split(
                     [" | ", " - ", "(", ")", "[", "]", "{", "}"],
                     StringSplitOptions.RemoveEmptyEntries)
@@ -334,42 +281,6 @@ public static partial class Comp
 
             title = string.Join(" - ", normalNameList);
             return true;
-        }
-
-        private string _GetTranslatedTitleParts(List<string> subtitleList)
-        {
-            var title = TranslatedName.BeforeFirst(" (").BeforeFirst(" - ");
-
-            var suffix = "";
-            if (TranslatedName.AfterLast(")").Contains(" - "))
-                suffix = TranslatedName.AfterLast(")").AfterLast(" - ");
-
-            var englishName = TranslatedName;
-            if (!string.IsNullOrEmpty(suffix))
-                englishName = englishName.Replace($" - {suffix}", "");
-
-            englishName = englishName.Replace(title, "").Trim('(', ')', ' ');
-
-            subtitleList.AddRange(
-                englishName
-                    .Split(
-                        [" | ", " - ", "(", ")", "[", "]", "{", "}"],
-                        StringSplitOptions.RemoveEmptyEntries)
-                    .Select(s => s.Trim(' ', '/'))
-                    .Where(w => !string.IsNullOrEmpty(w)));
-
-            if (subtitleList.Count > 1
-                && !subtitleList.Any(s => _IsModLoaderMarker(s.ToLower()))
-                && !(subtitleList.Count == 2
-                    && subtitleList.Last().ToUpper() == subtitleList.Last()))
-            {
-                subtitleList.Clear();
-                subtitleList.Add(englishName);
-            }
-
-            if (!string.IsNullOrEmpty(suffix)) subtitleList.Add(suffix);
-
-            return title;
         }
 
         private static string _BuildControlSubtitle(
@@ -429,58 +340,7 @@ public static partial class Comp
 
         public bool IsLike(CompProject project)
         {
-            if (SameText(Id, project.Id))
-                return true;
-
-            if (FromCurseForge == project.FromCurseForge)
-                return false;
-
-            if (!HasSameItems(ModLoaders, project.ModLoaders))
-                return false;
-
-            if (Type != CompType.Shader && !HasSameItems(Drops, project.Drops))
-                return false;
-
-            if (LastUpdate is { } lastUpdate
-                && project.LastUpdate is { } projectLastUpdate
-                && Math.Abs((lastUpdate - projectLastUpdate).TotalDays) > 7)
-                return false;
-
-            if (!HasMatchingText(project))
-                return false;
-
-            LauncherCommon.Log(
-                $"[Comp] 将 {RawName} ({Slug}) 与 {project.RawName} ({project.Slug}) 认定为相似工程");
-
-            if (DatabaseEntry is null)
-                DatabaseEntry = project.DatabaseEntry;
-            else if (project.DatabaseEntry is null)
-                project.DatabaseEntry = DatabaseEntry;
-
-            return true;
-
-            static bool SameText(string? left, string? right)
-            {
-                return (left ?? "") == (right ?? "");
-            }
-
-            static bool HasSameItems<T>(ICollection<T> left, ICollection<T> right)
-            {
-                return left.Count == right.Count && !left.Except(right).Any();
-            }
-
-            bool HasMatchingText(CompProject other)
-            {
-                return SameText(TranslatedName, other.TranslatedName)
-                    || SameText(RawName, other.RawName)
-                    || SameText(Description, other.Description)
-                    || SameText(GetRaw(Slug), GetRaw(other.Slug));
-            }
-
-            static string GetRaw(string data)
-            {
-                return string.Concat(data.Where(char.IsLetterOrDigit)).ToLower();
-            }
+            return (Id ?? "") == (project.Id ?? "");
         }
 
         public override string ToString()

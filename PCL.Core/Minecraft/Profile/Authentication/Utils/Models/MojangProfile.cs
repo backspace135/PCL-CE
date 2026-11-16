@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using PCL.Core.Minecraft.IdentityModel.Yggdrasil;
 
 namespace PCL.Core.Minecraft.Profile.Authentication.Utils.Models;
 
@@ -15,4 +14,11 @@ public record MojangProfile
     public List<PlayerProperty>? Properties { get; set; }
     [JsonExtensionData]
     public Dictionary<string, JsonElement>? AdditionalData { get; set; }
+}
+
+public record PlayerProperty
+{
+    [JsonPropertyName("name")] public required string Name { get; init; }
+    [JsonPropertyName("value")] public required string Value { get; init; }
+    [JsonPropertyName("signature")] public string? Signature { get; init; }
 }

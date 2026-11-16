@@ -46,29 +46,29 @@ public partial class PageLoginMsViewModel : ViewModelBase
             try
             {
                 ProfileService.Select(null);
-                GameLaunch.mcLoginMsLoader.Start(ProfileUi.GetLoginData(GameLaunch.McLoginType.Ms), true);
-                while (GameLaunch.mcLoginMsLoader.State == LoadState.Loading)
+                HorizonLogin.LoginLoader.Start(true, true);
+                while (HorizonLogin.LoginLoader.State == LoadState.Loading)
                 {
-                    Common.RunInUi(() => LoginText = Lang.Number(GameLaunch.mcLoginMsLoader.Progress, "P0"));
+                    Common.RunInUi(() => LoginText = Lang.Number(HorizonLogin.LoginLoader.Progress, "P0"));
                     Thread.Sleep(50);
                 }
 
-                if (GameLaunch.mcLoginMsLoader.State == LoadState.Finished)
+                if (HorizonLogin.LoginLoader.State == LoadState.Finished)
                 {
                     loginSucceeded = true;
                     Common.RunInUi(() => Launcher.frmLaunchLeft?.RefreshPage(true));
                 }
-                else if (GameLaunch.mcLoginMsLoader.State == LoadState.Aborted)
+                else if (HorizonLogin.LoginLoader.State == LoadState.Aborted)
                 {
                     throw new ThreadInterruptedException();
                 }
-                else if (GameLaunch.mcLoginMsLoader.Error is null)
+                else if (HorizonLogin.LoginLoader.Error is null)
                 {
                     throw new InvalidOperationException(Lang.Text("Launch.Account.Microsoft.Error.Unknown"));
                 }
                 else
                 {
-                    throw GameLaunch.mcLoginMsLoader.Error;
+                    throw HorizonLogin.LoginLoader.Error;
                 }
             }
             catch (ThreadInterruptedException)

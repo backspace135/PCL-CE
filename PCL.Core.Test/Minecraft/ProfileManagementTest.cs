@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PCL.Core.Minecraft.Profile;
@@ -15,16 +15,12 @@ public sealed class ProfileManagementTest
         var profile = new McProfile
         {
             ProfileId = "profile-1",
-            ProfileType = ProfileType.Authlib,
+            ProfileType = ProfileType.Microsoft,
             UserName = "Player",
             Uuid = "0123456789abcdef0123456789abcdef",
             AccessToken = "access",
             RefreshToken = "refresh",
             ClientToken = "client",
-            Server = "https://example.test/api/yggdrasil/authserver",
-            ServerName = "Example",
-            LoginName = "login",
-            Password = "password",
             Description = "description",
             RawJson = "{\"profile\":true}"
         };
@@ -38,11 +34,9 @@ public sealed class ProfileManagementTest
         var actual = restored.GetAll().Single();
 
         Assert.AreEqual("profile-1", actual.ProfileId);
-        Assert.AreEqual(ProfileType.Authlib, actual.ProfileType);
+        Assert.AreEqual(ProfileType.Microsoft, actual.ProfileType);
         Assert.AreEqual("Player", actual.UserName);
         Assert.AreEqual("refresh", actual.RefreshToken);
-        Assert.AreEqual("https://example.test/api/yggdrasil/authserver", actual.Server);
-        Assert.AreEqual("password", actual.Password);
         Assert.AreSame(restored.Current, actual);
         Assert.AreEqual(0, restored.LastUsed);
     }

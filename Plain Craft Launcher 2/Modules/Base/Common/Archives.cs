@@ -246,18 +246,4 @@ public static partial class Common
         StringBuilder lpszShortPath,
         int cchBuffer);
 
-    public static void CreateSymbolicLink(string linkPath, string targetPath)
-    {
-        using var process = new Process();
-        process.StartInfo = new ProcessStartInfo
-        {
-            FileName = GameLaunch.ExtractLinkD(),
-            Arguments = $"\"{linkPath}\" \"{targetPath}\"",
-            CreateNoWindow = true,
-            UseShellExecute = false
-        };
-
-        process.Start();
-        process.WaitForExit();
-    }
 }

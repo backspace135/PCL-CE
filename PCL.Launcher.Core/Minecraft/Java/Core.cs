@@ -4,7 +4,6 @@ using PCL.Core.App.Localization;
 using PCL.Core.IO;
 using PCL.Core.Minecraft;
 using PCL.Core.Minecraft.Java;
-using PCL.Core.Minecraft.Java.UserPreference;
 using PCL.Core.Utils;
 
 namespace PCL;
@@ -30,23 +29,13 @@ public static partial class JavaRuntime
         string cancelException,
         Version? minVersion = null,
         Version? maxVersion = null,
-        McInstance? relatedInstance = null,
         bool enforceVersionRange = false,
         IReadOnlySet<int>? compatibleMajors = null)
     {
         LauncherCommon.Log(
             $"[Java] 要求选择合适 Java，"
             + $"要求最低版本 {(minVersion is not null ? minVersion.ToString() : "未指定")}，"
-            + $"要求选择的最高版本 {(maxVersion is not null ? maxVersion.ToString() : "未指定")}，"
-            + $"关联实例 {(relatedInstance is not null ? relatedInstance.Name : "未指定")}");
-
-        if (TrySelectInstanceJava(
-                relatedInstance,
-                minVersion,
-                maxVersion,
-                compatibleMajors,
-                out var instanceJava))
-            return instanceJava;
+            + $"要求选择的最高版本 {(maxVersion is not null ? maxVersion.ToString() : "未指定")}");
 
         if (TrySelectGlobalJava(
                 minVersion,
@@ -57,103 +46,6 @@ public static partial class JavaRuntime
             return globalJava;
 
         return SelectAutomaticJava(minVersion, maxVersion, compatibleMajors);
-    }
-
-    private static bool TrySelectInstanceJava(
-        McInstance? relatedInstance,
-        Version? minVersion,
-        Version? maxVersion,
-        IReadOnlySet<int>? compatibleMajors,
-        [NotNullWhen(true)] out JavaEntry? selected)
-    {
-        selected = null;
-
-        if (relatedInstance?.PathInstance is null)
-            return false;
-
-        var rawPreference = Config.Instance.SelectedJava[relatedInstance.PathInstance];
-        if (string.IsNullOrWhiteSpace(rawPreference))
-        {
-            LauncherCommon.Log($"[Java] 实例 '{relatedInstance.Name}' 无 Java 偏好配置，使用自动选择策略");
-            return false;
-        }
-
-        var preference = GetInstanceJavaPreference(relatedInstance);
-        if (preference is null)
-        {
-            LauncherCommon.Log($"[Java] 实例 '{relatedInstance.Name}' 未指定 Java 偏好（空值），使用自动选择策略");
-            return false;
-        }
-
-        switch (preference)
-        {
-            case ExistingJava existingJava:
-            {
-                var candidate = Javas.AddOrGet(existingJava.JavaExePath);
-                if (candidate is null || !candidate.IsEnabled)
-                {
-                    LauncherCommon.Log(
-                        $"[Java] 警告：实例指定的 Java 路径无效或不可用: {existingJava.JavaExePath}");
-                    return false;
-                }
-
-                if (!IsVersionSuitable(candidate.Installation.Version, minVersion, maxVersion)
-                    || !IsAllowedMajor(candidate, compatibleMajors))
-                    LauncherUi.Interaction?.ShowHint(
-                        _GetJavaRangeWarning(
-                            "Minecraft.Launch.Java.Compatibility.InstanceSelectedOutOfRange",
-                            candidate.Installation.Version,
-                            minVersion,
-                            maxVersion));
-
-                LauncherCommon.Log(
-                    $"[Java] 返回实例 '{relatedInstance.Name}' 指定的 Java: {candidate}");
-                selected = candidate;
-                return true;
-            }
-
-            case UseRelativePath relativePath:
-            {
-                var absolutePath = Path.GetFullPath(
-                    Path.Combine(
-                        Basics.ExecutableDirectory,
-                        relativePath.RelativePath));
-
-                if (!Files.IsPathWithinDirectory(absolutePath, Basics.ExecutableDirectory))
-                {
-                    LauncherCommon.Log($"[Java] 警告：实例相对路径指定的 Java 无效: {absolutePath}");
-                    return false;
-                }
-
-                var candidate = Javas.Get(absolutePath);
-                if (candidate is null || !candidate.IsEnabled)
-                    return false;
-
-                if (!IsVersionSuitable(candidate.Installation.Version, minVersion, maxVersion)
-                    || !IsAllowedMajor(candidate, compatibleMajors))
-                    LauncherUi.Interaction?.ShowHint(
-                        _GetJavaRangeWarning(
-                            "Minecraft.Launch.Java.Compatibility.RelativePathSelectedOutOfRange",
-                            candidate.Installation.Version,
-                            minVersion,
-                            maxVersion),
-                        NotificationType.Error);
-
-                LauncherCommon.Log(
-                    $"[Java] 返回实例 '{relatedInstance.Name}' 相对路径指定的 Java ({relativePath.RelativePath}): {candidate}");
-                selected = candidate;
-                return true;
-            }
-
-            case UseGlobalPreference:
-                LauncherCommon.Log(
-                    $"[Java] 实例 '{relatedInstance.Name}' 配置为使用全局 Java 设置，继续检查全局配置");
-                return false;
-
-            default:
-                LauncherCommon.Log($"[Java] 警告：未知的 Java 偏好类型 '{preference}'，跳过处理");
-                return false;
-        }
     }
 
     private static bool TrySelectGlobalJava(
@@ -288,111 +180,4 @@ public static partial class JavaRuntime
             maxVersion?.ToString() ?? Lang.Text("Minecraft.Launch.Java.Compatibility.NoMaximum"));
     }
 
-    public static JavaPreference GetInstanceJavaPreference(McInstance instance)
-    {
-        var rawPreference = Config.Instance.SelectedJava[instance.PathInstance];
-        JavaPreference? preference = null;
-
-        if (!string.IsNullOrEmpty(rawPreference))
-            try
-            {
-                preference = JsonSerializer.Deserialize<JavaPreference>(
-                    rawPreference,
-                    JsonCompat.SerializerOptions);
-            }
-            catch (JsonException)
-            {
-            }
-
-        if (preference is null)
-        {
-            var trimmed = rawPreference?.Trim();
-            if (string.IsNullOrEmpty(trimmed))
-                preference = new AutoSelect();
-            else if (trimmed == "使用全局设置")
-                preference = new UseGlobalPreference();
-            else
-                preference = new ExistingJava(trimmed);
-        }
-
-        if ((preference is ExistingJava java && !Path.IsPathRooted(java.JavaExePath))
-            || (preference is UseRelativePath path
-                && !Files.IsPathWithinDirectory(path.RelativePath, Basics.ExecutableDirectory)))
-            return new UseGlobalPreference();
-
-        return preference;
-    }
-
-    /// <summary>
-    ///     是否强制指定了 64 位 Java。如果没有强制指定，返回是否安装了 64 位 Java。
-    /// </summary>
-    public static bool IsGameSet64BitJava(McInstance? relatedVersion = null)
-    {
-        try
-        {
-            var userSetup = Config.Launch.SelectedJava;
-            if (userSetup.StartsWith('{'))
-            {
-                var json = LauncherCommon.GetJson(userSetup);
-                userSetup = $"{json["Path"]}java.exe";
-                Config.Launch.SelectedJava = userSetup;
-            }
-
-            if (relatedVersion is not null)
-            {
-                var instancePreference = GetInstanceJavaPreference(relatedVersion);
-
-                switch (instancePreference)
-                {
-                    case AutoSelect:
-                        return Javas.Existing64BitJava();
-
-                    case ExistingJava existingJava:
-                    {
-                        var java = Javas.AddOrGet(existingJava.JavaExePath);
-                        return java is not null && java.Installation.Is64Bit;
-                    }
-
-                    case UseRelativePath relativePath:
-                    {
-                        var javaExePath = Path.GetFullPath(relativePath.RelativePath);
-                        if (Files.IsPathWithinDirectory(javaExePath, Basics.ExecutableDirectory))
-                        {
-                            var java = Javas.Get(javaExePath);
-                            return java is not null && java.Installation.Is64Bit;
-                        }
-
-                        break;
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(userSetup) && !File.Exists(userSetup))
-            {
-                Config.Launch.SelectedJava = "";
-                userSetup = string.Empty;
-            }
-
-            if (string.IsNullOrEmpty(userSetup))
-                return Javas.Existing64BitJava();
-
-            var selectedJava = Javas.AddOrGet(userSetup);
-            return selectedJava is not null && selectedJava.Installation.Is64Bit;
-        }
-        catch (Exception ex)
-        {
-            LauncherCommon.Log(
-                ex,
-                "检查 Java 类别时出错",
-                LauncherLogLevel.Feedback,
-                userSummary: Lang.Text("Minecraft.Launch.Java.Compatibility.CheckFailed"));
-
-            if (relatedVersion is not null)
-                Config.Instance.SelectedJava[relatedVersion.PathInstance] = "使用全局设置";
-
-            Config.Launch.SelectedJava = "";
-        }
-
-        return true;
-    }
 }

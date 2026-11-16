@@ -47,7 +47,6 @@ public partial class PageSetupUpdate : IPageView
     private void Init()
     {
         Animations.AniBeginControl();
-        TextMirrorCDK.Password = Config.Update.MirrorChyanKey;
 
         ComboSystemUpdateChannel.SelectedIndex = (int)Config.Update.UpdateChannel;
         ComboSystemUpdateMode.SelectedIndex = (int)Config.Update.UpdateMode;
@@ -105,7 +104,7 @@ public partial class PageSetupUpdate : IPageView
                         UpdateManager.IsCurrentVersionBeta
                             ? UpdateChannel.Beta
                             : UpdateChannel.Stable, SystemInfo.IsArm64System ? UpdateArch.Arm64 : UpdateArch.X64);
-                    _vm.UpdateNameText = "PCL CE " + VersionNameFormat(updateInfo.VersionName);
+                    _vm.UpdateNameText = "PCL Horizon " + VersionNameFormat(updateInfo.VersionName);
                     var summary = updateInfo.Changelog.Between("<summary>", "</summary>");
                     if (!updateInfo.Changelog.Contains("<summary>") || string.IsNullOrWhiteSpace(summary.Trim()))
                         _vm.ChangelogText = Lang.Text("Setup.Update.Changelog.Empty");
@@ -323,19 +322,9 @@ public partial class PageSetupUpdate : IPageView
         }
     }
 
-    private void TextMirrorCDK_PasswordChanged(object sender, EventArgs e)
-    {
-        Config.Update.MirrorChyanKey = TextMirrorCDK.Password;
-    }
-
-    private void BtnGetMirrorCDK_Click(object sender, MouseButtonEventArgs e)
-    {
-        Common.OpenWebsite("https://mirrorchyan.com/");
-    }
-
     private void BtnChangelog_Click(object sender, MouseButtonEventArgs e)
     {
-        Common.OpenWebsite("https://github.com/PCL-Community/PCL2-CE/releases/v" + Common.VersionBaseName);
+        Common.OpenWebsite("https://github.com/backspace135/PCL-CE/releases/tag/v" + Common.VersionBaseName);
     }
 
     public string VersionNameFormat(string str) => PageSetupUpdateViewModel.VersionNameFormat(str);

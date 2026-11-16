@@ -52,7 +52,7 @@ public static class CompFavoritesUi
                         LauncherUi.Interaction?.ShowHint(
                             Lang.Text(
                                 "Download.Comp.Detail.Favorites.Remove",
-                                project.TranslatedName,
+                                project.RawName,
                                 i.Name),
                             NotificationType.Success);
                     }
@@ -62,7 +62,7 @@ public static class CompFavoritesUi
                         LauncherUi.Interaction?.ShowHint(
                             Lang.Text(
                                 "Download.Comp.Detail.Favorites.Add",
-                                project.TranslatedName,
+                                project.RawName,
                                 i.Name),
                             NotificationType.Success);
                     }

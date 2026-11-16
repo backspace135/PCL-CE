@@ -26,11 +26,6 @@ public sealed class WpfLaunchUi : ILaunchUi
             button1Action: button1Action);
     }
 
-    public void SetGpuPreference(string javaExePath, bool preference)
-    {
-        Launcher.SetGpuPreference(javaExePath, preference);
-    }
-
     public int? ShowSelect(string caption, IReadOnlyList<string> options)
     {
         return DialogCompat.ShowSelect(caption, null, options);
@@ -46,7 +41,6 @@ public sealed class WpfLaunchUi : ILaunchUi
         PlatformServices.UiDispatcher?.Post(() =>
         {
             if (Launcher.frmMain is not { } main) return;
-            main.AprilGiveup();
             main.pageStack =
                 [.. main.pageStack.Where(p => p.page != FormMain.PageType.InstanceSelect)];
         });
@@ -91,22 +85,6 @@ public sealed class WpfLaunchUi : ILaunchUi
     public void RefreshLaunching()
     {
         PlatformServices.UiDispatcher?.Post(() => Launcher.frmLaunchLeft?.LaunchingRefresh());
-    }
-
-    public void AttachLogPage(GameWatcher.Watcher watcher)
-    {
-        PlatformServices.UiDispatcher?.Post(() =>
-        {
-            Launcher.frmLogLeft ??= new PageLogLeft();
-            if (Launcher.frmLogRight is null)
-            {
-                Animations.AniBeginControl();
-                Launcher.frmLogRight = new PageLogRight();
-                Animations.AniEndControl();
-            }
-
-            Launcher.frmLogLeft.Add(watcher);
-        });
     }
 
     public void SetMainWindowState(LaunchWindowState state)
