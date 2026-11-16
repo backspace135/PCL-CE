@@ -12,10 +12,10 @@ namespace PCL
                 foreach (var Token in raw.RegexSearch("(?<=accessToken ([^ ]{5}))[^ ]+(?=[^ ]{5})"))
                     raw = raw.Replace(Token, new string(filterChar, Token.Count()));
             // 打码当前登录的结果
-            var accessToken = GameLaunch.mcLoginLoader.output.AccessToken;
+            var profile = PCL.Core.Minecraft.Profile.ProfileService.Current;
+            var accessToken = profile?.AccessToken;
             if (accessToken is not null && accessToken.Length >= 10 && raw.ContainsF(accessToken, true) &&
-                (GameLaunch.mcLoginLoader.output.Uuid ?? "") !=
-                (GameLaunch.mcLoginLoader.output.AccessToken ?? "")) // UUID 和 AccessToken 一样则不打码
+                (profile!.Uuid ?? "") != accessToken) // UUID 和 AccessToken 一样则不打码
                 raw = raw.Replace(accessToken, accessToken[..5] + new string(filterChar, accessToken.Length - 10) +
                                                accessToken[^5..]);
             return raw;

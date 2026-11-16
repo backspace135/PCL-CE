@@ -828,6 +828,10 @@
     <sys:String x:Key="Event.Setting.Written">Setting written: {0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">Variable written: {0} → {1}</sys:String>
 
+    <!-- Event.LaunchGame -->
+
+    <sys:String x:Key="Event.LaunchGame.InstanceNotFound">Instance {0} was not found.</sys:String>
+
     <!-- Horizon.Datapack -->
 
     <sys:String x:Key="Horizon.Datapack.Card">Data packs ({0})</sys:String>
@@ -968,6 +972,17 @@
     <sys:String x:Key="Horizon.Select.Left.Create">New instance</sys:String>
     <sys:String x:Key="Horizon.Select.Left.Instances">Instances</sys:String>
     <sys:String x:Key="Horizon.Select.Left.OpenFolder">Open the instances folder</sys:String>
+
+    <!-- Horizon.Setup.Data -->
+
+    <sys:String x:Key="Horizon.Setup.Data.Busy">The game is starting or running. Change the data folder after it stops.</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Change">Change location</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Changed">The data folder is now {0}. Existing files were not moved.</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Current">Current location: {0}</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Hint">This folder holds the installed Horizon builds, the prepared game resources, the instances and the vanilla files downloaded for preparing. The prepared resources and vanilla files take a lot of space, so put it on a disk with room to spare.</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Open">Open the data folder</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Select">Choose the Horizon data folder</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Title">Horizon data folder</sys:String>
 
     <!-- Instance -->
 

@@ -11,19 +11,6 @@ public partial class Setup
             Config.Preference.Hide,
             new ConfigObserver(ConfigEvent.Changed, _ => PageSetupUI.HiddenRefresh()));
 
-        Config.Launch.MemoryAllocationModeConfig.Observe(
-            new ConfigObserver(
-                ConfigEvent.Changed,
-                e => LaunchRamType((int)e.Value!)));
-        States.Game.SelectedFolderConfig.Observe(
-            new ConfigObserver(
-                ConfigEvent.Changed,
-                e => LaunchFolderSelect((string)(e.Value ?? ""))));
-        States.Game.SelectedInstanceConfig.Observe(
-            new ConfigObserver(
-                ConfigEvent.Changed,
-                e => LaunchInstanceSelect((string)(e.Value ?? ""))));
-
         Config.Download.ThreadLimitConfig.Observe(
             new ConfigObserver(
                 ConfigEvent.Changed,
@@ -136,7 +123,6 @@ public partial class Setup
             new ConfigObserver(
                 ConfigEvent.Changed,
                 e => SystemHttpProxyCustomPassword((string)(e.Value ?? ""))));
-
     }
 
     /// <summary>
@@ -144,8 +130,6 @@ public partial class Setup
     /// </summary>
     public static void ApplyAll()
     {
-        LaunchRamType(Config.Launch.MemoryAllocationMode);
-
         ToolDownloadThread(Config.Download.ThreadLimit);
         ToolDownloadFileConnection(Config.Download.FileConnectionLimit);
         ToolDownloadSpeed(Config.Download.SpeedLimit);

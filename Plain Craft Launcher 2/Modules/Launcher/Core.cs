@@ -11,8 +11,6 @@ public static partial class Launcher
     public static SplashScreen? frmStart;
     public static PageLaunchLeft? frmLaunchLeft;
     public static PageLaunchRight? frmLaunchRight;
-    public static PageLogLeft? frmLogLeft;
-    public static PageLogRight? frmLogRight;
     public static PageSelectLeft? frmSelectLeft;
     public static PageSelectRight? frmSelectRight;
     public static PageSpeedLeft? frmSpeedLeft;
@@ -35,11 +33,9 @@ public static partial class Launcher
     public static PageSetupLog? frmSetupLog;
     public static PageSetupLauncherLanguage? frmSetupLauncherLanguage;
     public static PageSetupLauncherMisc? frmSetupLauncherMisc;
-    public static PageLoginAuth? frmLoginAuth;
     public static PageLoginMs? frmLoginMs;
     public static PageLoginProfile? frmLoginProfile;
     public static PageLoginProfileSkin? frmLoginProfileSkin;
-    public static PageLoginOffline? frmLoginOffline;
     public static PageInstanceLeft? frmInstanceLeft;
     public static PageInstanceOverall? frmInstanceOverall;
     public static PageInstanceScreenshot? frmInstanceScreenshot;

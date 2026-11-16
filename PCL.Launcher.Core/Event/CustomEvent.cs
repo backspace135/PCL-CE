@@ -152,27 +152,26 @@ public class CustomEvent
     }
 
     /// <summary>
-    ///     启动游戏。支持 \current 指代当前选中实例，可选 ServerIp。
+    ///     启动游戏。参数：实例名称（\current 指代当前选中实例）[|服务器地址]。
     /// </summary>
     private static void _LaunchGame(string arg, EventType type)
     {
         var args = SplitArgs(arg);
-        if (args[0] == "\\current")
-        {
-            if (InstanceList.McMcInstanceSelected is null)
-                throw new InvalidOperationException(Lang.Text("Event.LaunchGame.SelectVersion"));
-            args[0] = InstanceList.McMcInstanceSelected.Name;
-        }
+        var instance = args[0] == "\\current"
+            ? HorizonEnvironment.SelectedInstance
+                ?? throw new InvalidOperationException(Lang.Text("Event.LaunchGame.SelectVersion"))
+            : HorizonEnvironment.Instances.FirstOrDefault(i => i.Name == args[0] || i.Id == args[0])
+                ?? throw new InvalidOperationException(Lang.Text("Event.LaunchGame.InstanceNotFound", args[0]));
 
         LauncherCommon.RunInUi(() =>
         {
-            var launchOptions = new GameLaunch.McLaunchOptions
+            var options = new HorizonLaunchOptions
             {
-                ServerIp = args.Length >= 2 ? args[1] : null,
-                instance = new McInstance(args[0])
+                Instance = instance,
+                QuickPlayServer = args.Length >= 2 && !string.IsNullOrWhiteSpace(args[1]) ? args[1] : null
             };
-            if (GameLaunch.McLaunchStart(launchOptions))
-                LauncherUi.Interaction?.ShowHint(Lang.Text("Event.LaunchGame.Starting", args[0]));
+            if (HorizonLaunch.Start(options))
+                LauncherUi.Interaction?.ShowHint(Lang.Text("Event.LaunchGame.Starting", instance.Name));
         });
     }
 

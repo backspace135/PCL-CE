@@ -14,18 +14,6 @@
       "license": "https://github.com/PCL-Community/PCL-CE/blob/dev/LICENSE"
     },
     {
-      "name": "LegacyFix",
-      "info": "Copyright © betacraftuk\nLicensed under the GPL-3.0 license.",
-      "website": "https://github.com/betacraftuk/legacyfix",
-      "license": "https://github.com/betacraftuk/legacyfix/blob/master/LICENSE"
-    },
-    {
-      "name": "Java Launch Wrapper",
-      "info": "Copyright © 2022 00ll00\nLicensed under the MIT License.",
-      "website": "https://github.com/00ll00/java_launch_wrapper",
-      "license": "https://github.com/00ll00/java_launch_wrapper?tab=MIT-1-ov-file#readme"
-    },
-    {
       "name": "Iconmonstr",
       "info": "Copyright © 2019 iconmonstr (Alexander Kahlkopf)",
       "website": "https://iconmonstr.com/",
@@ -48,12 +36,6 @@
       "info": "Copyright © 2016-2021 Nicolas Musset",
       "website": "https://github.com/Kryptos-FR/markdig.wpf",
       "license": "https://github.com/Kryptos-FR/markdig.wpf/blob/main/LICENSE.md"
-    },
-    {
-      "name": "Mesa Loader Windows",
-      "info": "Copyright © 2024 Glavo\nLicensed under the Apache 2 License.",
-      "website": "https://github.com/HMCL-dev/mesa-loader-windows",
-      "license": "https://github.com/HMCL-dev/mesa-loader-windows/blob/main/LICENSE"
     },
     {
       "name": "Ae.Dns.Client",
@@ -90,12 +72,6 @@
       "info": "Copyright © protobuf-net\nLicensed under the Apache-2.0 license.",
       "website": "https://github.com/protobuf-net/protobuf-net",
       "license": "https://github.com/protobuf-net/protobuf-net/blob/main/Licence.txt"
-    },
-    {
-      "name": "LWJGL Unsafe Agent",
-      "info": "Copyright © HMCL-dev\nLicensed under the Apache-2.0 license.",
-      "website": "https://github.com/HMCL-dev/lwjgl-unsafe-agent",
-      "license": "https://github.com/HMCL-dev/lwjgl-unsafe-agent/blob/main/LICENSE"
     },
     {
       "name": "Downloader",

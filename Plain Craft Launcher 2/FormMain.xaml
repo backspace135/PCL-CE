@@ -471,13 +471,6 @@
                                          ToolTip="{loc:Loc Main.Extra.ShutdownMinecraft.ToolTip}"
                                          Visibility="Collapsed"
                                          SvgIcon="lucide/power" />
-                    <local:MyExtraButton x:Name="BtnExtraLog"
-                                         HorizontalAlignment="Right"
-                                         VerticalAlignment="Center"
-                                         Click="BtnExtraLog_Click"
-                                         ToolTip="{loc:Loc Main.Extra.GameLog.ToolTip}"
-                                         Visibility="Collapsed"
-                                         SvgIcon="lucide/scroll-text" />
                 </StackPanel>
                 <controls:BlurBorder x:Name="PanMsgBackground"
                                      Grid.Row="0"

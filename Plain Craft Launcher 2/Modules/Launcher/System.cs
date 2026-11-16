@@ -19,46 +19,6 @@ public static partial class Launcher
     public static extern int SetForegroundWindow(nint hWnd);
 
     /// <summary>
-    ///     将特定程序设置为使用高性能显卡启动。
-    ///     如果失败，则抛出异常。
-    /// </summary>
-    public static void SetGpuPreference(string executable, bool wantHighPerformance = true)
-    {
-        const string gpuPreferenceRegistryKey = @"Software\Microsoft\DirectX\UserGpuPreferences";
-        const string highPerformancePreference = "GpuPreference=2;";
-        const string defaultPreference = "GpuPreference=0;";
-
-        var isCurrentHighPerformance = false;
-
-        using (var readOnlyKey = Registry.CurrentUser.OpenSubKey(gpuPreferenceRegistryKey, false))
-        {
-            if (readOnlyKey is null)
-            {
-                Common.Log("[System] 需要创建显卡设置的父级键");
-                Registry.CurrentUser.CreateSubKey(gpuPreferenceRegistryKey);
-            }
-            else
-            {
-                var currentValue = readOnlyKey.GetValue(executable)?.ToString();
-                isCurrentHighPerformance = currentValue == highPerformancePreference;
-            }
-        }
-
-        Common.Log(
-            $"[System] 当前程序 ({executable}) 的显卡设置为高性能: {isCurrentHighPerformance}");
-
-        if (isCurrentHighPerformance == wantHighPerformance)
-            return;
-
-        using var writeKey = Registry.CurrentUser.OpenSubKey(gpuPreferenceRegistryKey, true);
-        writeKey?.SetValue(
-            executable,
-            wantHighPerformance ? highPerformancePreference : defaultPreference);
-
-        Common.Log($"[System] 已调整程序 ({executable}) 显卡设置: {wantHighPerformance}");
-    }
-
-    /// <summary>
     ///     对替换标记进行处理。会对替换内容使用 EscapeHandler 进行转义。
     /// </summary>
     public static string? ArgumentReplace(
@@ -125,10 +85,8 @@ public static partial class Launcher
         string text,
         Func<string?, string> replacer)
     {
-        text = text.Replace(
-            "{java}",
-            replacer(GameLaunch.mcLaunchJavaSelected?.Installation.JavaFolder));
-        text = text.Replace("{minecraft}", replacer(GameFolders.mcFolderSelected));
+        text = text.Replace("{java}", replacer(null));
+        text = text.Replace("{minecraft}", replacer(HorizonEnvironment.Paths.Root));
 
         return text;
     }
@@ -137,7 +95,7 @@ public static partial class Launcher
         string text,
         Func<string?, string> replacer)
     {
-        var instance = InstanceList.McMcInstanceSelected;
+        var instance = HorizonEnvironment.SelectedInstance;
 
         if (instance is null)
         {
@@ -151,27 +109,21 @@ public static partial class Launcher
             return text;
         }
 
-        text = text.Replace("{version_path}", replacer(instance.PathInstance));
-        text = text.Replace("{verpath}", replacer(instance.PathInstance));
-        text = text.Replace("{version_indie}", replacer(instance.PathIndie));
-        text = text.Replace("{verindie}", replacer(instance.PathIndie));
+        text = text.Replace("{version_path}", replacer(instance.Directory));
+        text = text.Replace("{verpath}", replacer(instance.Directory));
+        text = text.Replace("{version_indie}", replacer(instance.Directory));
+        text = text.Replace("{verindie}", replacer(instance.Directory));
         text = text.Replace("{name}", replacer(instance.Name));
-
-        var vanillaName = instance.Info.VanillaName;
-        var versionName = vanillaName is "unknown" or "old" or "pending"
-            ? instance.Name
-            : vanillaName;
-
-        return text.Replace("{version}", replacer(versionName));
+        return text.Replace("{version}", replacer(instance.BuildVersion ?? "nightly"));
     }
 
     private static string ArgumentReplaceLogin(
         string text,
         Func<string?, string> replacer)
     {
-        var loginLoader = GameLaunch.mcLoginLoader;
+        var profile = PCL.Core.Minecraft.Profile.ProfileService.Current;
 
-        if (loginLoader.State != LoadState.Finished)
+        if (profile is null)
         {
             text = text.Replace("{user}", replacer(null));
             text = text.Replace("{uuid}", replacer(null));
@@ -180,18 +132,9 @@ public static partial class Launcher
             return text;
         }
 
-        text = text.Replace("{user}", replacer(loginLoader.output.Name));
-        text = text.Replace("{uuid}", replacer(loginLoader.output.Uuid.ToLower()));
-
-        text = loginLoader.input?.LoginType switch
-        {
-            GameLaunch.McLoginType.Legacy => text.Replace("{login}", replacer("离线")),
-            GameLaunch.McLoginType.Ms => text.Replace("{login}", replacer("正版")),
-            GameLaunch.McLoginType.Auth => text.Replace("{login}", replacer("Authlib-Injector")),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-
-        return text;
+        text = text.Replace("{user}", replacer(profile.UserName));
+        text = text.Replace("{uuid}", replacer(profile.Uuid.ToLower()));
+        return text.Replace("{login}", replacer("正版"));
     }
 
     private static string ArgumentReplaceAdvanced(

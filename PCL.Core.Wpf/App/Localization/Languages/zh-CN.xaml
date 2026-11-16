@@ -828,6 +828,10 @@
     <sys:String x:Key="Event.Setting.Written">已写入设置：{0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">已写入变量：{0} → {1}</sys:String>
 
+    <!-- Event.LaunchGame -->
+
+    <sys:String x:Key="Event.LaunchGame.InstanceNotFound">找不到实例 {0}。</sys:String>
+
     <!-- Horizon.Datapack -->
 
     <sys:String x:Key="Horizon.Datapack.Card">数据包（{0}）</sys:String>
@@ -968,6 +972,17 @@
     <sys:String x:Key="Horizon.Select.Left.Create">新建实例</sys:String>
     <sys:String x:Key="Horizon.Select.Left.Instances">实例</sys:String>
     <sys:String x:Key="Horizon.Select.Left.OpenFolder">打开实例文件夹</sys:String>
+
+    <!-- Horizon.Setup.Data -->
+
+    <sys:String x:Key="Horizon.Setup.Data.Busy">游戏正在启动或运行，请结束后再更改数据目录。</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Change">更改位置</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Changed">数据目录已改为 {0}，已有的文件不会被移动。</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Current">当前位置：{0}</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Hint">这里存放已安装的 Horizon 构建、准备好的游戏资源、实例以及准备资源时下载的原版文件。准备好的资源和原版文件占用空间较大，可以放到空间充足的磁盘上。</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Open">打开数据目录</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Select">选择 Horizon 数据目录</sys:String>
+    <sys:String x:Key="Horizon.Setup.Data.Title">Horizon 数据目录</sys:String>
 
     <!-- Instance -->
 

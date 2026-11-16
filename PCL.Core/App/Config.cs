@@ -377,94 +377,14 @@ public static partial class Config
     [ConfigGroup("Launch")] partial class LaunchConfigGroup
     {
         /// <summary>
-        /// 内存分配模式。
-        /// </summary>
-        [ConfigItem<int>("LaunchRamType", 0, ConfigSource.Local)] public partial int MemoryAllocationMode { get; set; }
-
-        /// <summary>
-        /// 自定义内存分配大小。
-        /// </summary>
-        [ConfigItem<int>("LaunchRamCustom", 15, ConfigSource.Local)] public partial int CustomMemorySize { get; set; }
-
-        /// <summary>
-        /// 自定义初始堆大小（-Xms）的滑块刻度值，0 表示不主动设置。仅在手动分配模式下生效，且实际值不会超过最大堆。
-        /// </summary>
-        [ConfigItem<int>("LaunchRamCustomInitial", 0, ConfigSource.Local)] public partial int CustomInitialMemorySize { get; set; }
-
-        /// <summary>
-        /// 是否固定堆大小：启用后额外追加 -Xms 并使其等于 -Xmx，隐式禁用内存归还以降低延迟抖动、利于 ZGC。见 #3282。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceLockMemory", false, ConfigSource.Local)] public partial bool LockMemory { get; set; }
-
-        /// <summary>
-        /// 优先 IP 协议栈。
-        /// </summary>
-        [ConfigItem<JvmPreferredIpStack>("LaunchPreferredIpStack", JvmPreferredIpStack.Default)] public partial JvmPreferredIpStack PreferredIpStack { get; set; }
-
-        /// <summary>
-        /// 附加 JVM 参数。
-        /// </summary>
-        [ConfigItem<string>("LaunchAdvanceJvm", "-XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Djdk.lang.Process.allowAmbiguousCommands=true -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -Dlog4j2.formatMsgNoLookups=true", ConfigSource.Local)] public partial string JvmArgs { get; set; }
-
-        /// <summary>
-        /// 附加游戏参数。
-        /// </summary>
-        [ConfigItem<string>("LaunchAdvanceGame", "", ConfigSource.Local)] public partial string GameArgs { get; set; }
-
-        /// <summary>
-        /// 预启动指令。
-        /// </summary>
-        [ConfigItem<string>("LaunchAdvanceRun", "", ConfigSource.Local)] public partial string PreLaunchCommand { get; set; }
-
-        /// <summary>
-        /// 是否等待预启动指令完成。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceRunWait", true, ConfigSource.Local)] public partial bool PreLaunchCommandWait { get; set; }
-
-        /// <summary>
-        /// 禁用 Java Launch Wrapper。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceDisableJLW", true, ConfigSource.Local)] public partial bool DisableJlw { get; set; }
-
-        /// <summary>
-        /// 禁用 LegacyFix
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceDisableLF", false, ConfigSource.Local)] public partial bool DisableLF { get; set; }
-
-        /// <summary>
         /// 强制使用高性能显卡。
         /// </summary>
         [ConfigItem<bool>("LaunchAdvanceGraphicCard", true)] public partial bool SetGpuPreference { get; set; }
 
         /// <summary>
-        /// 使用 java 而不是 javaw。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceNoJavaw", false)] public partial bool NoJavaw { get; set; }
-
-        /// <summary>
-        /// 禁用 LWJGL Unsafe Agent。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceDisableLwjglUnsafeAgent", false)] public partial bool DisableLwjglUnsafeAgent { get; set; }
-
-        /// <summary>
-        /// 禁用自动崩溃分析。
-        /// </summary>
-        [ConfigItem<bool>("LaunchAdvanceDisableCrashAnalysis", false, ConfigSource.Local)] public partial bool DisableCrashAnalysis { get; set; }
-
-        /// <summary>
         /// 渲染器。
         /// </summary>
         [ConfigItem<int>("LaunchAdvanceRenderer", 0 ,ConfigSource.Local)] public partial int Renderer { get; set; }
-
-        /// <summary>
-        /// 游戏窗口标题。
-        /// </summary>
-        [ConfigItem<string>("LaunchArgumentTitle", "", ConfigSource.Local)] public partial string Title { get; set; }
-
-        /// <summary>
-        /// 自定义左下角版本信息。
-        /// </summary>
-        [ConfigItem<string>("LaunchArgumentInfo", "PCLCE", ConfigSource.Local)] public partial string TypeInfo { get; set; }
 
         /// <summary>
         /// 选择的默认 Java 实例。
@@ -481,30 +401,6 @@ public static partial class Config
         /// </summary>
         [ConfigItem<LauncherVisibility>("LaunchArgumentVisible", LauncherVisibility.DoNothing)] public partial LauncherVisibility LauncherVisibility { get; set; }
 
-        /// <summary>
-        /// 游戏进程优先级。
-        /// </summary>
-        [ConfigItem<GameProcessPriority>("LaunchArgumentPriority", GameProcessPriority.Normal)] public partial GameProcessPriority ProcessPriority { get; set; }
-
-        /// <summary>
-        /// 游戏窗口宽度。
-        /// </summary>
-        [ConfigItem<int>("LaunchArgumentWindowWidth", 854, ConfigSource.Local)] public partial int GameWindowWidth { get; set; }
-
-        /// <summary>
-        /// 游戏窗口高度。
-        /// </summary>
-        [ConfigItem<int>("LaunchArgumentWindowHeight", 480, ConfigSource.Local)] public partial int GameWindowHeight { get; set; }
-
-        /// <summary>
-        /// 游戏窗口模式 (正常/最大化/全屏)。
-        /// </summary>
-        [ConfigItem<GameWindowSizeMode>("LaunchArgumentWindowType", GameWindowSizeMode.Default, ConfigSource.Local)] public partial GameWindowSizeMode GameWindowMode { get; set; }
-
-        /// <summary>
-        /// 正版登录方式。
-        /// </summary>
-        [ConfigItem<int>("LoginMsAuthType", 1)] public partial int LoginMsAuthType { get; set; }
     }
 
     /// <summary>
@@ -539,17 +435,5 @@ public static partial class Config
         [ConfigItem<bool>("VersionArgumentIndieV2", false)] public partial ArgConfig<bool> IndieV2 { get; }
         [ConfigItem<string>("VersionArgumentJavaSelect", "使用全局设置")] public partial ArgConfig<string> SelectedJava { get; }
         [ConfigItem<string>("VersionServerEnter", "")] public partial ArgConfig<string> ServerToEnter { get; }
-    }
-
-    /// <summary>
-    /// 实例独立配置的认证部分
-    /// </summary>
-    [ConfigGroup("InstanceAuth", ConfigSource.GameInstance)] partial class InstanceAuthConfigGroup
-    {
-        [ConfigItem<int>("VersionServerLoginRequire", 0)] public partial ArgConfig<int> LoginRequirementSolution { get; }
-        [ConfigItem<string>("VersionServerAuthRegister", "")] public partial ArgConfig<string> AuthRegisterAddress { get; }
-        [ConfigItem<string>("VersionServerAuthName", "")] public partial ArgConfig<string> AuthServerDisplayName { get; }
-        [ConfigItem<string>("VersionServerAuthServer", "")] public partial ArgConfig<string> AuthServerAddress { get; }
-        [ConfigItem<bool>("VersionServerLoginLock", false)] public partial ArgConfig<bool> AuthLocked { get; }
     }
 }

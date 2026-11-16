@@ -6,11 +6,6 @@ namespace PCL;
 
 public sealed class WpfProfileUi : IProfileUi
 {
-    public object? GetLoginData()
-    {
-        return ProfileUi.GetLoginData();
-    }
-
     public string IsProfileValid()
     {
         return ProfileUi.IsProfileValid();

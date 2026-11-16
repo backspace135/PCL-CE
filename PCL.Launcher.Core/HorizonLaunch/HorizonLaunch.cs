@@ -1,12 +1,9 @@
 using PCL.Core.App;
 using PCL.Core.App.Localization;
-using PCL.Core.Logging;
-using PCL.Core.Minecraft.IdentityModel;
 using PCL.Core.Minecraft.Profile;
-using PCL.Core.Minecraft.Profile.Authentication;
-using PCL.Core.Minecraft.Profile.Authentication.Utils;
 using PCL.Core.Minecraft.Profile.Models;
 using PCL.Core.Utils;
+using PCL.Core.Utils.OS;
 using PCL.Horizon;
 using PCL.Network;
 using PCL.Network.Loaders;
@@ -276,41 +273,8 @@ public static partial class HorizonLaunch
     private static void _StageLogin(Loading.LoaderTask<int, int> task)
     {
         var context = Context;
-        var existing = ProfileService.Current is { ProfileType: ProfileType.Microsoft } current ? current : null;
-        LogWrapper.Info("Profile", $"验证方式：正版（{(existing is null ? "尚未登录" : existing.UserName)}）");
-        McProfile profile;
-        try
-        {
-            profile = ProfileService
-                .AuthenticateAsync(
-                    ProfileType.Microsoft,
-                    new AuthenticationRequest
-                    {
-                        DeviceCodeHandler = LoginProfile.ShowDeviceCodeLoginAsync,
-                        RefreshFailureHandler = (_, _) => Task.FromResult(false)
-                    },
-                    existing,
-                    true,
-                    task.AbortedToken)
-                .GetAwaiter()
-                .GetResult();
-        }
-        catch (IdentityModelAuthenticationException ex)
-            when (LoginProfile.HandleMicrosoftXstsError(ex)
-                  || LoginProfile.HandleMicrosoftNotOwnedError(ex)
-                  || LoginProfile.HandleMicrosoftCreateProfileError(ex))
-        {
-            throw new IdentityModelException("$$", ex);
-        }
-
         // Horizon 只为拥有 Java 版的正版账户启动：每次启动前都确认一次
-        if (!MojangUtils.CheckLicenseAsync(profile, task.AbortedToken).GetAwaiter().GetResult())
-        {
-            LoginProfile.HandleMicrosoftNotOwnedError(
-                new IdentityModelAuthenticationException("minecraft_not_owned", "The Microsoft account does not own Minecraft."));
-            throw new Exception("$$");
-        }
-
+        var profile = HorizonLogin.Login(false, task.AbortedToken);
         context.Session = new HorizonSession(profile.UserName, profile.Uuid, profile.AccessToken);
         LaunchUi.RefreshLaunchPage(false);
         Log($"已验证正版账户 {profile.UserName}");
@@ -411,6 +375,18 @@ public static partial class HorizonLaunch
             QuickPlayMultiplayer = context.Options.QuickPlayServer
         };
         Log($"启动参数：{string.Join(" ", HorizonLaunchService.BuildArguments(request, context.Api!.Client))}");
+        if (Config.Launch.SetGpuPreference)
+        {
+            try
+            {
+                ProcessInterop.SetGpuPreference(context.Build!.ClientPath);
+            }
+            catch (Exception ex)
+            {
+                LauncherCommon.Log(ex, "[Horizon] 设置高性能显卡失败");
+            }
+        }
+
         var game = HorizonLaunchService.StartAsync(request, null, task.AbortedToken).GetAwaiter().GetResult();
         context.Game = game;
         context.Instance.MarkPlayed();

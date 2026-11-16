@@ -12,5 +12,5 @@ public class SafeProfile
     [JsonPropertyName("accessToken")] public string AccessToken { get; set; } = string.Empty;
     [JsonPropertyName("uuid")] public string Uuid { get; set; } = string.Empty;
     [JsonPropertyName("tokenType")] public string TokenType { get; set; } = "Bearer";
-    [JsonPropertyName("profileType")] public ProfileType ProfileType { get; set; } = ProfileType.Offline;
+    [JsonPropertyName("profileType")] public ProfileType ProfileType { get; set; } = ProfileType.Microsoft;
 }

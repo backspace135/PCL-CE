@@ -156,7 +156,6 @@ public partial class FormMain
         BtnExtraDownload.showCheck = BtnExtraDownload_ShowCheck;
         BtnExtraBack.showCheck = BtnExtraBack_ShowCheck;
         BtnExtraShutdown.showCheck = BtnExtraShutdown_ShowCheck;
-        BtnExtraLog.showCheck = BtnExtraLog_ShowCheck;
         // 初始化尺寸改变
         if (!Config.Preference.LockWindowSize)
             AddResizer();
@@ -333,10 +332,6 @@ public partial class FormMain
             Common.Log($"[Start] 最高版本号从 {lowerVersionCode} 升高到 {Common.VersionCode}");
         }
 #endif
-        // 被移除的窗口设置选项 (Commit 3161488 2026/1/23)
-        if ((int)Config.Launch.GameWindowMode == 5)
-            Config.Launch.GameWindowMode = GameWindowSizeMode.Default;
-
         // 输出更新日志
         if (lastVersionCode <= 0)
             return;
@@ -871,38 +866,7 @@ public partial class FormMain
                 {
                     var str = (string)e.Data.GetData(DataFormats.Text);
                     Common.Log("[System] 接受文本拖拽：" + str);
-                    if (str.StartsWithF("authlib-injector:yggdrasil-server:"))
-                    {
-                        // Authlib 拖拽
-                        e.Handled = true;
-                        e.Effects = DragDropEffects.Copy;
-                        var authlibServer =
-                            WebUtility.UrlDecode(str.Substring("authlib-injector:yggdrasil-server:".Length));
-                        Common.Log("[System] Authlib 拖拽：" + authlibServer);
-                        if (!new HttpValidator().Validate(authlibServer).IsValid)
-                        {
-                            HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.AuthlibInvalid", authlibServer)));
-                            return;
-                        }
-
-                        if ((DialogService.Instance.Show(new TextDialogRequest
-                        {
-                            Title = Lang.Text("Main.FileDrag.CreateAuthlibProfileTitle"),
-                            Content = Lang.Text("Main.FileDrag.CreateAuthlibProfile", authlibServer),
-                            Buttons = DialogButtons.OkCancel,
-                            ForceWait = true
-                        }).Result?.Button ?? 0) == 2)
-                            return;
-                        Common.RunInUi(() =>
-                        {
-                            PageLoginAuth.draggedAuthServer = authlibServer;
-                            Launcher.frmLaunchLeft.RefreshPage(true, GameLaunch.McLoginType.Auth);
-                        });
-                        if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionSetup)
-                            // 正在服务器选项页，需要刷新设置项显示
-                            Launcher.frmInstanceSetup.Refresh();
-                    }
-                    else if (str.StartsWithF("file:///"))
+                    if (str.StartsWithF("file:///"))
                     {
                         // 文件拖拽（例如从浏览器下载窗口拖入）
                         var filePath = WebUtility.UrlDecode(str).Substring("file:///".Length).Replace("/", @"\");
@@ -1274,10 +1238,6 @@ public partial class FormMain
         /// </summary>
         HelpDetail = 9,
 
-        /// <summary>
-        ///     游戏实时日志。这是一个副页面。
-        /// </summary>
-        GameLog = 10,
 
         /// <summary>
         ///     存档详细管理，这是一个副页面。
@@ -1339,10 +1299,6 @@ public partial class FormMain
             case PageType.TaskManager:
             {
                 return Lang.Text("Main.Title.TaskManager");
-            }
-            case PageType.GameLog:
-            {
-                return Lang.Text("Main.Title.GameLog");
             }
             case PageType.InstanceSetup:
             {
@@ -1723,15 +1679,6 @@ public partial class FormMain
                         PageChangeAnim(Launcher.frmSetupLeft, (FrameworkElement)Launcher.frmSetupLeft.PageGet(subType));
                         break;
                     }
-                case PageType.GameLog: // 实时日志
-                    {
-                        if (Launcher.frmLogLeft is null)
-                            Launcher.frmLogLeft = new PageLogLeft();
-                        if (Launcher.frmLogLeft is null)
-                            Launcher.frmLogRight = new PageLogRight();
-                        PageChangeAnim(Launcher.frmLogLeft, Launcher.frmLogRight);
-                        break;
-                    }
                 case PageType.InstanceSelect: // 实例选择
                     {
                         if (Launcher.frmSelectLeft is null)
@@ -2034,10 +1981,8 @@ public partial class FormMain
     {
         try
         {
-            if (GameLaunch.mcLaunchLoaderReal is not null)
-                GameLaunch.mcLaunchLoaderReal.Abort();
-            foreach (var Watcher in GameWatcher.mcWatcherList)
-                Watcher.Kill();
+            HorizonLaunch.LaunchLoaderReal?.Abort();
+            HorizonGames.KillAll();
             HintService.Show(Hints.Success(Lang.Text("Main.ShutdownMinecraft.Success")));
         }
         catch (Exception ex)
@@ -2052,22 +1997,8 @@ public partial class FormMain
 
     public bool BtnExtraShutdown_ShowCheck()
     {
-        return GameWatcher.hasRunningMinecraft;
+        return HorizonGames.HasRunningGame;
     }
-
-    // 游戏日志
-    private void BtnExtraLog_Click(object sender, MouseButtonEventArgs e)
-    {
-        PageChange(PageType.GameLog);
-    }
-
-    public bool BtnExtraLog_ShowCheck()
-    {
-        if (Launcher.frmLogLeft is null || Launcher.frmLogRight is null || pageCurrent == PageType.GameLog)
-            return false;
-        return Launcher.frmLogLeft.shownLogs.Count > 0;
-    }
-
     /// <summary>
     ///     返回顶部。
     /// </summary>
