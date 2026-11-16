@@ -268,7 +268,7 @@ public class CustomEvent
         {
             if (!CanWriteSettingFromCustomEvent(args[0]))
                 return;
-            item.SetValueNoType(args[1], InstanceList.McMcInstanceSelected?.PathInstance);
+            item.SetValueNoType(args[1]);
         }
 
         if (args.Length == 2)

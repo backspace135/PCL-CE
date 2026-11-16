@@ -80,68 +80,7 @@ public partial class PageDownloadCompDetail : IPageView
             var loaderName = $"Modrinth {Lang.Text("Download.Comp.Detail.WorldDownload")}：{_project.RawName} ";
 
             // 确认默认保存位置
-            string? defaultFolder;
-            var subFolder = @"saves\";
-            // 获取资源所需的加载器
-            var allowedLoaders = new List<Comp.CompLoaderType>();
-            if (file.ModLoaders.Any())
-                allowedLoaders = file.ModLoaders;
-            else if (_project.ModLoaders.Any()) allowedLoaders = _project.ModLoaders;
-            Common.Log("[Comp] 世界要求的加载器种类：" + (allowedLoaders.Any() ? allowedLoaders.Join(" / ") : "无要求"));
-
-            // 获取常规资源默认下载位置
-            if (cachedFolder.ContainsKey(file.Type) && !string.IsNullOrEmpty(cachedFolder[file.Type]))
-            {
-                defaultFolder = cachedFolder.GetOrDefault(file.Type,
-                    InstanceList.McMcInstanceSelected?.PathIndie ?? Common.ExePath);
-                Common.Log($"[Comp] 使用上次下载时的文件夹作为默认下载位置：{defaultFolder}");
-            }
-            else if (InstanceList.McMcInstanceSelected is not null && IsVersionSuitable(InstanceList.McMcInstanceSelected))
-            {
-                defaultFolder = $"{InstanceList.McMcInstanceSelected.PathIndie}{subFolder}";
-                Directory.CreateDirectory(defaultFolder);
-                Common.Log($"[Comp] 使用当前实例作为默认下载位置：{defaultFolder}");
-            }
-            else
-            {
-                // 查找所有可能的实例
-                var needLoad = InstanceList.mcInstanceListLoader.State != LoadState.Finished;
-                if (needLoad)
-                {
-                    HintService.Show(Hints.Info(Lang.Text("Download.Comp.Detail.FindingApplicableInstance")));
-                    Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader,
-                        GameFolders.mcFolderSelected!,
-                        Loading.LoaderFolderRunType.ForceRun,
-                        1,
-                        @"versions\",
-                        true);
-                }
-
-                var suitableVersions = InstanceList.mcInstanceList.Values
-                    .SelectMany(l => l)
-                    .Where(IsVersionSuitable)
-                    .Select(v => new DirectoryInfo($"{v.PathIndie}{subFolder}"))
-                    .ToArray();
-
-                if (suitableVersions.Length != 0)
-                {
-                    var selectedVersion = suitableVersions
-                        .OrderByDescending(dir => dir.Exists ? dir.LastWriteTimeUtc : DateTime.MinValue)
-                        .ThenByDescending(dir => dir.Exists ? dir.GetFiles().Length : -1).First(); // 先按文件夹更改时间降序
-                    // 再按文件夹中的文件数量降序
-                    defaultFolder = selectedVersion.FullName;
-                    Directory.CreateDirectory(defaultFolder);
-                    Common.Log($"[Comp] 使用适合的游戏实例作为默认下载位置：{defaultFolder}");
-                }
-                else
-                {
-                    defaultFolder = GameFolders.mcFolderSelected;
-                    if (needLoad)
-                        HintService.Show(Hints.Info(Lang.Text("Download.Comp.Detail.NoApplicableInstance")));
-                    else
-                        Common.Log("[Comp] 由于当前实例不兼容，使用当前的 MC 文件夹作为默认下载位置");
-                }
-            }
+            var defaultFolder = GetDefaultFolder(file.Type);
 
             var target = SystemDialogs.SelectSaveFile(Lang.Text("Download.Comp.Detail.SelectWorldInstallLocation"), file.FileName ?? "", Lang.Text("Download.Comp.Detail.WorldFile.Filter"),
                 defaultFolder);
@@ -171,17 +110,6 @@ public partial class PageDownloadCompDetail : IPageView
             Loading.LoaderTaskbarAdd(loader);
             Launcher.frmMain!.BtnExtraDownload.ShowRefresh();
             Launcher.frmMain.BtnExtraDownload.Ribble();
-
-            // 判断某个版本是否符合资源要求
-            bool IsVersionSuitable(McInstance? version)
-            {
-                if (version is null) return false;
-                if (!version.IsLoaded) version.Load();
-                if (file.GameVersions.Any(v => v.Contains('.')) && !file.GameVersions.Any(v => v.Contains('.') && v == version.Info.VanillaName)) return false;
-                // 加载器
-                if (!allowedLoaders.Any()) return true; // 无要求
-                return false;
-            }
         }
 
         catch (Exception ex)
@@ -192,6 +120,26 @@ public partial class PageDownloadCompDetail : IPageView
                 Common.LogLevel.Feedback,
                 userSummary: Lang.Text("Download.Comp.Error.OperationFailed"));
         }
+    }
+
+    /// <summary>
+    ///     资源的默认保存位置：上次保存的文件夹，其次是当前 Horizon 实例中对应的文件夹，最后是启动器所在文件夹。
+    /// </summary>
+    private static string GetDefaultFolder(Comp.CompType type)
+    {
+        if (cachedFolder.TryGetValue(type, out var cached) && !string.IsNullOrEmpty(cached))
+        {
+            Common.Log($"[Comp] 使用上次下载时的文件夹作为默认下载位置：{cached}");
+            return cached;
+        }
+
+        var instance = HorizonEnvironment.SelectedInstance;
+        var folder = instance is null ? null : Comp.GetInstanceFolder(instance, type, false);
+        if (folder is null)
+            return Common.ExePath;
+        Directory.CreateDirectory(folder);
+        Common.Log($"[Comp] 使用当前实例作为默认下载位置：{folder}");
+        return folder;
     }
 
     public void Save_Click(object sender, EventArgs e)
@@ -227,96 +175,9 @@ public partial class PageDownloadCompDetail : IPageView
 
                 // 确认默认保存位置
                 string? defaultFolder = null;
-                var allowedLoaders = new List<Comp.CompLoaderType>();
                 if (file.Type != Comp.CompType.ModPack)
                 {
-                    var subFolder = "";
-                    switch (file.Type)
-                    {
-                        case Comp.CompType.Mod: subFolder = "mods\\"; break;
-                        case Comp.CompType.ResourcePack: subFolder = "resourcepacks\\"; break;
-                        case Comp.CompType.Shader: subFolder = "shaderpacks\\"; break;
-                        case Comp.CompType.World: subFolder = "saves\\"; break;
-                        case Comp.CompType.DataPack: subFolder = ""; break; // 导航到版本根目录
-                    }
-
-                    // 获取资源所需的加载器
-                    if (file.ModLoaders.Count != 0)
-                        allowedLoaders = file.ModLoaders;
-                    else if (_project.ModLoaders.Count != 0) allowedLoaders = _project.ModLoaders;
-                    Common.Log(
-                        $"[Comp] {desc}要求的加载器种类：{(allowedLoaders.Any() ? string.Join(" / ", allowedLoaders) : "无要求")}");
-
-                    // 获取常规资源默认下载位置逻辑
-                    if (cachedFolder.ContainsKey(file.Type) && !string.IsNullOrEmpty(cachedFolder[file.Type]))
-                    {
-                        defaultFolder = cachedFolder.GetOrDefault(file.Type,
-                            InstanceList.McMcInstanceSelected?.PathIndie ?? Common.ExePath);
-                        Common.Log($"[Comp] 使用上次下载时的文件夹作为默认下载位置：{defaultFolder}");
-                    }
-                    else if (InstanceList.McMcInstanceSelected is not null &&
-                             IsVersionSuitable(InstanceList.McMcInstanceSelected))
-                    {
-                        defaultFolder = $"{InstanceList.McMcInstanceSelected.PathIndie}{subFolder}";
-                        Directory.CreateDirectory(defaultFolder);
-                        Common.Log($"[Comp] 使用当前实例作为默认下载位置：{defaultFolder}");
-                    }
-                    else
-                    {
-                        // 查找所有可能的实例
-                        var needLoad = InstanceList.mcInstanceListLoader.State != LoadState.Finished;
-                        if (needLoad)
-                        {
-                            HintService.Show(Hints.Info(Lang.Text("Download.Comp.Detail.FindingApplicableInstance")));
-                            Loading.LoaderFolderRun(InstanceList.mcInstanceListLoader, GameFolders.mcFolderSelected!,
-                                Loading.LoaderFolderRunType.ForceRun, 1, "versions\\", true);
-                        }
-
-                        var suitableVersions = InstanceList.mcInstanceList.Values.SelectMany(l => l)
-                            .Where(IsVersionSuitable)
-                            .Select(v => new DirectoryInfo($"{v.PathIndie}{subFolder}"))
-                            .ToArray();
-
-                        if (suitableVersions.Length != 0)
-                        {
-                            var selectedVersion = suitableVersions
-                                .OrderByDescending(dir => dir.Exists ? dir.LastWriteTimeUtc : DateTime.MinValue)
-                                .ThenByDescending(dir => dir.Exists ? dir.GetFiles().Length : -1)
-                                .First();
-                            defaultFolder = selectedVersion.FullName;
-                            Directory.CreateDirectory(defaultFolder);
-                            Common.Log($"[Comp] 使用适合的游戏实例作为默认下载位置：{defaultFolder}");
-                        }
-                        else
-                        {
-                            defaultFolder = GameFolders.mcFolderSelected;
-                            if (needLoad)
-                                HintService.Show(Hints.Info(Lang.Text("Download.Comp.Detail.NoApplicableInstance")));
-                            else
-                                Common.Log("[Comp] 由于当前实例不兼容，使用当前的 MC 文件夹作为默认下载位置");
-                        }
-                    }
-
-                    // 判断某个版本是否符合资源要求 (局部函数)
-                    bool IsVersionSuitable(McInstance? version)
-                    {
-                        if (version is null) return false;
-                        if (!version.IsLoaded) version.Load();
-
-                        // 只对 Mod 和数据包进行版本检测
-                        if (file.Type is Comp.CompType.Mod or Comp.CompType.DataPack)
-                            if (file.GameVersions.Any(v => v.Contains('.')) && !file.GameVersions.Any(v => v.Contains('.') && v == version.Info.VanillaName))
-                                return false;
-
-                        // 加载器判定
-                        if (allowedLoaders.Count == 0) return true; // 无要求
-                        if (allowedLoaders.Contains(Comp.CompLoaderType.Forge) && version.Info.HasForge) return true;
-                        if (allowedLoaders.Contains(Comp.CompLoaderType.Forge) && version.Info.HasCleanroom) return true;
-                        if (allowedLoaders.Contains(Comp.CompLoaderType.Fabric) && (version.Info.HasFabric || version.Info.HasLegacyFabric)) return true;
-                        if (allowedLoaders.Contains(Comp.CompLoaderType.NeoForge) && version.Info.HasNeoForge) return true;
-                        if (allowedLoaders.Contains(Comp.CompLoaderType.LiteLoader) && version.Info.HasLiteLoader) return true;
-                        return false;
-                    }
+                    defaultFolder = GetDefaultFolder(file.Type);
                 }
 
                 // 获取文件名并弹窗

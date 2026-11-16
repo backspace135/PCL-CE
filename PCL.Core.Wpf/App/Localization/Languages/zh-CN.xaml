@@ -652,6 +652,14 @@
     <sys:String x:Key="Download.Comp.QuickDownload.Hint.NoInstance">当前未选中任何 Minecraft 实例</sys:String>
     <sys:String x:Key="Download.Comp.QuickDownload.Hint.SelectFolder">请选择保存位置</sys:String>
 
+    <!-- Download.Comp.QuickDownload.ChooseWorld -->
+
+    <sys:String x:Key="Download.Comp.QuickDownload.ChooseWorld.Title">选择要安装数据包的存档（{0}）</sys:String>
+
+    <!-- Download.Comp.QuickDownload.Hint -->
+
+    <sys:String x:Key="Download.Comp.QuickDownload.Hint.NoWorld">实例 {0} 中还没有存档，无法安装数据包</sys:String>
+
     <!-- Download.Comp.Type -->
 
     <sys:String x:Key="Download.Comp.Type.Any">任意</sys:String>

@@ -424,7 +424,7 @@ public static partial class Common
                         OS: {RuntimeInformation.OSDescription} (32-bit: {SystemInfo.Is32BitSystem})
                         Memory: {availableMiB} MiB / {totalMiB} MiB
                         DPI: {Dpi} ({dpiScale * 100}%)
-                        MC Folder: {GameFolders.mcFolderSelected ?? "Nothing"}
+                        Horizon Data: {HorizonEnvironment.Paths.Root}
                         Executable Path: {ExePath}
                         """;
 

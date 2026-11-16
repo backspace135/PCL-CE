@@ -93,8 +93,6 @@ public static partial class Config
     {
         [ConfigItem<bool>("ToolHelpChinese", true)] public partial bool AutoChangeLanguage { get; set; }
         // [ConfigItem<int>("ToolUpdateAlpha", 0, ConfigSource.SharedEncrypt)] public partial int Alpha { get; set; }
-        [ConfigItem<bool>("ToolUpdateRelease", false)] public partial bool ReleaseNotification { get; set; }
-        [ConfigItem<bool>("ToolUpdateSnapshot", false)] public partial bool SnapshotNotification { get; set; }
     }
 
     /// <summary>
@@ -397,39 +395,5 @@ public static partial class Config
         /// </summary>
         [ConfigItem<LauncherVisibility>("LaunchArgumentVisible", LauncherVisibility.DoNothing)] public partial LauncherVisibility LauncherVisibility { get; set; }
 
-    }
-
-    /// <summary>
-    /// 实例独立配置。<br/>
-    /// 懒得写注释了，自己理解吧。
-    /// </summary>
-    [ConfigGroup("Instance", ConfigSource.GameInstance)] partial class InstanceConfigGroup
-    {
-        [ConfigItem<string>("VersionAdvanceJvm", "")] public partial ArgConfig<string> JvmArgs { get; }
-        [ConfigItem<string>("VersionAdvanceGame", "")] public partial ArgConfig<string> GameArgs { get; }
-        [ConfigItem<int>("VersionAdvanceRenderer", 0)] public partial ArgConfig<int> Renderer { get; }
-        [ConfigItem<int>("VersionAdvanceAssets", 0)] public partial ArgConfig<int> AssetVerifySolutionV1 { get; }
-        [ConfigItem<bool>("VersionAdvanceAssetsV2", false)] public partial ArgConfig<bool> DisableAssetVerifyV2 { get; }
-        [ConfigItem<bool>("VersionAdvanceJava", false)] public partial ArgConfig<bool> IgnoreJavaCompatibility { get; }
-        [ConfigItem<bool>("VersionAdvanceDisableJlw", false)] public partial ArgConfig<bool> DisableJlwObsolete { get; }
-        [ConfigItem<string>("VersionAdvanceRun", "")] public partial ArgConfig<string> PreLaunchCommand { get; }
-        [ConfigItem<string>("VersionAdvanceClasspathHead", "")] public partial ArgConfig<string> ClasspathHead { get; }
-        [ConfigItem<bool>("VersionAdvanceRunWait", true)] public partial ArgConfig<bool> PreLaunchCommandWait { get; }
-        [ConfigItem<bool>("VersionAdvanceDisableJLW", false)] public partial ArgConfig<bool> DisableJlw { get; }
-        [ConfigItem<bool>("VersionAdvanceDisableLwjglUnsafeAgent", false)] public partial ArgConfig<bool> DisableLwjglUnsafeAgent { get; }
-        [ConfigItem<bool>("VersionAdvanceUseProxyV2", false)] public partial ArgConfig<bool> UseProxy { get; }
-        [ConfigItem<bool>("VersionAdvanceDisableLF", false)] public partial ArgConfig<bool> DisableLF { get; }
-        [ConfigItem<bool>("VersionAdvanceDisableModUpdate", false)] public partial ArgConfig<bool> DisableModUpdate { get; }
-        [ConfigItem<bool>("VersionUseDebugLog4j2Config", false)] public partial ArgConfig<bool> UseDebugLof4j2Config { get; }
-        [ConfigItem<int>("VersionRamType", 2)] public partial ArgConfig<int> MemorySolution { get; }
-        [ConfigItem<int>("VersionRamCustom", 15)] public partial ArgConfig<int> CustomMemorySize { get; }
-        [ConfigItem<int>("VersionRamCustomInitial", 0)] public partial ArgConfig<int> CustomInitialMemorySize { get; }
-        [ConfigItem<string>("VersionArgumentTitle", "")] public partial ArgConfig<string> Title { get; }
-        [ConfigItem<bool>("VersionArgumentTitleEmpty", false)] public partial ArgConfig<bool> UseGlobalTitle { get; }
-        [ConfigItem<string>("VersionArgumentInfo", "")] public partial ArgConfig<string> TypeInfo { get; }
-        [ConfigItem<int>("VersionArgumentIndie", -1)] public partial ArgConfig<int> IndieV1 { get; }
-        [ConfigItem<bool>("VersionArgumentIndieV2", false)] public partial ArgConfig<bool> IndieV2 { get; }
-        [ConfigItem<string>("VersionArgumentJavaSelect", "使用全局设置")] public partial ArgConfig<string> SelectedJava { get; }
-        [ConfigItem<string>("VersionServerEnter", "")] public partial ArgConfig<string> ServerToEnter { get; }
     }
 }

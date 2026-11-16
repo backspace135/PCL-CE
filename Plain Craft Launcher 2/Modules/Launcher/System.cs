@@ -148,11 +148,7 @@ public static partial class Launcher
             {
                 if (ConfigService.TryGetConfigItemNoType(m.Groups[1].Value, out var item)
                     && item.Source != ConfigSource.SharedEncrypt)
-                    return replacer(
-                        item
-                            .GetValueNoType(InstanceList.McMcInstanceSelected?.PathInstance)
-                            ?.ToString()
-                        ?? "");
+                    return replacer(item.GetValueNoType()?.ToString() ?? "");
 
                 return replacer("");
             });

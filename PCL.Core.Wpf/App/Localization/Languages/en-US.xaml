@@ -652,6 +652,14 @@
     <sys:String x:Key="Download.Comp.QuickDownload.Hint.NoInstance">No Minecraft instance selected!</sys:String>
     <sys:String x:Key="Download.Comp.QuickDownload.Hint.SelectFolder">Select a folder to save the file</sys:String>
 
+    <!-- Download.Comp.QuickDownload.ChooseWorld -->
+
+    <sys:String x:Key="Download.Comp.QuickDownload.ChooseWorld.Title">Choose a world to install the data pack into ({0})</sys:String>
+
+    <!-- Download.Comp.QuickDownload.Hint -->
+
+    <sys:String x:Key="Download.Comp.QuickDownload.Hint.NoWorld">Instance {0} has no worlds to install the data pack into</sys:String>
+
     <!-- Download.Comp.Type -->
 
     <sys:String x:Key="Download.Comp.Type.Any">Any</sys:String>

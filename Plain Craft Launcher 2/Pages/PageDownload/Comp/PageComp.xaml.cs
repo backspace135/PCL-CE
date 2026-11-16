@@ -171,11 +171,6 @@ public partial class PageComp
 
     #region 加载
 
-    /// <summary>
-    ///     在切换到页面时，应自动将筛选项设置为与该目标 MC 版本和加载器相同。
-    /// </summary>
-    public static McInstance? targetVersion;
-
     public Loading.LoaderTask<Comp.CompProjectRequest, int> loader;
 
     private bool _isLoaderInited;
@@ -195,36 +190,6 @@ public partial class PageComp
 
     private void PageCompControls_Inited(object sender, EventArgs e)
     {
-        // 不知道从 Initialized 改成 Loaded 会不会有问题，但用 Initialized 会导致初始的筛选器修改被覆盖回默认值
-        if (targetVersion is not null)
-        {
-            // 设置目标
-            ResetFilter(); // 重置筛选器
-            TextSearchVersion.Text = targetVersion.Info.VanillaName;
-
-            MyComboBoxItem GetTargetItemByName(string name)
-            {
-                foreach (MyComboBoxItem item in ComboSearchLoader.Items)
-                    if (string.Equals(item.Content?.ToString(), name, StringComparison.OrdinalIgnoreCase))
-                        return item;
-                return (MyComboBoxItem)ComboSearchLoader.Items[0]!;
-            }
-
-            ;
-            if (targetVersion.Info.HasForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Forge");
-            else if (targetVersion.Info.HasFabric)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("Fabric");
-            else if (targetVersion.Info.HasNeoForge)
-                ComboSearchLoader.SelectedItem = GetTargetItemByName("NeoForge");
-            else if (targetVersion.Info.HasQuilt) ComboSearchLoader.SelectedItem = GetTargetItemByName("Quilt");
-            targetVersion = null;
-            // 如果已经完成请求，则重新开始
-            if (_isLoaderInited)
-                StartNewSearch();
-            ScrollToHome();
-        }
-
         // 加载器初始化
         if (_isLoaderInited)
             return;

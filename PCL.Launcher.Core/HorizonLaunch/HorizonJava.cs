@@ -42,7 +42,6 @@ public static class HorizonJava
             "$$",
             new Version(major, 0, 0, 0),
             new Version(major, 999, 999, 999),
-            null,
             true,
             new HashSet<int> { major });
 

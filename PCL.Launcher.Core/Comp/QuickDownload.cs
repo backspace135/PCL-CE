@@ -2,6 +2,7 @@ using System.Text;
 using PCL.Core.App;
 using PCL.Core.App.Localization;
 using PCL.Core.UI;
+using PCL.Horizon;
 using PCL.Network.Loaders;
 
 namespace PCL;
@@ -56,26 +57,34 @@ public static partial class Comp
                         behavior = choice.Value + 1;
                     }
 
+                    var file = _PickLatestFile(files);
+                    if (file is null)
+                    {
+                        LauncherUi.Interaction?.ShowHint(
+                            Lang.Text("Download.Comp.QuickDownload.Hint.NoFile"));
+                        return;
+                    }
+
                     switch (behavior)
                     {
                         case 1:
                             _QuickDownloadToInstance(
                                 project,
-                                files,
-                                InstanceList.McMcInstanceSelected);
+                                file,
+                                HorizonEnvironment.SelectedInstance);
                             break;
                         case 2:
                         {
-                            var instances = _QuickDownloadPickInstances(project, files);
+                            var instances = _QuickDownloadPickInstances();
                             if (instances is null) return;
                             var startedTargets =
                                 new HashSet<string>(StringComparer.OrdinalIgnoreCase);
                             foreach (var instance in instances)
-                                _QuickDownloadToInstance(project, files, instance, startedTargets);
+                                _QuickDownloadToInstance(project, file, instance, startedTargets);
                             break;
                         }
                         case 3:
-                            _QuickDownloadToFolder(project, files);
+                            _QuickDownloadToFolder(project, file);
                             break;
                     }
                 }
@@ -91,11 +100,11 @@ public static partial class Comp
             "Comp QuickDownload");
     }
 
-    /// <summary>下载到指定实例的最新兼容版本。</summary>
+    /// <summary>下载到指定实例。数据包需要先选择一个存档。</summary>
     private static void _QuickDownloadToInstance(
         CompProject project,
-        List<CompFile> files,
-        McInstance? instance,
+        CompFile file,
+        HorizonInstance? instance,
         ISet<string>? startedTargets = null)
     {
         if (instance is null)
@@ -105,19 +114,8 @@ public static partial class Comp
             return;
         }
 
-        if (!instance.IsLoaded) instance.Load();
-        var compatible = files
-            .Where(f => IsInstanceSuitableForFile(instance, f, _ResolveLoaders(f, project)))
-            .ToList();
-        var file = _PickLatestFile(compatible);
-        if (file is null)
-        {
-            LauncherUi.Interaction?.ShowHint(
-                Lang.Text("Download.Comp.QuickDownload.Hint.NoCompatibleFile"));
-            return;
-        }
-
-        var folder = instance.PathIndie + _GetSubFolder(project.Type);
+        var folder = GetInstanceFolder(instance, project.Type, true);
+        if (folder is null) return;
         Directory.CreateDirectory(folder);
         var target = Path.Combine(folder, CompFileNameGet(project, file));
         if (startedTargets is not null && !startedTargets.Add(target))
@@ -128,71 +126,84 @@ public static partial class Comp
             NotificationType.Success);
     }
 
-    /// <summary>弹实例列表让用户选择，返回选中的实例（兼容者优先、当前选中实例居首）；取消或无兼容实例返回 null。</summary>
-    private static List<McInstance>? _QuickDownloadPickInstances(
-        CompProject project,
-        List<CompFile> files)
+    /// <summary>
+    ///     返回某类资源在 Horizon 实例内的存放文件夹。
+    ///     数据包存放在存档内：<paramref name="askWorld" /> 为 true 时让用户选择存档，否则返回存档文件夹。
+    ///     不支持的资源类型或用户取消时返回 null。
+    /// </summary>
+    public static string? GetInstanceFolder(HorizonInstance instance, CompType type, bool askWorld)
     {
-        var needLoad = InstanceList.mcInstanceListLoader.State != LoadState.Finished;
-        if (needLoad)
+        switch (type)
         {
-            if (string.IsNullOrEmpty(GameFolders.mcFolderSelected)) return null;
-            LauncherUi.Interaction?.ShowHint(Lang.Text("Download.Comp.QuickDownload.Hint.Loading"));
-            Loading.LoaderFolderRun(
-                InstanceList.mcInstanceListLoader,
-                GameFolders.mcFolderSelected,
-                Loading.LoaderFolderRunType.ForceRun,
-                1,
-                "versions\\",
-                true);
-        }
+            case CompType.ResourcePack:
+                return instance.ResourcePacksDir;
+            case CompType.Shader:
+                return instance.ShaderPacksDir;
+            case CompType.World:
+                return instance.SavesDir;
+            case CompType.DataPack:
+            {
+                if (!askWorld) return instance.SavesDir;
+                var worlds = Directory.Exists(instance.SavesDir)
+                    ? Directory.GetDirectories(instance.SavesDir)
+                        .Where(d => File.Exists(Path.Combine(d, "level.dat")))
+                        .OrderByDescending(Directory.GetLastWriteTimeUtc)
+                        .ToList()
+                    : [];
+                if (worlds.Count == 0)
+                {
+                    LauncherUi.Interaction?.ShowHint(
+                        Lang.Text("Download.Comp.QuickDownload.Hint.NoWorld", instance.Name));
+                    return null;
+                }
 
-        var compatible = InstanceList
-            .mcInstanceList.Values
-            .SelectMany(l => l)
-            .Where(v =>
-                v is not null
-                && files.Any(f => IsInstanceSuitableForFile(
-                    v,
-                    f,
-                    _ResolveLoaders(f, project))))
-            .ToList();
-        if (compatible.Count == 0)
+                var index = worlds.Count == 1
+                    ? 0
+                    : LauncherCommon.RunInUiWait(() =>
+                        CompUi.Current?.ShowSelect(
+                            Lang.Text("Download.Comp.QuickDownload.ChooseWorld.Title", instance.Name),
+                            null,
+                            worlds.Select(d => Path.GetFileName(d)).ToList(),
+                            Lang.Text("Common.Action.Continue"),
+                            Lang.Text("Common.Action.Cancel")));
+                return index is null ? null : instance.DatapacksDir(Path.GetFileName(worlds[index.Value]));
+            }
+            default:
+                return null;
+        }
+    }
+
+    /// <summary>弹实例列表让用户选择（当前选中实例居首）；取消或没有实例返回 null。</summary>
+    private static List<HorizonInstance>? _QuickDownloadPickInstances()
+    {
+        var current = HorizonEnvironment.SelectedInstance;
+        List<HorizonInstance> instances =
+        [
+            .. HorizonEnvironment.Instances
+                .OrderBy(v => v.Id == current?.Id ? 0 : 1)
+                .ThenBy(v => v.Name)
+        ];
+        if (instances.Count == 0)
         {
             LauncherUi.Interaction?.ShowHint(
-                Lang.Text("Download.Comp.QuickDownload.Hint.NoCompatibleInstance"));
+                Lang.Text("Download.Comp.QuickDownload.Hint.NoInstance"));
             return null;
         }
 
-        var current = InstanceList.McMcInstanceSelected;
-        if (current is not null)
-            compatible =
-            [
-                .. compatible
-                    .OrderBy(v => v == current ? 0 : 1)
-                    .ThenBy(v => v.Name)
-            ];
         var indices = LauncherCommon.RunInUiWait(() =>
             CompUi.Current?.ShowMultiSelect(
                 Lang.Text("Download.Comp.QuickDownload.ChooseInstance.Title"),
                 null,
-                compatible.Select(v => v.Name).ToList(),
+                instances.Select(v => v.Name).ToList(),
                 Lang.Text("Common.Action.Continue"),
                 Lang.Text("Common.Action.Cancel")));
         if (indices is null) return null;
-        return [.. indices.Select(i => compatible[i])];
+        return [.. indices.Select(i => instances[i])];
     }
 
     /// <summary>下载最新版本到用户选择的文件夹。</summary>
-    private static void _QuickDownloadToFolder(CompProject project, List<CompFile> files)
+    private static void _QuickDownloadToFolder(CompProject project, CompFile file)
     {
-        var file = _PickLatestFile(files);
-        if (file is null)
-        {
-            LauncherUi.Interaction?.ShowHint(Lang.Text("Download.Comp.QuickDownload.Hint.NoFile"));
-            return;
-        }
-
         var saveFolder = LauncherCommon.RunInUiWait(() =>
             SystemDialogs.SelectFolder(Lang.Text("Download.Comp.QuickDownload.Hint.SelectFolder")));
         if (string.IsNullOrWhiteSpace(saveFolder)) return;
@@ -260,25 +271,6 @@ public static partial class Comp
         CompUi.Current?.RefreshDownloadButton();
     }
 
-    /// <summary>根据资源类型返回实例内的目标子文件夹（与 Save_Click 一致）。</summary>
-    private static string _GetSubFolder(CompType type)
-    {
-        return type switch
-        {
-            CompType.Mod => "mods\\",
-            CompType.ResourcePack => "resourcepacks\\",
-            CompType.Shader => "shaderpacks\\",
-            CompType.World => "saves\\",
-            _ => ""
-        };
-    }
-
-    /// <summary>取文件自身声明的加载器，缺失时回退到工程的加载器。</summary>
-    private static List<CompLoaderType> _ResolveLoaders(CompFile file, CompProject project)
-    {
-        return file.ModLoaders.Count > 0 ? file.ModLoaders : project.ModLoaders;
-    }
-
     /// <summary>
     ///     按资源类型筛选文件，与详情页 GetResults 一致：Modrinth 会返回 Mod / 服务端插件 / 数据包混合的列表，
     ///     需过滤回当前类型，避免快速下载到另一种产物。光影与资源包不筛（原版光影以资源包格式发布）。
@@ -288,30 +280,6 @@ public static partial class Comp
         return type is CompType.Shader or CompType.ResourcePack
             ? files
             : ([.. files.Where(f => f.Type == type)]);
-    }
-
-    /// <summary>判断某实例是否兼容该文件（基于 Save_Click 的 isVersionSuitable，补全了 Quilt 判定）。</summary>
-    public static bool IsInstanceSuitableForFile(
-        McInstance? version,
-        CompFile file,
-        List<CompLoaderType> allowedLoaders)
-    {
-        if (version is null) return false;
-        if (!version.IsLoaded) version.Load();
-
-        if (file.Type is CompType.Mod or CompType.DataPack)
-            if (file.GameVersions.Any(v => v.Contains('.'))
-                && !ContainsGameVersion(file.GameVersions, version.Info.VanillaName))
-                return false;
-
-        return allowedLoaders.Count == 0
-            || (allowedLoaders.Contains(CompLoaderType.Forge) && version.Info.HasForge)
-            || (allowedLoaders.Contains(CompLoaderType.Forge) && version.Info.HasCleanroom)
-            || (allowedLoaders.Contains(CompLoaderType.Fabric)
-                && (version.Info.HasFabric || version.Info.HasLegacyFabric))
-            || (allowedLoaders.Contains(CompLoaderType.NeoForge) && version.Info.HasNeoForge)
-            || (allowedLoaders.Contains(CompLoaderType.Quilt) && version.Info.HasQuilt)
-            || (allowedLoaders.Contains(CompLoaderType.LiteLoader) && version.Info.HasLiteLoader);
     }
 
     /// <summary>挑选最新文件：优先 Release，其次按发布日期最新。compatFilter 为空时不做兼容过滤。</summary>

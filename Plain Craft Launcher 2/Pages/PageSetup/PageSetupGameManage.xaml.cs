@@ -64,10 +64,6 @@ public partial class PageSetupGameManage : IPageView
         CheckDownloadIgnoreQuilt.Checked = Config.Download.Comp.IgnoreQuilt;
         CheckDownloadClipboard.Checked = Config.Download.Comp.ReadClipboard;
 
-        // Minecraft 更新提示
-        CheckUpdateRelease.Checked = Config.Tool.ReleaseNotification;
-        CheckUpdateSnapshot.Checked = Config.Tool.SnapshotNotification;
-
         // 辅助设置
         CheckHelpLauncherLanguage.Checked = Config.Tool.AutoChangeLanguage;
     }

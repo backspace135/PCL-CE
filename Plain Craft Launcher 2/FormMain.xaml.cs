@@ -135,10 +135,6 @@ public partial class FormMain
         // 调试模式提醒
         if (Common.modeDebug)
             HintService.Show(Hints.Info(Lang.Text("Main.DebugMode.Hint")));
-        // 尽早执行的加载池
-        GameFolders.McFolderListLoader
-            .Start(0); // 为了让下载已存在文件检测可以正常运行，必须跑一次；为了让启动按钮尽快可用，需要尽早执行；为了与 PageLaunchLeft 联动，需要为 0 而不是 GetUuid
-
         Common.Log("[Start] 第二阶段加载用时：" + (TimeUtils.GetTimeTick() - Common.applicationStartTick) + " ms");
         // 注册生命周期状态事件
         Lifecycle.When(LifecycleState.WindowCreated, FormMain_Loaded);
@@ -1256,7 +1252,6 @@ public partial class FormMain
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
         DownloadCompFavorites = 8,
-        DownloadClient = 9,
 
         SetupLaunch = 0,
         SetupUI = 1,

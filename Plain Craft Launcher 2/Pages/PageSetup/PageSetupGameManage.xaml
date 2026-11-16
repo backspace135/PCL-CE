@@ -158,21 +158,12 @@
                         <RowDefinition Height="8" />
                         <RowDefinition Height="22" />
                         <RowDefinition Height="8" />
-                        <RowDefinition Height="22" />
-                        <RowDefinition Height="8" />
                     </Grid.RowDefinitions>
-                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameUpdateNotice}" Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReleaseNotice}" Grid.Column="1" x:Name="CheckUpdateRelease"
-                                      Change="CheckBoxChange"
-                                      Tag="ToolUpdateRelease" ToolTip="{loc:Loc Setup.GameManage.Accessibility.ReleaseNotice.ToolTip}" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.SnapshotNotice}" Grid.Column="2" Height="22" x:Name="CheckUpdateSnapshot"
-                                      Change="CheckBoxChange"
-                                      Tag="ToolUpdateSnapshot" ToolTip="{loc:Loc Setup.GameManage.Accessibility.SnapshotNotice.ToolTip}" />
-                    <TextBlock VerticalAlignment="Center" Grid.Row="2" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameLanguage}"
+                    <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{loc:Loc Setup.GameManage.Accessibility.GameLanguage}"
                                Margin="0,0,25,0" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.AutoLauncherLanguage}" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5"
+                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.AutoLauncherLanguage}" Grid.Column="1" Grid.ColumnSpan="5"
                                       x:Name="CheckHelpLauncherLanguage" Tag="ToolHelpChinese" Change="CheckBoxChange" />
-                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard}" Height="22" Grid.Row="4" Grid.Column="0"
+                    <local:MyCheckBox Text="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard}" Height="22" Grid.Row="2" Grid.Column="0"
                                       Grid.ColumnSpan="3" Change="CheckBoxChange"
                                       x:Name="CheckDownloadClipboard" Tag="ToolDownloadClipboard"
                                       ToolTip="{loc:Loc Setup.GameManage.Accessibility.ReadClipboard.ToolTip}" />
