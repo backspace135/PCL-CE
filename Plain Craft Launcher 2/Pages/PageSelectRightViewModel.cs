@@ -47,7 +47,7 @@ public partial class PageSelectRightViewModel : ViewModelBase
     [RelayCommand]
     private void Download()
     {
-        Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall);
+        Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadClient);
     }
 
     [RelayCommand]

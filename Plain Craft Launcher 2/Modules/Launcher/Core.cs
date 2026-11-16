@@ -18,16 +18,7 @@ public static partial class Launcher
     public static PageSpeedLeft? frmSpeedLeft;
     public static PageSpeedRight? frmSpeedRight;
     public static PageDownloadLeft? frmDownloadLeft;
-    public static PageDownloadInstall? frmDownloadInstall;
     public static PageDownloadClient? frmDownloadClient;
-    public static PageDownloadOptiFine? frmDownloadOptiFine;
-    public static PageDownloadLiteLoader? frmDownloadLiteLoader;
-    public static PageDownloadForge? frmDownloadForge;
-    public static PageDownloadNeoForge? frmDownloadNeoForge;
-    public static PageDownloadCleanroom? frmDownloadCleanroom;
-    public static PageDownloadFabric? frmDownloadFabric;
-    public static PageDownloadLabyMod? frmDownloadLabyMod;
-    public static PageDownloadLegacyFabric? frmDownloadLegacyFabric;
     public static PageDownloadMod? frmDownloadMod;
     public static PageDownloadDataPack? frmDownloadDataPack;
     public static PageDownloadShader? frmDownloadShader;
@@ -60,7 +51,6 @@ public static partial class Launcher
     public static PageInstanceCompResource? frmInstanceSchematic;
     public static PageInstanceCompResource? frmInstanceResourcePack;
     public static PageInstanceSetup? frmInstanceSetup;
-    public static PageInstanceInstall? frmInstanceInstall;
     public static PageInstanceServer? frmInstanceServer;
     public static PageInstanceSavesLeft? frmInstanceSavesLeft;
     public static PageInstanceSavesInfo? frmInstanceSavesInfo;

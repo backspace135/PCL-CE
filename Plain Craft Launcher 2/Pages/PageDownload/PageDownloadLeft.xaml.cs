@@ -22,23 +22,6 @@ public partial class PageDownloadLeft : IRefreshable
     {
         switch (subType)
         {
-            case FormMain.PageSubType.DownloadInstall:
-            {
-                GameDownload.dlClientListLoader.Start(isForceRestart: true);
-                GameDownload.DlOptiFineListLoader.Start(isForceRestart: true);
-                GameDownload.DlForgeListLoader.Start(isForceRestart: true);
-                GameDownload.DlNeoForgeListLoader.Start(isForceRestart: true);
-                GameDownload.DlCleanroomListLoader.Start(isForceRestart: true);
-                GameDownload.DlLiteLoaderListLoader.Start(isForceRestart: true);
-                GameDownload.DlFabricListLoader.Start(isForceRestart: true);
-                GameDownload.DlLegacyFabricListLoader.Start(isForceRestart: true);
-                CompDownloadLoaders.DlFabricApiLoader.Start(isForceRestart: true);
-                CompDownloadLoaders.DlLegacyFabricApiLoader.Start(isForceRestart: true);
-                CompDownloadLoaders.DlOptiFabricLoader.Start(isForceRestart: true);
-                GameDownload.DlLabyModListLoader.Start(isForceRestart: true);
-                ItemInstall.Checked = true;
-                break;
-            }
             case FormMain.PageSubType.DownloadMod:
             {
                 Comp.compProjectCache.Clear();
@@ -102,54 +85,6 @@ public partial class PageDownloadLeft : IRefreshable
                 ItemClient.Checked = true;
                 break;
             }
-            case FormMain.PageSubType.DownloadOptiFine:
-            {
-                GameDownload.DlOptiFineListLoader.Start(isForceRestart: true);
-                ItemOptiFine.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadForge:
-            {
-                GameDownload.DlForgeListLoader.Start(isForceRestart: true);
-                ItemForge.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadNeoForge:
-            {
-                GameDownload.DlNeoForgeListLoader.Start(isForceRestart: true);
-                ItemNeoForge.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadCleanroom:
-            {
-                GameDownload.DlCleanroomListLoader.Start(isForceRestart: true);
-                ItemCleanroom.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadLiteLoader:
-            {
-                GameDownload.DlLiteLoaderListLoader.Start(isForceRestart: true);
-                ItemLiteLoader.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadFabric:
-            {
-                GameDownload.DlFabricListLoader.Start(isForceRestart: true);
-                ItemFabric.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadLabyMod:
-            {
-                GameDownload.DlLabyModListLoader.Start(isForceRestart: true);
-                ItemLabyMod.Checked = true;
-                break;
-            }
-            case FormMain.PageSubType.DownloadLegacyFabric:
-            {
-                GameDownload.DlLegacyFabricListLoader.Start(isForceRestart: true);
-                ItemLegacyFabric.Checked = true;
-                break;
-            }
             case FormMain.PageSubType.DownloadCompFavorites:
             {
                 if (Launcher.frmDownloadCompFavorites is not null)
@@ -162,20 +97,13 @@ public partial class PageDownloadLeft : IRefreshable
         HintService.Show(Hints.Info(Lang.Text("Download.Left.Hint.Refreshing"), log: false));
     }
 
-    // 点击返回
-    private void ItemInstall_Click(object sender, MouseButtonEventArgs e)
-    {
-        if (!ItemInstall.Checked)
-            return;
-        Launcher.frmDownloadInstall.ExitSelectPage();
-    }
 
     #region 页面切换
 
     /// <summary>
     ///     当前页面的编号。
     /// </summary>
-    public FormMain.PageSubType PageId = FormMain.PageSubType.DownloadInstall;
+    public FormMain.PageSubType PageId = FormMain.PageSubType.DownloadClient;
 
     public PageDownloadLeft()
     {
@@ -199,12 +127,6 @@ public partial class PageDownloadLeft : IRefreshable
             id = PageId;
         switch (id)
         {
-            case FormMain.PageSubType.DownloadInstall:
-            {
-                if (Launcher.frmDownloadInstall is null)
-                    Launcher.frmDownloadInstall = new PageDownloadInstall();
-                return Launcher.frmDownloadInstall;
-            }
             case FormMain.PageSubType.DownloadMod:
             {
                 if (Launcher.frmDownloadMod is null)
@@ -240,54 +162,6 @@ public partial class PageDownloadLeft : IRefreshable
                 if (Launcher.frmDownloadClient is null)
                     Launcher.frmDownloadClient = new PageDownloadClient();
                 return Launcher.frmDownloadClient;
-            }
-            case FormMain.PageSubType.DownloadOptiFine:
-            {
-                if (Launcher.frmDownloadOptiFine is null)
-                    Launcher.frmDownloadOptiFine = new PageDownloadOptiFine();
-                return Launcher.frmDownloadOptiFine;
-            }
-            case FormMain.PageSubType.DownloadForge:
-            {
-                if (Launcher.frmDownloadForge is null)
-                    Launcher.frmDownloadForge = new PageDownloadForge();
-                return Launcher.frmDownloadForge;
-            }
-            case FormMain.PageSubType.DownloadNeoForge:
-            {
-                if (Launcher.frmDownloadNeoForge is null)
-                    Launcher.frmDownloadNeoForge = new PageDownloadNeoForge();
-                return Launcher.frmDownloadNeoForge;
-            }
-            case FormMain.PageSubType.DownloadCleanroom:
-            {
-                if (Launcher.frmDownloadCleanroom is null)
-                    Launcher.frmDownloadCleanroom = new PageDownloadCleanroom();
-                return Launcher.frmDownloadCleanroom;
-            }
-            case FormMain.PageSubType.DownloadLiteLoader:
-            {
-                if (Launcher.frmDownloadLiteLoader is null)
-                    Launcher.frmDownloadLiteLoader = new PageDownloadLiteLoader();
-                return Launcher.frmDownloadLiteLoader;
-            }
-            case FormMain.PageSubType.DownloadFabric:
-            {
-                if (Launcher.frmDownloadFabric is null)
-                    Launcher.frmDownloadFabric = new PageDownloadFabric();
-                return Launcher.frmDownloadFabric;
-            }
-            case FormMain.PageSubType.DownloadLabyMod:
-            {
-                if (Launcher.frmDownloadLabyMod is null)
-                    Launcher.frmDownloadLabyMod = new PageDownloadLabyMod();
-                return Launcher.frmDownloadLabyMod;
-            }
-            case FormMain.PageSubType.DownloadLegacyFabric:
-            {
-                if (Launcher.frmDownloadLegacyFabric is null)
-                    Launcher.frmDownloadLegacyFabric = new PageDownloadLegacyFabric();
-                return Launcher.frmDownloadLegacyFabric;
             }
 
             default:

@@ -28,24 +28,6 @@
                     </x:Array>
                 </local:MyListItem.Buttons>
             </local:MyListItem>
-            <local:MyListItem x:Name="ItemInstall" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="10"
-                              Check="PageCheck"
-                              MinPaddingRight="35" Height="36" VerticalAlignment="Top"
-                              Title="{loc:Loc Instance.Left.Install}"
-                              LogoScale="0.87"
-                              Visibility="{Binding ItemInstallVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                              SvgIcon="lucide/wrench">
-                <local:MyListItem.Buttons>
-                    <x:Array Type="{x:Type local:MyIconButton}">
-                        <local:MyIconButton Tag="10" ToolTip="{loc:Loc Common.Action.Refresh}"
-                                            ToolTipService.Placement="Right"
-                                            ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
-                                            LogoScale="0.85"
-                                            Command="{Binding RefreshButtonCommand}" CommandParameter="{Binding Tag, RelativeSource={RelativeSource Self}}"
-                                            SvgIcon="lucide/refresh-cw" />
-                    </x:Array>
-                </local:MyListItem.Buttons>
-            </local:MyListItem>
             <TextBlock x:Name="TextResource" Text="{loc:Loc Instance.Left.Resources}" Margin="13,6,5,4"
                        Visibility="{Binding TextResourceVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                        Opacity="0.6" FontSize="12" />

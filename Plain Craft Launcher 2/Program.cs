@@ -60,7 +60,6 @@ internal static class Program
         LoginProfile.Current = new WpfProfileUi();
         LogFilter.Current = new WpfLogFilter();
         RestrictedFeatures.Current = new WpfRestrictedFeatures();
-        ModpackUi.Current = new WpfModpackUi();
         EventUi.Current = new WpfEventUi();
         LauncherState.InstanceSelectionChanged += _ => PageDownloadCompDetail.cachedFolder.Clear();
 

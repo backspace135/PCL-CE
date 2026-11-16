@@ -38,10 +38,9 @@ public sealed class WpfDownloadInteraction : IDownloadUserInteraction
             if (msgResult == 2)
                 Common.RunInUi(() =>
                 {
-                    PageDownloadInstall.mcVersionWaitingForSelect = versionName;
                     Launcher.frmMain!.PageChange(
                         FormMain.PageType.Download,
-                        FormMain.PageSubType.DownloadInstall);
+                        FormMain.PageSubType.DownloadClient);
                 });
         }
         catch (Exception ex)

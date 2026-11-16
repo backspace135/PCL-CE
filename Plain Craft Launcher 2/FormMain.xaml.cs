@@ -788,14 +788,7 @@ public partial class FormMain
 
     private void TriggerPageBack()
     {
-        if (pageCurrent == PageType.Download && PageCurrentSub == PageSubType.DownloadInstall &&
-            Launcher.frmDownloadInstall.isInSelectPage)
-            Launcher.frmDownloadInstall.ExitSelectPage();
-        else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionInstall &&
-                 Launcher.frmInstanceInstall.isInSelectPage)
-            Launcher.frmInstanceInstall.ExitSelectPage();
-        else
-            PageBack();
+        PageBack();
     }
 
     // 切回窗口
@@ -1397,21 +1390,12 @@ public partial class FormMain
     public enum PageSubType
     {
         Default = 0,
-        DownloadInstall = 1,
         DownloadMod = 2,
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
         DownloadShader = 6,
         DownloadCompFavorites = 8,
         DownloadClient = 9,
-        DownloadOptiFine = 10,
-        DownloadForge = 11,
-        DownloadNeoForge = 12,
-        DownloadCleanroom = 13,
-        DownloadFabric = 14,
-        DownloadLiteLoader = 16,
-        DownloadLabyMod = 17,
-        DownloadLegacyFabric = 18,
 
         SetupLaunch = 0,
         SetupUI = 1,
@@ -1434,7 +1418,6 @@ public partial class FormMain
         VersionResourcePack = 7,
         VersionShader = 8,
         VersionSchematic = 9,
-        VersionInstall = 10,
         VersionServer = 11,
         VersionModJarInJar = 12,
         VersionSavesInfo = 0,

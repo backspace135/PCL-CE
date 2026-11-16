@@ -182,7 +182,7 @@ public partial class PageLaunchLeft : IPageView
             }
             case LaunchButtonAction.Download:
             {
-                Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall);
+                Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadClient);
                 break;
             }
         }

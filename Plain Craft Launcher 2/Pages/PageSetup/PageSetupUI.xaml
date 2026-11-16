@@ -353,8 +353,6 @@
                         <TextBlock Margin="0,12,0,4" Text="{loc:Loc Setup.Ui.FeatureHide.SubInstance}"
                                    Opacity="0.6" FontSize="12" />
                         <WrapPanel>
-                            <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Edit}"
-                                              x:Name="CheckHiddenVersionEdit" Tag="UiHiddenVersionEdit" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Save}"
                                               x:Name="CheckHiddenVersionSave" Tag="UiHiddenVersionSave" Change="CheckBoxChange" />
                             <local:MyCheckBox Height="22" Margin="0,0,12,4" Text="{loc:Loc Setup.Ui.FeatureHide.Item.Screenshot}"

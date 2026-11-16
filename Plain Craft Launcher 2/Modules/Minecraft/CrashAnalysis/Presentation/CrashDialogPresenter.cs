@@ -99,7 +99,7 @@ internal sealed class CrashDialogPresenter(CrashAnalysisContext context)
 
         Common.RunInUi(() => Launcher.frmMain.PageChange(
             FormMain.PageType.InstanceSetup,
-            FormMain.PageSubType.VersionInstall));
+            FormMain.PageSubType.VersionOverall));
     }
 
     private static void _OpenDirectFile(CrashLogEntry directFile)

@@ -29,7 +29,7 @@ public partial class PageInstanceModDisabled : IPageView
 
     private void BtnDownload_Click(object sender, MouseButtonEventArgs e)
     {
-        Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadInstall);
+        Launcher.frmMain.PageChange(FormMain.PageType.Download, FormMain.PageSubType.DownloadClient);
     }
 
     private void BtnVersion_Click(object sender, MouseButtonEventArgs e)

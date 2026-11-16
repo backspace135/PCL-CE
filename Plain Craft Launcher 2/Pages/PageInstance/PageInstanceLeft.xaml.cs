@@ -85,24 +85,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     PageInstanceCompResource.Refresh(Comp.CompType.Schematic);
                     break;
                 }
-            case FormMain.PageSubType.VersionInstall:
-                {
-                    GameDownload.dlClientListLoader.Start(isForceRestart: true);
-                    GameDownload.DlOptiFineListLoader.Start(isForceRestart: true);
-                    GameDownload.DlForgeListLoader.Start(isForceRestart: true);
-                    GameDownload.DlNeoForgeListLoader.Start(isForceRestart: true);
-                    GameDownload.DlCleanroomListLoader.Start(isForceRestart: true);
-                    GameDownload.DlLiteLoaderListLoader.Start(isForceRestart: true);
-                    GameDownload.DlFabricListLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlFabricApiLoader.Start(isForceRestart: true);
-                    GameDownload.DlLegacyFabricListLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlLegacyFabricApiLoader.Start(isForceRestart: true);
-                    CompDownloadLoaders.DlOptiFabricLoader.Start(isForceRestart: true);
-                    GameDownload.DlLabyModListLoader.Start(isForceRestart: true);
-                    ItemInstall.Checked = true;
-                    Launcher.frmInstanceInstall.GetCurrentInfo();
-                    break;
-                }
             case FormMain.PageSubType.VersionServer:
                 {
                     if (Launcher.frmInstanceServer is not null)
@@ -208,11 +190,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                 {
                     Launcher.frmInstanceSchematic ??= new PageInstanceCompResource(Comp.CompType.Schematic);
                     return Launcher.frmInstanceSchematic;
-                }
-            case FormMain.PageSubType.VersionInstall:
-                {
-                    Launcher.frmInstanceInstall ??= new PageInstanceInstall();
-                    return Launcher.frmInstanceInstall;
                 }
             case FormMain.PageSubType.VersionServer:
                 {

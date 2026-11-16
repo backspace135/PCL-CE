@@ -30,8 +30,6 @@ public partial class PageInstanceOverallViewModel : ViewModelBase
 
     [ObservableProperty] private bool _renameButtonEnabled = true;
 
-    [ObservableProperty] private bool _restoreButtonEnabled = true;
-
     [ObservableProperty] private bool _deleteButtonEnabled = true;
 
     [ObservableProperty] private bool _patchButtonEnabled = true;

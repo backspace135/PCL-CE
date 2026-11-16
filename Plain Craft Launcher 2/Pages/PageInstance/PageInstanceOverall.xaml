@@ -143,11 +143,6 @@
                                         Margin="0,7,20,0"
                                         ToolTip="{loc:Loc Instance.Overall.Manage.RepairFiles.ToolTip}"
                                         Height="35" />
-                        <local:MyButton x:Name="BtnManageRestore" Text="{loc:Loc Common.Action.Reset}" MinWidth="140" Padding="13,0" Click="BtnManageRestore_Click"
-                                        IsEnabled="{Binding RestoreButtonEnabled}"
-                                        Margin="0,7,20,0"
-                                        ToolTip="{loc:Loc Instance.Overall.Manage.Reinstall.ToolTip}"
-                                        Height="35" />
                         <local:MyButton x:Name="BtnManageDelete" Text="{loc:Loc Instance.Overall.Manage.Delete}" MinWidth="140" Padding="13,0" Click="BtnManageDelete_Click"
                                         IsEnabled="{Binding DeleteButtonEnabled}"
                                         Margin="0,7,20,0"
