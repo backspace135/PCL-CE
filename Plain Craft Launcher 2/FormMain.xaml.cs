@@ -164,10 +164,8 @@ public partial class FormMain
         BtnExtraUpdateRestart.showCheck = BtnExtraUpdateRestart_ShowCheck;
         BtnExtraDownload.showCheck = BtnExtraDownload_ShowCheck;
         BtnExtraBack.showCheck = BtnExtraBack_ShowCheck;
-        BtnExtraApril.showCheck = BtnExtraApril_ShowCheck;
         BtnExtraShutdown.showCheck = BtnExtraShutdown_ShowCheck;
         BtnExtraLog.showCheck = BtnExtraLog_ShowCheck;
-        BtnExtraApril.ShowRefresh();
         // 初始化尺寸改变
         if (!Config.Preference.LockWindowSize)
             AddResizer();
@@ -686,11 +684,6 @@ public partial class FormMain
         WindowState = WindowState.Minimized;
     }
 
-    private void BtnTitleHelp_Click(object sender, EventArgs e)
-    {
-        Common.OpenWebsite("https://www.bilibili.com/video/BV1uT4y1P7CX");
-    }
-
     #endregion
 
     #region 窗体事件
@@ -797,10 +790,7 @@ public partial class FormMain
         // 调用启动游戏
         if (e.Key == Key.Enter && pageCurrent == PageType.Launch)
         {
-            if (Launcher.isAprilEnabled && !Launcher.isAprilGiveup)
-                HintService.Show(Hints.Info(Lang.Text("Main.April.Nope")));
-            else
-                Launcher.frmLaunchLeft.LaunchButtonClick();
+            Launcher.frmLaunchLeft.LaunchButtonClick();
         }
 
         // 修复按下 Alt 后误认为弹出系统菜单导致的冻结
@@ -1958,7 +1948,6 @@ public partial class FormMain
             #region 设置为最新状态
 
             BtnExtraDownload.ShowRefresh();
-            BtnExtraApril.ShowRefresh();
 
             #endregion
 
@@ -2199,28 +2188,6 @@ public partial class FormMain
         return NetFacade.HasDownloadingTask() && !(pageCurrent == PageType.TaskManager);
     }
 
-    // 投降
-    public void AprilGiveup()
-    {
-        if (Launcher.isAprilEnabled && !Launcher.isAprilGiveup)
-        {
-            HintService.Show(Hints.Success("=D"));
-            Launcher.isAprilGiveup = true;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleX = 1d;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleY = 1d;
-            BtnExtraApril.ShowRefresh();
-        }
-    }
-
-    private void BtnExtraApril_Click(object sender, MouseButtonEventArgs e)
-    {
-        AprilGiveup();
-    }
-
-    public bool BtnExtraApril_ShowCheck()
-    {
-        return Launcher.isAprilEnabled && !Launcher.isAprilGiveup && pageCurrent == PageType.Launch;
-    }
 
     // 关闭 Minecraft
     private void BtnExtraShutdown_Click(object sender, MouseButtonEventArgs e)

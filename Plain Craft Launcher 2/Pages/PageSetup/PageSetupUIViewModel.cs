@@ -47,9 +47,8 @@ public partial class PageSetupUIViewModel : ViewModelBase
 
     [ObservableProperty] private int _customPresetSelectedIndex = -1;
 
-    public string[] ThemeColors => Basics.IsAprilFool
-        ? [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue"), Lang.Text("Setup.Ui.Theme.Color.Hmcl")]
-        : [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue")];
+    public string[] ThemeColors =>
+        [Lang.Text("Setup.Ui.Theme.Color.SkyBlue"), Lang.Text("Setup.Ui.Theme.Color.CatBlue"), Lang.Text("Setup.Ui.Theme.Color.CrashBlue")];
 
     public void ShowLauncherHint()
     {

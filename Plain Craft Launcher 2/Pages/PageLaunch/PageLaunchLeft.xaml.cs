@@ -79,9 +79,6 @@ public partial class PageLaunchLeft : IPageView
         if (isLoad)
             RefreshPage(false);
 
-        AprilPosTrans.X = 0d;
-        AprilPosTrans.Y = 0d;
-
         if (isLoad)
             return;
         isLoad = true;
@@ -220,17 +217,6 @@ public partial class PageLaunchLeft : IPageView
              Launcher.frmMain.pageRight.PageState != MyPageRight.PageStates.ContentStay &&
              Launcher.frmMain.pageRight.PageState != MyPageRight.PageStates.ContentEnter))
             return;
-        // 愚人节处理
-        if (Launcher.isAprilEnabled && !Launcher.isAprilGiveup)
-        {
-            Launcher.isAprilGiveup = true;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleX = 1d;
-            Launcher.frmLaunchLeft.AprilScaleTrans.ScaleY = 1d;
-            Launcher.frmLaunchLeft.AprilPosTrans.X = 0d;
-            Launcher.frmLaunchLeft.AprilPosTrans.Y = 0d;
-            Launcher.frmMain.BtnExtraApril.ShowRefresh();
-        }
-
         // 实际的启动
         switch (_launchButtonAction)
         {

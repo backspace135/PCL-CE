@@ -6,7 +6,6 @@ namespace PCL;
 public static partial class Launcher
 {
     private const int MainTimerSleepMs = 49;
-    private const int AprilTimerSleepMs = 1;
     private const int LongTimerInterval = 150;
     public static FormMain? frmMain;
     public static SplashScreen? frmStart;
@@ -108,9 +107,6 @@ public static partial class Launcher
     {
         try
         {
-            if (frmMain!.BtnExtraApril_ShowCheck() && _aprilDistance != 0)
-                frmMain.BtnExtraApril.Ribble();
-
             Common.RunInUi(() =>
             {
                 var main = frmMain!;
@@ -135,14 +131,11 @@ public static partial class Launcher
     }
 
     /// <summary>
-    ///     启动主时钟，以及愚人节专用时钟。
+    ///     启动主时钟。
     /// </summary>
     public static void TimerMainStart()
     {
         Common.RunInNewThread(RunMainTimerLoop, "Timer Main");
-
-        if (isAprilEnabled)
-            Common.RunInNewThread(RunAprilTimerLoop, "Timer Main Fool");
     }
 
     /// <summary>
@@ -168,35 +161,4 @@ public static partial class Launcher
         }
     }
 
-    /// <summary>
-    ///     愚人节专用时钟线程。
-    /// </summary>
-    private static void RunAprilTimerLoop()
-    {
-        try
-        {
-            var lastTick = Environment.TickCount;
-
-            while (true)
-            {
-                var currentTick = Environment.TickCount;
-
-                if (currentTick != lastTick)
-                {
-                    lastTick = currentTick;
-                    Common.RunInUiWait(TimerFool);
-                }
-
-                Thread.Sleep(AprilTimerSleepMs);
-            }
-        }
-        catch (Exception ex)
-        {
-            Common.Log(
-                ex,
-                "愚人节主时钟出错",
-                Common.LogLevel.Feedback,
-                userSummary: Lang.Text("Main.Error.OperationFailed"));
-        }
-    }
 }

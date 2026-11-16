@@ -46,7 +46,6 @@ public sealed class WpfLaunchUi : ILaunchUi
         PlatformServices.UiDispatcher?.Post(() =>
         {
             if (Launcher.frmMain is not { } main) return;
-            main.AprilGiveup();
             main.pageStack =
                 [.. main.pageStack.Where(p => p.page != FormMain.PageType.InstanceSelect)];
         });
