@@ -70,7 +70,6 @@ public static partial class Launcher
     public static PageInstanceSavesLeft? frmInstanceSavesLeft;
     public static PageInstanceSavesInfo? frmInstanceSavesInfo;
     public static PageInstanceSavesDatapack? frmInstanceSavesDatapack;
-    public static PageHomepageNewsView? frmHomepageNews;
 
     public static MySlider? dragControl;
 

@@ -370,18 +370,6 @@ public partial class FormMain
             return;
         ShowUpdateLog();
 
-        // 重置自定义主页配置
-        if (lastVersionCode < 521 && Config.Preference.Homepage.SelectedPreset >= 3)
-        {
-            Config.Preference.Homepage.SelectedPreset = 0;
-            DialogService.Instance.Show(new TextDialogRequest
-            {
-                Title = Lang.Text("Main.HomepageReset.Title"),
-                Content = Lang.Text("Main.HomepageReset.Content"),
-                Buttons = DialogButtons.Ok,
-                ForceWait = true
-            });
-        }
     }
 
     private void DowngradeSub(int lastVersionCode)
