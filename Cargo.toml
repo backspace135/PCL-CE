@@ -1,0 +1,46 @@
+# Horizon's portable core: vanilla 26.3's rules and data with no window, GPU, sound or
+# HTTP client in them (docs/layers.md#portable-crates in the Horizon repository).
+[workspace]
+members = [
+    "crates/horizon-core",
+    "crates/horizon-guest-stack",
+    "crates/horizon-threads",
+    "crates/horizon-java-properties",
+    "crates/horizon-mod-runtime",
+    "crates/horizon-assets",
+    "crates/horizon-world",
+    "crates/horizon-client-core",
+    "crates/horizon-items",
+    "crates/horizon-protocol",
+    "crates/horizon-command",
+]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+license = "LGPL-3.0-or-later"
+rust-version = "1.95"
+
+# Ports mirror vanilla's Java signatures, index loops and nested generic types
+# one to one so they can be checked against the decompiled sources.
+[workspace.lints.clippy]
+too_many_arguments = "allow"
+type_complexity = "allow"
+needless_range_loop = "allow"
+large_enum_variant = "allow"
+
+# Line tables keep file:line in backtraces; full debug info made every
+# example and test binary hundreds of megabytes and slow to link.
+[profile.dev]
+debug = "line-tables-only"
+
+[profile.release]
+lto = "thin"
+codegen-units = 1
+
+# Optimized but quick-to-link builds for iteration: cargo build --profile fast
+[profile.fast]
+inherits = "release"
+lto = false
+codegen-units = 16
+incremental = true

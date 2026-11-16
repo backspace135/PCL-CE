@@ -1,0 +1,4 @@
+/target/
+# Mojang's files (game jars, assets, decompiled sources, prepared resources) never get committed.
+/.local/
+/datagen/
