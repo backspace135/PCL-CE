@@ -31,7 +31,7 @@ public sealed class HorizonReleaseService
     public HorizonReleaseService(HttpClient http, string? assetName = null)
     {
         _http = http;
-        AssetName = assetName ?? HorizonPlatform.CurrentWindowsAsset;
+        AssetName = assetName ?? HorizonPlatform.WindowsX64;
     }
 
     public string AssetName { get; }
