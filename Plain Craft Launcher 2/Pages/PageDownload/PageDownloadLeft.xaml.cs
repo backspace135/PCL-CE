@@ -53,20 +53,6 @@ public partial class PageDownloadLeft : IRefreshable
                 ItemMod.Checked = true;
                 break;
             }
-            case FormMain.PageSubType.DownloadPack:
-            {
-                Comp.compProjectCache.Clear();
-                Comp.compFilesCache.Clear();
-                if (Launcher.frmDownloadPack is not null)
-                {
-                    Launcher.frmDownloadPack.Content.storage = new Comp.CompProjectStorage();
-                    Launcher.frmDownloadPack.Content.page = 0;
-                    Launcher.frmDownloadPack.PageLoaderRestart();
-                }
-
-                ItemPack.Checked = true;
-                break;
-            }
             case FormMain.PageSubType.DownloadDataPack:
             {
                 Comp.compProjectCache.Clear();
@@ -238,12 +224,6 @@ public partial class PageDownloadLeft : IRefreshable
                 if (Launcher.frmDownloadMod is null)
                     Launcher.frmDownloadMod = new PageDownloadMod();
                 return Launcher.frmDownloadMod;
-            }
-            case FormMain.PageSubType.DownloadPack:
-            {
-                if (Launcher.frmDownloadPack is null)
-                    Launcher.frmDownloadPack = new PageDownloadPack();
-                return Launcher.frmDownloadPack;
             }
             case FormMain.PageSubType.DownloadDataPack:
             {

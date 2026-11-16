@@ -97,30 +97,6 @@ public partial class PageLaunchLeft : IPageView
         // 加载实例
         Common.RunInNewThread(() =>
         {
-            // 自动整合包安装：准备
-            string packInstallPath = null;
-            if (File.Exists(Path.Combine(Common.ExePath, "modpack.zip")))
-                packInstallPath = Path.Combine(Common.ExePath, "modpack.zip");
-            if (File.Exists(Path.Combine(Common.ExePath, "modpack.mrpack")))
-                packInstallPath = Path.Combine(Common.ExePath, "modpack.mrpack");
-            if (packInstallPath is not null && !RestrictedFeaturePolicy.Check("auto-modpack-install"))
-                packInstallPath = null;
-            if (packInstallPath is not null)
-            {
-                Common.Log("[Launch] 需自动安装整合包：" + packInstallPath, Common.LogLevel.Debug);
-                States.Game.SelectedFolder = @"$.minecraft\";
-                if (!Directory.Exists(Common.ExePath + @".minecraft\"))
-                {
-                    Directory.CreateDirectory(Common.ExePath + @".minecraft\");
-                    Directory.CreateDirectory(Common.ExePath + @".minecraft\versions\");
-                    GameFolders.McFolderLauncherProfilesJsonCreate(Common.ExePath + @".minecraft\");
-                }
-
-                PageSelectLeft.AddFolder(Common.ExePath + @".minecraft\",
-                    Common.GetFolderNameFromPath(Common.ExePath), false);
-                GameFolders.McFolderListLoader.WaitForExit();
-            }
-
             // 确认 Minecraft 文件夹存在
             GameFolders.mcFolderSelected =
                 States.Game.SelectedFolder.ToString().Replace("$", Common.ExePath);
@@ -139,33 +115,6 @@ public partial class PageLaunchLeft : IPageView
             Common.Log("[Launch] Minecraft 文件夹：" + GameFolders.mcFolderSelected);
             if (Config.Debug.AddRandomDelay)
                 Thread.Sleep(RandomUtils.NextInt(500, 3000));
-            // 自动整合包安装
-            if (packInstallPath is not null)
-                try
-                {
-                    var installLoader = Modpack.ModpackInstall(packInstallPath);
-                    Common.Log("[Launch] 自动安装整合包已开始：" + packInstallPath);
-                    installLoader.WaitForExit();
-                    if (installLoader.State == LoadState.Finished)
-                    {
-                        Common.Log("[Launch] 自动安装整合包成功，清理安装包：" + packInstallPath);
-                        if (File.Exists(packInstallPath))
-                            File.Delete(packInstallPath);
-                    }
-                }
-                catch (CancelledException ex)
-                {
-                    Common.Log(ex, "自动安装整合包被用户取消：" + packInstallPath);
-                }
-                catch (Exception ex)
-                {
-                    Common.Log(
-                        ex,
-                        Lang.Text("Select.Folder.Error.InstallPack", packInstallPath),
-                        Common.LogLevel.Msgbox,
-                        userSummary: Lang.Text("Select.Folder.Error.InstallPack", packInstallPath));
-                }
-
             // 确认 Minecraft 版本实例
             var selection = States.Game.SelectedInstance;
             var instance = selection == "" ? null : new McInstance(selection);

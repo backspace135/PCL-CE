@@ -103,13 +103,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     Launcher.frmInstanceInstall.GetCurrentInfo();
                     break;
                 }
-            case FormMain.PageSubType.VersionExport:
-                {
-                    if (Launcher.frmInstanceExport is not null)
-                        Launcher.frmInstanceExport.RefreshAll();
-                    ItemExport.Checked = true;
-                    break;
-                }
             case FormMain.PageSubType.VersionServer:
                 {
                     if (Launcher.frmInstanceServer is not null)
@@ -220,11 +213,6 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                 {
                     Launcher.frmInstanceInstall ??= new PageInstanceInstall();
                     return Launcher.frmInstanceInstall;
-                }
-            case FormMain.PageSubType.VersionExport:
-                {
-                    Launcher.frmInstanceExport ??= new PageInstanceExport();
-                    return Launcher.frmInstanceExport;
                 }
             case FormMain.PageSubType.VersionServer:
                 {

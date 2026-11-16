@@ -33,7 +33,6 @@ public static partial class DownloadUi
                     folders.LabyModFolder,
                     request.labyModChannel,
                     folders.LiteLoaderFolder,
-                    request.mmcPackInfo,
                     folders.LegacyFabricFolder
                 );
                 task.Progress = 0.2d;
@@ -68,8 +67,7 @@ public static partial class DownloadUi
 
     private static bool _ShouldFixInstallLibraries(McInstallRequest request)
     {
-        return request.mmcPackInfo is not null
-            || request.optiFineEntry is not null
+        return request.optiFineEntry is not null
             || (request.forgeVersion is not null
                 && Convert.ToDouble(request.forgeVersion.BeforeFirst(".")) >= 20d)
             || request.neoForgeVersion is not null

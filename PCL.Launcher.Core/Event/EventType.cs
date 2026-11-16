@@ -13,8 +13,6 @@ public enum EventType
     ShowDialog,
     ShowHint,
     SwitchPage,
-    ImportModpack,
-    InstallModpack,
     ModifySetting,
     WriteSetting,
     ModifyVariable,

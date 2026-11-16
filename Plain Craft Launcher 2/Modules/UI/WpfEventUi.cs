@@ -23,10 +23,6 @@ public sealed class WpfEventUi : IEventUi
         });
     }
 
-    public void StartModpackInstall()
-    {
-        Modpack.ModpackInstall();
-    }
 
     public void OpenHelp(string location)
     {

@@ -34,8 +34,6 @@ public class CustomEvent
         [EventType.ShowDialog] = _ShowDialog,
         [EventType.ShowHint] = _ShowHint,
         [EventType.SwitchPage] = _SwitchPage,
-        [EventType.ImportModpack] = _ModpackInstall,
-        [EventType.InstallModpack] = _ModpackInstall,
         [EventType.ModifySetting] = _WriteSetting,
         [EventType.WriteSetting] = _WriteSetting,
         [EventType.ModifyVariable] = _WriteVariable,
@@ -255,14 +253,6 @@ public class CustomEvent
     {
         var args = SplitArgs(arg);
         EventUi.SwitchPage(args[0], args.Length > 1 ? args[1] : null);
-    }
-
-    /// <summary>
-    ///     导入 / 安装整合包。触发 Modpack.ModpackInstall()。
-    /// </summary>
-    private static void _ModpackInstall(string _, EventType __)
-    {
-        EventUi.StartModpackInstall();
     }
 
     /// <summary>

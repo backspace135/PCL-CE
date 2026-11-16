@@ -32,8 +32,6 @@ public partial class PageCompViewModel : ViewModelBase
 
     [ObservableProperty] private string _errorMessage = Lang.Text("Download.Comp.Hint.ModrinthUnreachable");
 
-    [ObservableProperty] private bool _isInstallModPackVisible;
-
     [ObservableProperty] private bool _supportCurseForge = true;
 
     [ObservableProperty] private bool _supportModrinth = true;
@@ -45,12 +43,6 @@ public partial class PageCompViewModel : ViewModelBase
     [ObservableProperty] private bool _isShaderLoaderComboVisible;
 
     [ObservableProperty] private string _loadingText = Lang.Text("Application.Control.Loading.Default");
-
-    [RelayCommand]
-    public void InstallModPack()
-    {
-        Modpack.ModpackInstall();
-    }
 
     public void ApplyPagerState(int currentPage, Comp.CompProjectStorage storage)
     {

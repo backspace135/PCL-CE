@@ -368,12 +368,6 @@ public partial class MyCompItem
                             targetLoader = Launcher.frmDownloadMod.Content.loader.input.modLoader;
                             break;
                         }
-                    case FormMain.PageSubType.DownloadPack:
-                        {
-                            targetType = Comp.CompType.ModPack;
-                            targetVersion = Launcher.frmDownloadPack!.Content.loader.input!.gameVersion;
-                            break;
-                        }
                     case FormMain.PageSubType.DownloadDataPack:
                         {
                             targetType = Comp.CompType.DataPack;

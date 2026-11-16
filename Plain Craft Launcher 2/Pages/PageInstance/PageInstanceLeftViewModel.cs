@@ -17,8 +17,6 @@ public partial class PageInstanceLeftViewModel : ViewModelBase
 
     [ObservableProperty] private bool _itemInstallVisible = true;
 
-    [ObservableProperty] private bool _itemExportVisible = true;
-
     [ObservableProperty] private bool _itemWorldVisible = true;
 
     [ObservableProperty] private bool _itemScreenshotVisible = true;
@@ -78,7 +76,6 @@ public partial class PageInstanceLeftViewModel : ViewModelBase
         }
 
         ItemInstallVisible = PageSetupUI.HiddenForceShow || !hide.InstanceEdit;
-        ItemExportVisible = PageSetupUI.HiddenForceShow || !hide.InstanceExport;
         ItemWorldVisible = PageSetupUI.HiddenForceShow || !hide.InstanceSave;
         ItemScreenshotVisible = PageSetupUI.HiddenForceShow || !hide.InstanceScreenshot;
         ItemResourcePackVisible = PageSetupUI.HiddenForceShow || !hide.InstanceResourcePack;

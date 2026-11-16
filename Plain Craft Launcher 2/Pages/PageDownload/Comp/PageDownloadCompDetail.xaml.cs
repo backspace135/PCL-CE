@@ -70,98 +70,6 @@ public partial class PageDownloadCompDetail : IPageView
     }
 
     // 整合包安装
-    public async void Install_Click(MyListItem sender, EventArgs e)
-    {
-        if (!RestrictedFeaturePolicy.Check("online-modpack-install")) return;
-        FrameworkElement? control = sender;
-        control?.IsEnabled = false;
-        try
-        {
-            // 获取基本信息
-            var file = (Comp.CompFile)sender.Tag;
-            var loaderName =
-                $"{(_project.FromCurseForge ? "CurseForge" : "Modrinth")} {Lang.Text("Download.Comp.Detail.ModpackDownload")}：{_project.TranslatedName} ";
-
-            // 获取实例名
-            var packName = _project.TranslatedName.Replace(".zip", "").Replace(".rar", "").Replace(".mrpack", "")
-                .Replace('\\', '＼').Replace('/', '／').Replace('|', '｜').Replace(':', '：').Replace('<', '＜')
-                    .Replace('>', '＞').Replace('*', '＊').Replace('?', '？').Replace("\"", "").Replace("： ", "：");
-            var validate = new FolderNameValidator(GameFolders.mcFolderSelected + "versions");
-            if (!(await validate.ValidateAsync(packName).ConfigureAwait(true)).IsValid)
-                packName = "";
-            var instanceNameResult = await DialogService.Instance.ShowAsync(new InputDialogRequest
-            {
-                Title = Lang.Text("Download.Comp.Detail.InputInstanceName"),
-                DefaultValue = packName,
-                ValidateRules = [validate],
-                Buttons = DialogButtons.OkCancel,
-                HighLight = false,
-                ForceWait = false
-            }).ConfigureAwait(true);
-            var instanceName = instanceNameResult.IsConfirmed ? instanceNameResult.InputText : null;
-            if (string.IsNullOrEmpty(instanceName))
-                return;
-
-            // 构造步骤加载器
-            var loaders = new List<Loading.LoaderBase>();
-            var target =
-                $@"{GameFolders.mcFolderSelected}versions\{instanceName}\原始整合包.{(_project.FromCurseForge ? "zip" : "mrpack")}";
-            var logoFileAddress = MyImage.GetTempPath(_compItem!.Logo);
-            loaders.Add(new LoaderDownload(Lang.Text("Download.Comp.Detail.DownloadModpackFile"),
-                    new List<DownloadFile> { file.ToNetFile(target, Comp.DownloadReason.ModPack) })
-            { ProgressWeight = 10d, block = true });
-            loaders.Add(new Loading.LoaderTask<int, int>(Lang.Text("Download.Comp.Detail.PrepareModpackInstall"),
-                _ => Modpack.ModpackInstall(target, instanceName,
-                    File.Exists(logoFileAddress) ? logoFileAddress : null, file.ProjectId,
-                    true))
-            { ProgressWeight = 0.1d });
-
-            // 启动
-            var loader = new Loading.LoaderCombo<string>(loaderName, loaders)
-            {
-                OnStateChanged = myLoader =>
-                {
-                    switch (myLoader.State)
-                    {
-                        case LoadState.Failed:
-                            {
-                                HintService.Show(Hints.Error(Lang.Text("Download.Comp.Detail.Task.Failed", myLoader.name,
-                                        myLoader.Error.ToString())));
-                                break;
-                            }
-                        case LoadState.Aborted:
-                            {
-                                HintService.Show(Hints.Info(Lang.Text("Download.Comp.Detail.Task.Cancelled", myLoader.name)));
-                                break;
-                            }
-                        case LoadState.Loading:
-                            {
-                                return; // 不重新加载版本列表
-                            }
-                    }
-
-                    DownloadUi.McInstallFailedClearFolder(myLoader);
-                }
-            };
-            loader.Start(Path.Combine(GameFolders.mcFolderSelected!, "versions", instanceName));
-            Loading.LoaderTaskbarAdd(loader);
-            Launcher.frmMain!.BtnExtraDownload.ShowRefresh();
-            Launcher.frmMain.BtnExtraDownload.Ribble();
-        }
-
-        catch (Exception ex)
-        {
-            Common.Log(
-                ex,
-                "下载资源整合包失败",
-                Common.LogLevel.Feedback,
-                userSummary: Lang.Text("Download.Comp.Error.OperationFailed"));
-        }
-        finally
-        {
-            control?.IsEnabled = true;
-        }
-    }
 
     // 世界下载
     public void InstallWorld_Click(MyListItem sender, EventArgs e)
@@ -1004,7 +912,6 @@ public partial class PageDownloadCompDetail : IPageView
 
                 groups.Add(CompFileGroupViewModel.Create(
                     pair.Key!, pair.Value, _project.Type, isSwapped, showRecognitionHint,
-                    (sender, e) => Launcher.frmDownloadCompDetail!.Install_Click((MyListItem)sender, e),
                     (sender, e) => Launcher.frmDownloadCompDetail!.InstallWorld_Click((MyListItem)sender, e),
                     Launcher.frmDownloadCompDetail!.Save_Click));
             }

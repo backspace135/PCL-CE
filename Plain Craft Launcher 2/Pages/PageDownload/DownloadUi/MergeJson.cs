@@ -22,7 +22,6 @@ public static partial class DownloadUi
         string? labyModFolder = null,
         string? labyModChannel = null,
         string? liteLoaderFolder = null,
-        MmcPackInfo? mmcPackInfo = null,
         string? legacyFabricFolder = null
     )
     {
@@ -54,15 +53,15 @@ public static partial class DownloadUi
             + $"{_GetMinecraftArguments(jsons.Cleanroom)}";
         var realArguments = _SplitMergeArguments(allArguments).Distinct().ToList().Join(" ");
 
-        var outputJson = _CreateMergedOutputJson(jsons.Minecraft, mmcPackInfo) ?? new JsonObject();
+        var outputJson = jsons.Minecraft ?? new JsonObject();
 
         _MergeLoaderJson(outputJson, jsons.OptiFine, false);
-        _MergeLoaderJson(outputJson, jsons.Forge, mmcPackInfo?.isForgeOverrided ?? false);
-        _MergeLoaderJson(outputJson, jsons.NeoForge, mmcPackInfo?.isNeoForgeOverrided ?? false);
-        _MergeLoaderJson(outputJson, jsons.Cleanroom, mmcPackInfo?.isCleanroomOverrided ?? false);
+        _MergeLoaderJson(outputJson, jsons.Forge, false);
+        _MergeLoaderJson(outputJson, jsons.NeoForge, false);
+        _MergeLoaderJson(outputJson, jsons.Cleanroom, false);
         _MergeLoaderJson(outputJson, jsons.LiteLoader, false);
-        _MergeLoaderJson(outputJson, jsons.Fabric, mmcPackInfo?.isFabricOverrided ?? false);
-        _MergeLoaderJson(outputJson, jsons.LegacyFabric, mmcPackInfo?.isFabricOverrided ?? false);
+        _MergeLoaderJson(outputJson, jsons.Fabric, false);
+        _MergeLoaderJson(outputJson, jsons.LegacyFabric, false);
         if (jsons.LabyMod is not null)
             outputJson = _ApplyLabyModJson(outputJson, jsons.LabyMod, labyModChannel ?? "");
 
@@ -70,8 +69,6 @@ public static partial class DownloadUi
 
         if (realArguments is not null && !string.IsNullOrEmpty(realArguments.Replace(" ", "")))
             outputJson["minecraftArguments"] = realArguments;
-        if (mmcPackInfo is not null && mmcPackInfo.isMcArgsEdited)
-            outputJson.Remove("minecraftArguments");
         outputJson.Remove("_comment_");
         outputJson.Remove("inheritsFrom");
         outputJson.Remove("jar");

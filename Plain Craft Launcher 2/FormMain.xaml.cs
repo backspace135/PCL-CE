@@ -1194,25 +1194,6 @@ public partial class FormMain
                 return;
             }
 
-            // 安装整合包
-            if (new[] { "zip", "rar", "mrpack" }.Any(t =>
-                    (t ?? "") == (extension ?? ""))) // 部分压缩包是 zip 格式但后缀为 rar，总之试一试
-            {
-                Common.Log("[System] 文件为压缩包，尝试作为整合包安装");
-                try
-                {
-                    Modpack.ModpackInstall(filePath);
-                    return;
-                }
-                catch (CancelledException ex)
-                {
-                    return; // 用户主动取消
-                }
-                catch (Exception ex)
-                {
-                    // 安装失败，继续往后尝试
-                }
-            }
 
             // 错误报告分析
             do
@@ -1439,7 +1420,6 @@ public partial class FormMain
         Default = 0,
         DownloadInstall = 1,
         DownloadMod = 2,
-        DownloadPack = 3,
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
         DownloadShader = 6,
@@ -1470,7 +1450,6 @@ public partial class FormMain
 
         VersionOverall = 0,
         VersionSetup = 1,
-        VersionExport = 2,
         VersionWorld = 3,
         VersionScreenshot = 4,
         VersionMod = 5,

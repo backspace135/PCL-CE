@@ -29,7 +29,6 @@ public static partial class Launcher
     public static PageDownloadLabyMod? frmDownloadLabyMod;
     public static PageDownloadLegacyFabric? frmDownloadLegacyFabric;
     public static PageDownloadMod? frmDownloadMod;
-    public static PageDownloadPack? frmDownloadPack;
     public static PageDownloadDataPack? frmDownloadDataPack;
     public static PageDownloadShader? frmDownloadShader;
     public static PageDownloadResourcePack? frmDownloadResourcePack;
@@ -64,7 +63,6 @@ public static partial class Launcher
     public static PageInstanceCompResource? frmInstanceResourcePack;
     public static PageInstanceSetup? frmInstanceSetup;
     public static PageInstanceInstall? frmInstanceInstall;
-    public static PageInstanceExport? frmInstanceExport;
     public static PageInstanceServer? frmInstanceServer;
     public static PageInstanceSavesLeft? frmInstanceSavesLeft;
     public static PageInstanceSavesInfo? frmInstanceSavesInfo;

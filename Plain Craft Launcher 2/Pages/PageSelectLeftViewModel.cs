@@ -114,10 +114,4 @@ public partial class PageSelectLeftViewModel : ViewModelBase
                 userSummary: Lang.Text("Select.Folder.Error.Add", newFolder));
         }
     }
-
-    [RelayCommand]
-    private void InstallModpack()
-    {
-        Modpack.ModpackInstall();
-    }
 }

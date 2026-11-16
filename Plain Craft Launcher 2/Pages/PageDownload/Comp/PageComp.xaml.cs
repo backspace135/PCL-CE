@@ -187,7 +187,6 @@ public partial class PageComp
             if (field == value)
                 return;
             field = value;
-            ViewModel.IsInstallModPackVisible = value == Comp.CompType.ModPack;
             loader.name = Lang.Text("Download.Comp.List.Source.ResourceFetch", TypeName);
             PanSearchBox.HintText = Comp.GetCompSearchName(value);
             ViewModel.LoadingText = Comp.GetCompLoadingName(value);

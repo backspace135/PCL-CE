@@ -268,19 +268,6 @@ public partial class PageSelectLeft : IRefreshable, IPageView
             itemAdd.Command = _vm.AddFolderCommand;
             Launcher.frmSelectLeft.PanList.Children.Add(itemAdd);
 
-            // 导入整合包
-            var itemInstall = new MyListItem
-            {
-                IsScaleAnimationEnabled = false,
-                Type = MyListItem.CheckType.Clickable,
-                Title = Lang.Text("Select.Folder.ImportModpack.Title"),
-                Height = 34,
-                ToolTip = Lang.Text("Select.Folder.ImportModpack.ToolTip"),
-                SvgIcon = "lucide/package-plus"
-            };
-            ToolTipService.SetPlacement(itemInstall, PlacementMode.Right);
-            itemInstall.Command = _vm.InstallModpackCommand;
-            Launcher.frmSelectLeft.PanList.Children.Add(itemInstall);
 
             // 边距
             Launcher.frmSelectLeft.PanList.Children.Add(new FrameworkElement { Height = 10, IsHitTestVisible = false });

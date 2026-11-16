@@ -25,29 +25,6 @@ public static partial class DownloadUi
         return splitArguments;
     }
 
-    private static JsonObject? _CreateMergedOutputJson(
-        JsonObject? minecraftJson,
-        MmcPackInfo? mmcPackInfo)
-    {
-        if (mmcPackInfo is null)
-            return minecraftJson;
-
-        if (!mmcPackInfo.isMinecraftOverrided)
-        {
-            Common.Log("[Download] 存在无修改 MC 核心文件的 MMC 整合包信息，应用相关参数");
-            minecraftJson?.Merge(mmcPackInfo.overridedJson);
-            return minecraftJson;
-        }
-
-        Common.Log("[Download] 当前实例的 MC 核心已被修改，使用对应的 MMC 整合包参数");
-        var overriddenJson = minecraftJson is not null
-            ? (JsonObject)minecraftJson.DeepClone()
-            : new JsonObject();
-        foreach (var patchProperty in mmcPackInfo.overridedJson)
-            overriddenJson[patchProperty.Key] = patchProperty.Value?.DeepClone();
-        return overriddenJson;
-    }
-
     private static void _MergeLoaderJson(
         JsonObject outputJson,
         JsonObject? loaderJson,

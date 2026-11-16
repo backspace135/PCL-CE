@@ -5,7 +5,6 @@ public interface IEventUi
 {
     bool RefreshPage();
     void SwitchPage(string pageType, string? subType);
-    void StartModpackInstall();
     void OpenHelp(string location);
 }
 
@@ -21,11 +20,6 @@ public static class EventUi
     public static void SwitchPage(string pageType, string? subType)
     {
         Current?.SwitchPage(pageType, subType);
-    }
-
-    public static void StartModpackInstall()
-    {
-        Current?.StartModpackInstall();
     }
 
     public static void OpenHelp(string location)

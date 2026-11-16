@@ -35,12 +35,6 @@ public static class EventTypeMapper
             "切换页面", "SwitchPage"
         },
         {
-            "导入整合包", "ImportModpack"
-        },
-        {
-            "安装整合包", "InstallModpack"
-        },
-        {
             "修改设置", "ModifySetting"
         },
         {
@@ -67,7 +61,9 @@ public static class EventTypeMapper
         "检查更新",
         "今日人品",
         "清理垃圾",
-        "下载文件"
+        "下载文件",
+        "导入整合包",
+        "安装整合包"
     };
 
     public static bool TryToEnglish(string chineseName, out string englishName)

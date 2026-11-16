@@ -150,7 +150,6 @@ public partial class PageSetupUI : IPageView
 
             // 子页面 实例设置
             CheckHiddenVersionEdit.Checked = uiHidden.InstanceEdit;
-            CheckHiddenVersionExport.Checked = uiHidden.InstanceExport;
             CheckHiddenVersionSave.Checked = uiHidden.InstanceSave;
             CheckHiddenVersionScreenshot.Checked = uiHidden.InstanceScreenshot;
             CheckHiddenVersionMod.Checked = uiHidden.InstanceMod;

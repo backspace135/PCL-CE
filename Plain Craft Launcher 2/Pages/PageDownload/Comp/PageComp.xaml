@@ -110,13 +110,6 @@
                                         SvgIcon="lucide/rotate-ccw"
                                         ToolTip="{loc:Loc Download.Comp.Filter.Reset}" LogoScale="0.9"
                                         Margin="3,0,0,0" Click="BtnSearchReset_Click" />
-                    <local:MyIconButton x:Name="BtnSearchInstallModPack"
-                                        SvgIcon="lucide/download"
-                                        Command="{Binding InstallModPackCommand}"
-                                        Visibility="{Binding IsInstallModPackVisible, Converter={StaticResource VisibilityConverter}}"
-                                        ToolTip="{loc:Loc Download.Comp.Filter.InstallModpack.ToolTip}"
-                                        LogoScale="0.9"
-                                        ToolTipService.HorizontalOffset="-55" ToolTipService.VerticalOffset="5" />
                 </StackPanel>
             </Grid>
         </local:MyCard>

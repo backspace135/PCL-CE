@@ -68,11 +68,6 @@ public class McInstallRequest
     public string? minecraftName = null;
 
     /// <summary>
-    ///     若 MMC 整合包安装包含特殊参数，则填写此项。
-    /// </summary>
-    public MmcPackInfo? mmcPackInfo = null;
-
-    /// <summary>
     ///     欲下载的 NeoForge。
     /// </summary>
     public GameDownload.DlNeoForgeListEntry? neoForgeEntry = null;
