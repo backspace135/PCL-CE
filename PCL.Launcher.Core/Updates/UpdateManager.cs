@@ -14,17 +14,7 @@ public static class UpdateManager
     public static UpdatesWrapperModel remoteServer = new(
         new List<IUpdateSource>
         {
-            new UpdatesMirrorChyanModel(),
-            new UpdatesRandomModel(
-            [
-                new UpdatesMinioModel("https://s3.pysio.online/pcl2-ce/", "Pysio"),
-                new UpdatesMinioModel(
-                    "https://staticassets.naids.com/resources/pclce/",
-                    "Naids")
-            ]),
-            new UpdatesMinioModel(
-                "https://github.com/PCL-Community/PCL2_CE_Server/raw/main/",
-                "GitHub")
+            new UpdatesGitHubModel("backspace135/PCL-CE")
         });
 
     public static Loading.LoaderCombo<JsonObject> updateLoader;
@@ -98,7 +88,7 @@ public static class UpdateManager
         bool forceValidated = false)
     {
         var dlTargetPath =
-            $@"{LauncherPaths.ExecutableDirectory}PCL\Plain Craft Launcher Community Edition.exe";
+            $@"{LauncherPaths.ExecutableDirectory}PCL\PCL Horizon.exe";
         LauncherCommon.RunInNewThread(() =>
         {
             try
@@ -233,7 +223,7 @@ public static class UpdateManager
         try
         {
             var fileName = LauncherPaths.ExecutableDirectory
-                + @"PCL\Plain Craft Launcher Community Edition.exe";
+                + @"PCL\PCL Horizon.exe";
             if (!File.Exists(fileName))
             {
                 LauncherCommon.Log("[System] 更新失败：未找到更新文件");

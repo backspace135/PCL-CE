@@ -125,7 +125,6 @@ public static partial class Config
         /// <summary>
         /// Mirror 酱 CDK。
         /// </summary>
-        [ConfigItem<string>("SystemMirrorChyanKey", "", ConfigSource.SharedEncrypt)] public partial string MirrorChyanKey { get; set; }
     }
 
     /// <summary>
