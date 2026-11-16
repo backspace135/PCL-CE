@@ -828,6 +828,52 @@
     <sys:String x:Key="Event.Setting.Written">Setting written: {0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">Variable written: {0} → {1}</sys:String>
 
+    <!-- Horizon.Exit -->
+
+    <sys:String x:Key="Horizon.Exit.Error">The game stopped on an error (exit code {0}).</sys:String>
+    <sys:String x:Key="Horizon.Exit.Panic">The game crashed (exit code {0}).</sys:String>
+    <sys:String x:Key="Horizon.Exit.RefusedCommandLine">The game refused its command line, which is a launcher bug: {0}</sys:String>
+    <sys:String x:Key="Horizon.Exit.Unknown">The game exited unexpectedly (exit code {0}).</sys:String>
+
+    <!-- Horizon.Files.Error -->
+
+    <sys:String x:Key="Horizon.Files.Error.AssetIndexInvalid">The asset index {0} is invalid.</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoAssetIndex">The version JSON of Minecraft {0} has no asset index.</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoClientDownload">The version JSON of Minecraft {0} has no client download.</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoServerDownload">The version JSON of Minecraft {0} has no server download, which the first preparation needs.</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.VersionJsonInvalid">The version JSON of Minecraft {0} is invalid.</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.VersionNotFound">Minecraft {0} is not in the version list, so the vanilla files needed to prepare resources can't be downloaded.</sys:String>
+
+    <!-- Horizon.Launch.Error -->
+
+    <sys:String x:Key="Horizon.Launch.Error.ExitedEarly">The game exited before opening its window (exit code {0}).</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.InstanceMissing">The folder of instance {0} no longer exists.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.JavaDownloadFailed">Downloading Java ({0}) failed.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NeedMicrosoft">Horizon only starts for a Microsoft account that owns Minecraft: Java Edition. Switch to a Microsoft account.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoInstance">There is no instance yet. Create one in the instance list first.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoJava">No Java {0} is available. Preparing the game resources needs it: add one in Settings or allow the automatic download.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoJavaMajor">This build doesn't say which Java version preparing needs.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoMinecraftVersion">Build {0} doesn't say which Minecraft version it needs.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoRelease">No Horizon build is available to download.</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.PinnedBuildGone">The build {0} this instance is pinned to isn't installed and is no longer published (Nightlies are kept for 7 days). Pick another build in the instance settings.</sys:String>
+
+    <!-- Horizon.Launch.Stage -->
+
+    <sys:String x:Key="Horizon.Launch.Stage.Api">Read the Launch API</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Assets">Analyse the asset files</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Build">Check the Horizon build</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Check">Check the game resources</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.DownloadAssets">Download the asset files</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.DownloadFiles">Download the vanilla files</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.End">Finish</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Files">Analyse the vanilla files</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Java">Get Java</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Login">Verify the account</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Prepare">Prepare the game resources</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Root">Start Horizon</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Start">Start the game</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">Wait for the game window</sys:String>
+
     <!-- Instance -->
 
     <sys:String x:Key="Instance.Error.OperationFailed">An instance operation failed. See the details below.</sys:String>

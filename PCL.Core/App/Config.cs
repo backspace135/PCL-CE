@@ -361,6 +361,17 @@ public static partial class Config
     }
 
     /// <summary>
+    /// Horizon 配置。
+    /// </summary>
+    [ConfigGroup("Horizon")] partial class HorizonConfigGroup
+    {
+        /// <summary>
+        /// Horizon 数据目录，存放构建、准备好的资源、实例和原版文件。留空则使用启动器所在目录下的 .horizon。
+        /// </summary>
+        [ConfigItem<string>("HorizonRoot", "", ConfigSource.Local)] public partial string Root { get; set; }
+    }
+
+    /// <summary>
     /// 启动配置。
     /// </summary>
     [ConfigGroup("Launch")] partial class LaunchConfigGroup

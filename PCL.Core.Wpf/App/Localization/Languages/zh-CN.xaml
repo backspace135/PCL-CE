@@ -828,6 +828,52 @@
     <sys:String x:Key="Event.Setting.Written">已写入设置：{0} → {1}</sys:String>
     <sys:String x:Key="Event.Variable.Written">已写入变量：{0} → {1}</sys:String>
 
+    <!-- Horizon.Exit -->
+
+    <sys:String x:Key="Horizon.Exit.Error">游戏因错误而退出（退出码 {0}）。</sys:String>
+    <sys:String x:Key="Horizon.Exit.Panic">游戏崩溃了（退出码 {0}）。</sys:String>
+    <sys:String x:Key="Horizon.Exit.RefusedCommandLine">游戏拒绝了启动参数，这是启动器的问题：{0}</sys:String>
+    <sys:String x:Key="Horizon.Exit.Unknown">游戏意外退出（退出码 {0}）。</sys:String>
+
+    <!-- Horizon.Files.Error -->
+
+    <sys:String x:Key="Horizon.Files.Error.AssetIndexInvalid">资源索引 {0} 无效。</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoAssetIndex">Minecraft {0} 的版本 JSON 中没有资源索引。</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoClientDownload">Minecraft {0} 的版本 JSON 中没有客户端下载信息。</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.NoServerDownload">Minecraft {0} 的版本 JSON 中没有服务端下载信息，而首次准备资源需要服务端 jar。</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.VersionJsonInvalid">Minecraft {0} 的版本 JSON 无效。</sys:String>
+    <sys:String x:Key="Horizon.Files.Error.VersionNotFound">在版本列表中找不到 Minecraft {0}，无法下载准备资源所需的原版文件。</sys:String>
+
+    <!-- Horizon.Launch.Error -->
+
+    <sys:String x:Key="Horizon.Launch.Error.ExitedEarly">游戏在打开窗口前就退出了（退出码 {0}）。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.InstanceMissing">实例 {0} 的文件夹已不存在。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.JavaDownloadFailed">下载 Java（{0}）失败。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NeedMicrosoft">Horizon 只能用拥有 Minecraft: Java Edition 的微软账户启动，请切换到微软账户。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoInstance">还没有实例，请先在实例列表中新建一个。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoJava">没有可用的 Java {0}。准备游戏资源需要它，请在设置中添加或允许自动下载。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoJavaMajor">该构建没有给出准备资源需要的 Java 版本。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoMinecraftVersion">构建 {0} 没有给出需要的 Minecraft 版本。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.NoRelease">没有找到可下载的 Horizon 构建。</sys:String>
+    <sys:String x:Key="Horizon.Launch.Error.PinnedBuildGone">实例固定使用的构建 {0} 未安装，且已不在发布列表中（Nightly 只保留 7 天）。请在实例设置中改用其他构建。</sys:String>
+
+    <!-- Horizon.Launch.Stage -->
+
+    <sys:String x:Key="Horizon.Launch.Stage.Api">读取启动接口</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Assets">分析资源文件</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Build">检查 Horizon 构建</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Check">检查游戏资源</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.DownloadAssets">下载资源文件</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.DownloadFiles">下载原版文件</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.End">完成</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Files">分析原版文件</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Java">准备 Java</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Login">验证正版账户</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Prepare">准备游戏资源</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Root">启动 Horizon</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Start">启动游戏进程</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">等待游戏窗口出现</sys:String>
+
     <!-- Instance -->
 
     <sys:String x:Key="Instance.Error.OperationFailed">实例操作失败。请查看错误详情。</sys:String>
