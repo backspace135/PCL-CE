@@ -12,11 +12,6 @@ public static class Secrets
     public static string MSOAuthClientId { get; } = EnvironmentInterop.GetSecret("MS_CLIENT_ID", readEnvDebugOnly: true).ReplaceNullOrEmpty();
 
     /// <summary>
-    /// 遥测密钥
-    /// </summary>
-    public static string TelemetryKey { get; } = EnvironmentInterop.GetSecret("TELEMETRY_KEY", readEnvDebugOnly: true).ReplaceNullOrEmpty();
-
-    /// <summary>
     /// 当前版本的 Git 提交 SHA
     /// </summary>
     public static string CommitHash { get; } = EnvironmentInterop.GetSecret("GITHUB_SHA", readEnvDebugOnly: true).ReplaceNullOrEmpty();

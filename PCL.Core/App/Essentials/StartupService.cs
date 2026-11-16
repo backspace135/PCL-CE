@@ -116,7 +116,6 @@ public sealed partial class StartupService
         IEnumerable<SubcommandDefinition> subcommands = [
             ("update", [("execute"), ("success"), ("failed")]),
             ("activate", []),
-            ("promote", []),
         ];
         Context.Debug("正在解析命令行参数...");
         var c = CommandLine.Parse(Basics.FullCommandLineArguments, subcommands);
