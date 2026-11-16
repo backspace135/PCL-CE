@@ -14,7 +14,11 @@ public partial class PageInstanceLeftViewModel : ViewModelBase
 
     [ObservableProperty] private bool _itemScreenshotVisible = true;
 
+    [ObservableProperty] private bool _itemModVisible = true;
+
     [ObservableProperty] private bool _itemResourcePackVisible = true;
+
+    [ObservableProperty] private bool _itemShaderVisible = true;
 
     [ObservableProperty] private bool _itemServerVisible = true;
 
@@ -31,9 +35,12 @@ public partial class PageInstanceLeftViewModel : ViewModelBase
         var forceShow = PageSetupUI.HiddenForceShow;
         ItemWorldVisible = forceShow || !hide.InstanceSave;
         ItemScreenshotVisible = forceShow || !hide.InstanceScreenshot;
+        ItemModVisible = forceShow || !hide.InstanceMod;
         ItemResourcePackVisible = forceShow || !hide.InstanceResourcePack;
+        ItemShaderVisible = forceShow || !hide.InstanceShader;
         ItemServerVisible = forceShow || !hide.InstanceServer;
-        TextResourceVisible = ItemWorldVisible || ItemScreenshotVisible || ItemResourcePackVisible || ItemServerVisible;
+        TextResourceVisible = ItemWorldVisible || ItemScreenshotVisible || ItemModVisible || ItemResourcePackVisible ||
+                              ItemShaderVisible || ItemServerVisible;
     }
 
     public static string GetUnknownSubPageMessage(FormMain.PageSubType id)

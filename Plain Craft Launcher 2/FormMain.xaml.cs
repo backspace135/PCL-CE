@@ -787,6 +787,14 @@ public partial class FormMain
                 // 资源包管理自动刷新
                 Launcher.frmInstanceResourcePack?.Refresh();
             }
+            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionMod)
+            {
+                Launcher.frmInstanceMod?.Refresh();
+            }
+            else if (pageCurrent == PageType.InstanceSetup && PageCurrentSub == PageSubType.VersionShader)
+            {
+                Launcher.frmInstanceShader?.Refresh();
+            }
             else if (pageCurrent == PageType.InstanceSelect)
             {
                 // 实例选择自动刷新
@@ -932,12 +940,15 @@ public partial class FormMain
                 var firstExtension = filePathList.First().AfterLast(".").ToLower();
                 var allSameType = filePathList.All(f => (f.AfterLast(".").ToLower() ?? "") == (firstExtension ?? ""));
 
-                if (allSameType && firstExtension == "zip" && pageCurrent == PageType.InstanceSetup &&
-                    PageCurrentSub == PageSubType.VersionResourcePack)
+                // 允许在资源包、光影与模组页批量拖入
+                var batchImport = pageCurrent == PageType.InstanceSetup && PageCurrentSub switch
                 {
-                }
-                // 允许在资源包页批量拖入资源包
-                else
+                    PageSubType.VersionResourcePack => firstExtension == "zip",
+                    PageSubType.VersionShader => firstExtension is "zip" or "hshader",
+                    PageSubType.VersionMod => firstExtension == "hmod",
+                    _ => false
+                };
+                if (!allSameType || !batchImport)
                 {
                     HintService.Show(Hints.Error(Lang.Text("Main.FileDrag.SameTypeOnly")));
                     return;
@@ -970,7 +981,20 @@ public partial class FormMain
             }
 
             // 处理资源安装
-            if (pageCurrent == PageType.InstanceSetup && new[] { "zip" }.Any(i => (i ?? "") == (extension ?? "")))
+            if (pageCurrent == PageType.InstanceSetup && extension == "hmod" && PageCurrentSub == PageSubType.VersionMod)
+            {
+                Common.RunInUi(() => PageInstanceMod.Import(filePathList));
+                return;
+            }
+
+            if (pageCurrent == PageType.InstanceSetup && extension is "zip" or "hshader" &&
+                PageCurrentSub == PageSubType.VersionShader)
+            {
+                Common.RunInUi(() => PageInstanceShader.Import(filePathList));
+                return;
+            }
+
+            if (pageCurrent == PageType.InstanceSetup && extension == "zip")
                 switch (PageCurrentSub)
                 {
                     case PageSubType.VersionWorld:
@@ -1227,10 +1251,10 @@ public partial class FormMain
     public enum PageSubType
     {
         Default = 0,
-        DownloadMod = 2,
+        DownloadHorizonBuild = 1,
+        DownloadHorizonContent = 2,
         DownloadDataPack = 4,
         DownloadResourcePack = 5,
-        DownloadShader = 6,
         DownloadCompFavorites = 8,
         DownloadClient = 9,
 
@@ -1251,12 +1275,9 @@ public partial class FormMain
         VersionWorld = 3,
         VersionScreenshot = 4,
         VersionMod = 5,
-        VersionModDisabled = 6,
         VersionResourcePack = 7,
         VersionShader = 8,
-        VersionSchematic = 9,
         VersionServer = 11,
-        VersionModJarInJar = 12,
         VersionSavesInfo = 0,
         VersionSavesDatapack = 1
     }

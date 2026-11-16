@@ -17,6 +17,8 @@ public static partial class Launcher
     public static PageSpeedRight? frmSpeedRight;
     public static PageDownloadLeft? frmDownloadLeft;
     public static PageDownloadClient? frmDownloadClient;
+    public static PageDownloadHorizonBuild? frmDownloadHorizonBuild;
+    public static PageDownloadHorizonContent? frmDownloadHorizonContent;
     public static PageDownloadDataPack? frmDownloadDataPack;
     public static PageDownloadResourcePack? frmDownloadResourcePack;
     public static PageDownloadCompFavorites? frmDownloadCompFavorites;
@@ -38,7 +40,9 @@ public static partial class Launcher
     public static PageInstanceOverall? frmInstanceOverall;
     public static PageInstanceScreenshot? frmInstanceScreenshot;
     public static PageInstanceSaves? frmInstanceSaves;
+    public static PageInstanceMod? frmInstanceMod;
     public static PageInstanceResourcePack? frmInstanceResourcePack;
+    public static PageInstanceShader? frmInstanceShader;
     public static PageInstanceSetup? frmInstanceSetup;
     public static PageInstanceServer? frmInstanceServer;
     public static PageInstanceSavesLeft? frmInstanceSavesLeft;

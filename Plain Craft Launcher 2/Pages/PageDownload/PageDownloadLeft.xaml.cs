@@ -51,10 +51,16 @@ public partial class PageDownloadLeft : IRefreshable
                 ItemResourcePack.Checked = true;
                 break;
             }
-            case FormMain.PageSubType.DownloadClient:
+            case FormMain.PageSubType.DownloadHorizonBuild:
             {
-                GameDownload.dlClientListLoader.Start(isForceRestart: true);
-                ItemClient.Checked = true;
+                Launcher.frmDownloadHorizonBuild?.Refresh();
+                ItemHorizonBuild.Checked = true;
+                break;
+            }
+            case FormMain.PageSubType.DownloadHorizonContent:
+            {
+                Launcher.frmDownloadHorizonContent?.Refresh();
+                ItemHorizonContent.Checked = true;
                 break;
             }
             case FormMain.PageSubType.DownloadCompFavorites:
@@ -75,7 +81,7 @@ public partial class PageDownloadLeft : IRefreshable
     /// <summary>
     ///     当前页面的编号。
     /// </summary>
-    public FormMain.PageSubType PageId = FormMain.PageSubType.DownloadClient;
+    public FormMain.PageSubType PageId = FormMain.PageSubType.DownloadHorizonBuild;
 
     public PageDownloadLeft()
     {
@@ -117,11 +123,15 @@ public partial class PageDownloadLeft : IRefreshable
                     Launcher.frmDownloadCompFavorites = new PageDownloadCompFavorites();
                 return Launcher.frmDownloadCompFavorites;
             }
-            case FormMain.PageSubType.DownloadClient:
+            case FormMain.PageSubType.DownloadHorizonBuild:
             {
-                if (Launcher.frmDownloadClient is null)
-                    Launcher.frmDownloadClient = new PageDownloadClient();
-                return Launcher.frmDownloadClient;
+                Launcher.frmDownloadHorizonBuild ??= new PageDownloadHorizonBuild();
+                return Launcher.frmDownloadHorizonBuild;
+            }
+            case FormMain.PageSubType.DownloadHorizonContent:
+            {
+                Launcher.frmDownloadHorizonContent ??= new PageDownloadHorizonContent();
+                return Launcher.frmDownloadHorizonContent;
             }
 
             default:

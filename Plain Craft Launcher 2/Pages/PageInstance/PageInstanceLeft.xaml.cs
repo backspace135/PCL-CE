@@ -62,9 +62,19 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     PageInstanceSaves.Refresh();
                     break;
                 }
+            case FormMain.PageSubType.VersionMod:
+                {
+                    Launcher.frmInstanceMod?.Refresh();
+                    break;
+                }
             case FormMain.PageSubType.VersionResourcePack:
                 {
                     Launcher.frmInstanceResourcePack?.Refresh();
+                    break;
+                }
+            case FormMain.PageSubType.VersionShader:
+                {
+                    Launcher.frmInstanceShader?.Refresh();
                     break;
                 }
             case FormMain.PageSubType.VersionServer:
@@ -110,10 +120,20 @@ public partial class PageInstanceLeft : IRefreshable, IPageView
                     Launcher.frmInstanceScreenshot ??= new PageInstanceScreenshot();
                     return Launcher.frmInstanceScreenshot;
                 }
+            case FormMain.PageSubType.VersionMod:
+                {
+                    Launcher.frmInstanceMod ??= new PageInstanceMod();
+                    return Launcher.frmInstanceMod;
+                }
             case FormMain.PageSubType.VersionResourcePack:
                 {
                     Launcher.frmInstanceResourcePack ??= new PageInstanceResourcePack();
                     return Launcher.frmInstanceResourcePack;
+                }
+            case FormMain.PageSubType.VersionShader:
+                {
+                    Launcher.frmInstanceShader ??= new PageInstanceShader();
+                    return Launcher.frmInstanceShader;
                 }
             case FormMain.PageSubType.VersionServer:
                 {

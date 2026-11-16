@@ -832,6 +832,92 @@
 
     <sys:String x:Key="Event.LaunchGame.InstanceNotFound">Instance {0} was not found.</sys:String>
 
+    <!-- Horizon.Build -->
+
+    <sys:String x:Key="Horizon.Build.AlreadyInstalled">Installed</sys:String>
+    <sys:String x:Key="Horizon.Build.Deleted">Deleted {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Hint">Builds are Nightly releases of horizon-rust/horizon; signatures and checksums are verified before installing. An instance uses its pinned build, or the newest installed build if none is pinned. If no build is installed, the newest Nightly is downloaded when you launch.</sys:String>
+    <sys:String x:Key="Horizon.Build.Incomplete">Incomplete</sys:String>
+    <sys:String x:Key="Horizon.Build.Install">Install</sys:String>
+    <sys:String x:Key="Horizon.Build.Installed">Installed {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.InstalledAt">Installed {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Installing">Installing {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Latest">Latest</sys:String>
+    <sys:String x:Key="Horizon.Build.Loading">Loading the build list…</sys:String>
+    <sys:String x:Key="Horizon.Build.NoneInstalled">No Horizon build is installed. Install one below, or just launch the game to install the newest build automatically.</sys:String>
+    <sys:String x:Key="Horizon.Build.OpenFolder">Open builds folder</sys:String>
+    <sys:String x:Key="Horizon.Build.PinnedBy">Pinned by {0} instance(s)</sys:String>
+
+    <!-- Horizon.Build.Delete -->
+
+    <sys:String x:Key="Horizon.Build.Delete.Confirm">Delete build {0}? The game resources it prepared are deleted too.</sys:String>
+    <sys:String x:Key="Horizon.Build.Delete.InUse">The game is starting or running. Delete builds after it exits.</sys:String>
+    <sys:String x:Key="Horizon.Build.Delete.PinnedWarning">{0} instance(s) are pinned to this build; it will be downloaded again when they launch.</sys:String>
+
+    <!-- Horizon.Build.Error -->
+
+    <sys:String x:Key="Horizon.Build.Error.Delete">Could not delete the build.</sys:String>
+    <sys:String x:Key="Horizon.Build.Error.Install">Could not install {0}.</sys:String>
+    <sys:String x:Key="Horizon.Build.Error.List">Could not load the build list: {0}</sys:String>
+
+    <!-- Horizon.Build.Installed -->
+
+    <sys:String x:Key="Horizon.Build.Installed.Card">Installed ({0})</sys:String>
+
+    <!-- Horizon.Build.Releases -->
+
+    <sys:String x:Key="Horizon.Build.Releases.Card">Available ({0})</sys:String>
+
+    <!-- Horizon.Content -->
+
+    <sys:String x:Key="Horizon.Content.Card">Results ({0})</sys:String>
+    <sys:String x:Key="Horizon.Content.Downloads">{0} downloads</sys:String>
+    <sys:String x:Key="Horizon.Content.Hint">Content comes from the Horizon registry (horizon-rust/horizon-mods). Sources, checksums and signatures are verified before installing, and revoked versions are never installed. Native mods and modpacks need the game to be rebuilt and are not offered by the launcher.</sys:String>
+    <sys:String x:Key="Horizon.Content.Incompatible">No version is compatible with the current build</sys:String>
+    <sys:String x:Key="Horizon.Content.Install">Install to the current instance</sys:String>
+    <sys:String x:Key="Horizon.Content.Installed">Installed {0} {1} to {2}</sys:String>
+    <sys:String x:Key="Horizon.Content.Installing">Installing…</sys:String>
+    <sys:String x:Key="Horizon.Content.Loading">Loading the registry…</sys:String>
+    <sys:String x:Key="Horizon.Content.NoResults">Nothing matches.</sys:String>
+    <sys:String x:Key="Horizon.Content.OpenSource">Open project page</sys:String>
+    <sys:String x:Key="Horizon.Content.Target">Installs to instance {0} (Horizon {1}, Minecraft {2}).</sys:String>
+
+    <!-- Horizon.Content.Card -->
+
+    <sys:String x:Key="Horizon.Content.Card.Truncated">Results (first {0} of {1})</sys:String>
+
+    <!-- Horizon.Content.Datapack -->
+
+    <sys:String x:Key="Horizon.Content.Datapack.NoWorld">Instance {0} has no worlds yet; data packs are installed into a world.</sys:String>
+    <sys:String x:Key="Horizon.Content.Datapack.SelectWorld">Choose the world for the data pack</sys:String>
+
+    <!-- Horizon.Content.Error -->
+
+    <sys:String x:Key="Horizon.Content.Error.Install">Could not install {0}.</sys:String>
+    <sys:String x:Key="Horizon.Content.Error.Load">Could not load the registry: {0}</sys:String>
+
+    <!-- Horizon.Content.Filter -->
+
+    <sys:String x:Key="Horizon.Content.Filter.CompatibleOnly">Compatible only</sys:String>
+    <sys:String x:Key="Horizon.Content.Filter.Kind">Type</sys:String>
+
+    <!-- Horizon.Content.Kind -->
+
+    <sys:String x:Key="Horizon.Content.Kind.All">All</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Datapack">Data pack</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Mod">Mod</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.ResourcePack">Resource pack</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Shader">Shader</sys:String>
+
+    <!-- Horizon.Content.Search -->
+
+    <sys:String x:Key="Horizon.Content.Search.Hint">Search by name, author or tag</sys:String>
+
+    <!-- Horizon.Content.Target -->
+
+    <sys:String x:Key="Horizon.Content.Target.NoBuild">Instance {0} has no usable Horizon build, so compatibility cannot be checked. Install a build on the Horizon builds page first.</sys:String>
+    <sys:String x:Key="Horizon.Content.Target.NoInstance">There is no instance yet. Create one first.</sys:String>
+
     <!-- Horizon.Crash -->
 
     <sys:String x:Key="Horizon.Crash.Export">Export the error report</sys:String>
@@ -865,6 +951,11 @@
 
     <sys:String x:Key="Horizon.Datapack.Error.Load">Reading the data pack list failed.</sys:String>
 
+    <!-- Horizon.Download.Left -->
+
+    <sys:String x:Key="Horizon.Download.Left.Builds">Horizon builds</sys:String>
+    <sys:String x:Key="Horizon.Download.Left.Content">Horizon content</sys:String>
+
     <!-- Horizon.Exit -->
 
     <sys:String x:Key="Horizon.Exit.Error">The game stopped on an error (exit code {0}).</sys:String>
@@ -894,6 +985,11 @@
 
     <sys:String x:Key="Horizon.Instance.Delete.Confirm">Delete instance {0}? Its worlds, resource packs, screenshots and settings go to the Recycle Bin with it.</sys:String>
     <sys:String x:Key="Horizon.Instance.Delete.ConfirmPermanent">Permanently delete instance {0}? Its worlds, resource packs, screenshots and settings are deleted with it and can't be recovered!</sys:String>
+
+    <!-- Horizon.Instance.Left -->
+
+    <sys:String x:Key="Horizon.Instance.Left.Mods">Mods</sys:String>
+    <sys:String x:Key="Horizon.Instance.Left.Shaders">Shaders</sys:String>
 
     <!-- Horizon.Instance.Overall -->
 
@@ -946,6 +1042,41 @@
     <sys:String x:Key="Horizon.Launch.Stage.Root">Start Horizon</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Start">Start the game</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">Wait for the game window</sys:String>
+
+    <!-- Horizon.Mod -->
+
+    <sys:String x:Key="Horizon.Mod.AppliesNextStart">The game is running. Changes apply the next time it starts.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Card">Mods ({0})</sys:String>
+    <sys:String x:Key="Horizon.Mod.Disable">Disable</sys:String>
+    <sys:String x:Key="Horizon.Mod.Empty">This instance has no mods yet. Install some from the Horizon content page, or put .hmod files into the horizon-mods folder or drop them on this page.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Enable">Enable</sys:String>
+    <sys:String x:Key="Horizon.Mod.Enabled">Enabled</sys:String>
+    <sys:String x:Key="Horizon.Mod.Folder">Folder</sys:String>
+    <sys:String x:Key="Horizon.Mod.Hint">Click a mod to enable or disable it; dropped-in mods start disabled. Native mods need the game to be rebuilt, so the launcher only lists them. Changes apply the next time the game starts.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Native">Native mod</sys:String>
+    <sys:String x:Key="Horizon.Mod.OpenFolder">Open mods folder</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked">Revoked</sys:String>
+    <sys:String x:Key="Horizon.Mod.Size">{0} MB</sys:String>
+
+    <!-- Horizon.Mod.Delete -->
+
+    <sys:String x:Key="Horizon.Mod.Delete.Confirm">Delete {0}?</sys:String>
+
+    <!-- Horizon.Mod.Error -->
+
+    <sys:String x:Key="Horizon.Mod.Error.Delete">Could not delete it.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Error.Load">Could not read the mod list.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Error.Toggle">Could not change whether the mod is enabled.</sys:String>
+
+    <!-- Horizon.Mod.Native -->
+
+    <sys:String x:Key="Horizon.Mod.Native.ToolTip">Native mods need the game to be rebuilt; the launcher cannot enable them.</sys:String>
+
+    <!-- Horizon.Mod.Revoked -->
+
+    <sys:String x:Key="Horizon.Mod.Revoked.EnableConfirm">{0} was revoked by the registry: {1}&#xA;&#xA;Enable it anyway?</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked.Hint">{0} installed mod(s) were revoked by the registry. Deleting them is recommended.</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked.Info">Revoked: {0}</sys:String>
 
     <!-- Horizon.ResourcePack -->
 
@@ -1005,6 +1136,37 @@
     <sys:String x:Key="Horizon.Setup.Data.Open">Open the data folder</sys:String>
     <sys:String x:Key="Horizon.Setup.Data.Select">Choose the Horizon data folder</sys:String>
     <sys:String x:Key="Horizon.Setup.Data.Title">Horizon data folder</sys:String>
+
+    <!-- Horizon.Shader -->
+
+    <sys:String x:Key="Horizon.Shader.AppliesNextStart">The game is running. Changes apply the next time it starts.</sys:String>
+    <sys:String x:Key="Horizon.Shader.Card">Shaders ({0})</sys:String>
+    <sys:String x:Key="Horizon.Shader.Empty">This instance has no shaders yet. Install some from the Horizon content page, or put .hshader files or shader pack .zip files into the shaderpacks folder or drop them on this page.</sys:String>
+    <sys:String x:Key="Horizon.Shader.Folder">Folder</sys:String>
+    <sys:String x:Key="Horizon.Shader.Hint">Click a shader to select it; only one can be used at a time. Changes apply the next time the game starts.</sys:String>
+    <sys:String x:Key="Horizon.Shader.None">No shader</sys:String>
+    <sys:String x:Key="Horizon.Shader.OpenFolder">Open shaders folder</sys:String>
+    <sys:String x:Key="Horizon.Shader.Selected">In use</sys:String>
+    <sys:String x:Key="Horizon.Shader.Size">{0} MB</sys:String>
+
+    <!-- Horizon.Shader.Delete -->
+
+    <sys:String x:Key="Horizon.Shader.Delete.Confirm">Delete {0}?</sys:String>
+
+    <!-- Horizon.Shader.Error -->
+
+    <sys:String x:Key="Horizon.Shader.Error.Delete">Could not delete it.</sys:String>
+    <sys:String x:Key="Horizon.Shader.Error.Load">Could not read the shader list.</sys:String>
+    <sys:String x:Key="Horizon.Shader.Error.Select">Could not change the shader.</sys:String>
+
+    <!-- Horizon.Shader.None -->
+
+    <sys:String x:Key="Horizon.Shader.None.Info">Use vanilla graphics</sys:String>
+
+    <!-- Horizon.Shader.Type -->
+
+    <sys:String x:Key="Horizon.Shader.Type.Horizon">Horizon shader</sys:String>
+    <sys:String x:Key="Horizon.Shader.Type.ShaderPack">Shader pack</sys:String>
 
     <!-- Instance -->
 

@@ -9,15 +9,31 @@
 
             <TextBlock Text="{loc:Loc Download.Left.Installation}" Margin="13,0,5,4" Opacity="0.6"
                        FontSize="12" />
-            <local:MyListItem x:Name="ItemClient" Checked="True" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="9"
+            <local:MyListItem x:Name="ItemHorizonBuild" Checked="True" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="1"
                               Check="PageCheck"
                               MinPaddingRight="35" Height="36" VerticalAlignment="Top"
-                              Title="{loc:Loc Download.Left.Minecraft}"
+                              Title="{loc:Loc Horizon.Download.Left.Builds}"
                               LogoScale="0.98"
                               SvgIcon="lucide/package">
                 <local:MyListItem.Buttons>
                     <x:Array Type="{x:Type local:MyIconButton}">
-                        <local:MyIconButton Tag="9" ToolTip="{loc:Loc Common.Action.Refresh}"
+                        <local:MyIconButton Tag="1" ToolTip="{loc:Loc Common.Action.Refresh}"
+                                            ToolTipService.Placement="Right" Click="RefreshButton_Click"
+                                            ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
+                                            LogoScale="0.85"
+                                            SvgIcon="lucide/refresh-cw" />
+                    </x:Array>
+                </local:MyListItem.Buttons>
+            </local:MyListItem>
+            <local:MyListItem x:Name="ItemHorizonContent" IsScaleAnimationEnabled="False" Type="RadioBox" Tag="2"
+                              Check="PageCheck"
+                              MinPaddingRight="35" Height="36" VerticalAlignment="Top"
+                              Title="{loc:Loc Horizon.Download.Left.Content}"
+                              LogoScale="0.9"
+                              SvgIcon="lucide/puzzle">
+                <local:MyListItem.Buttons>
+                    <x:Array Type="{x:Type local:MyIconButton}">
+                        <local:MyIconButton Tag="2" ToolTip="{loc:Loc Common.Action.Refresh}"
                                             ToolTipService.Placement="Right" Click="RefreshButton_Click"
                                             ToolTipService.InitialShowDelay="200" ToolTipService.VerticalOffset="-1"
                                             LogoScale="0.85"

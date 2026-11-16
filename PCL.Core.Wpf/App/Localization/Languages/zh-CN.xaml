@@ -832,6 +832,92 @@
 
     <sys:String x:Key="Event.LaunchGame.InstanceNotFound">找不到实例 {0}。</sys:String>
 
+    <!-- Horizon.Build -->
+
+    <sys:String x:Key="Horizon.Build.AlreadyInstalled">已安装</sys:String>
+    <sys:String x:Key="Horizon.Build.Deleted">已删除 {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Hint">构建来自 horizon-rust/horizon 的 Nightly，安装前会校验签名与校验和。启动时实例使用固定的构建，没有固定时使用最新的已安装构建；没有已安装的构建时会自动下载最新的 Nightly。</sys:String>
+    <sys:String x:Key="Horizon.Build.Incomplete">不完整</sys:String>
+    <sys:String x:Key="Horizon.Build.Install">安装</sys:String>
+    <sys:String x:Key="Horizon.Build.Installed">已安装 {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.InstalledAt">安装于 {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Installing">正在安装 {0}</sys:String>
+    <sys:String x:Key="Horizon.Build.Latest">最新</sys:String>
+    <sys:String x:Key="Horizon.Build.Loading">正在获取版本列表……</sys:String>
+    <sys:String x:Key="Horizon.Build.NoneInstalled">还没有安装 Horizon 构建。在下方选择一个安装，或直接启动游戏自动安装最新的构建。</sys:String>
+    <sys:String x:Key="Horizon.Build.OpenFolder">打开版本文件夹</sys:String>
+    <sys:String x:Key="Horizon.Build.PinnedBy">{0} 个实例固定使用</sys:String>
+
+    <!-- Horizon.Build.Delete -->
+
+    <sys:String x:Key="Horizon.Build.Delete.Confirm">确定要删除构建 {0} 吗？它准备的游戏资源也会一起删除。</sys:String>
+    <sys:String x:Key="Horizon.Build.Delete.InUse">游戏正在启动或运行，请等它退出后再删除构建。</sys:String>
+    <sys:String x:Key="Horizon.Build.Delete.PinnedWarning">有 {0} 个实例固定使用这个构建，删除后启动它们时会重新下载。</sys:String>
+
+    <!-- Horizon.Build.Error -->
+
+    <sys:String x:Key="Horizon.Build.Error.Delete">删除构建失败。</sys:String>
+    <sys:String x:Key="Horizon.Build.Error.Install">安装 {0} 失败。</sys:String>
+    <sys:String x:Key="Horizon.Build.Error.List">获取版本列表失败：{0}</sys:String>
+
+    <!-- Horizon.Build.Installed -->
+
+    <sys:String x:Key="Horizon.Build.Installed.Card">已安装（{0}）</sys:String>
+
+    <!-- Horizon.Build.Releases -->
+
+    <sys:String x:Key="Horizon.Build.Releases.Card">可下载（{0}）</sys:String>
+
+    <!-- Horizon.Content -->
+
+    <sys:String x:Key="Horizon.Content.Card">搜索结果（{0}）</sys:String>
+    <sys:String x:Key="Horizon.Content.Downloads">{0} 次下载</sys:String>
+    <sys:String x:Key="Horizon.Content.Hint">内容来自 Horizon 注册表（horizon-rust/horizon-mods），安装前会校验来源、校验和与签名，已撤下的版本不会被安装。原生模组和整合包需要重新构建游戏，启动器暂不提供。</sys:String>
+    <sys:String x:Key="Horizon.Content.Incompatible">没有与当前构建兼容的版本</sys:String>
+    <sys:String x:Key="Horizon.Content.Install">安装到当前实例</sys:String>
+    <sys:String x:Key="Horizon.Content.Installed">已把 {0} {1} 安装到 {2}</sys:String>
+    <sys:String x:Key="Horizon.Content.Installing">正在安装……</sys:String>
+    <sys:String x:Key="Horizon.Content.Loading">正在获取注册表……</sys:String>
+    <sys:String x:Key="Horizon.Content.NoResults">没有符合条件的内容。</sys:String>
+    <sys:String x:Key="Horizon.Content.OpenSource">打开项目主页</sys:String>
+    <sys:String x:Key="Horizon.Content.Target">将安装到实例 {0}（Horizon {1}，Minecraft {2}）。</sys:String>
+
+    <!-- Horizon.Content.Card -->
+
+    <sys:String x:Key="Horizon.Content.Card.Truncated">搜索结果（前 {0} 个，共 {1} 个）</sys:String>
+
+    <!-- Horizon.Content.Datapack -->
+
+    <sys:String x:Key="Horizon.Content.Datapack.NoWorld">实例 {0} 还没有存档，数据包需要安装到存档中。</sys:String>
+    <sys:String x:Key="Horizon.Content.Datapack.SelectWorld">选择要安装数据包的存档</sys:String>
+
+    <!-- Horizon.Content.Error -->
+
+    <sys:String x:Key="Horizon.Content.Error.Install">安装 {0} 失败。</sys:String>
+    <sys:String x:Key="Horizon.Content.Error.Load">获取注册表失败：{0}</sys:String>
+
+    <!-- Horizon.Content.Filter -->
+
+    <sys:String x:Key="Horizon.Content.Filter.CompatibleOnly">只显示兼容的内容</sys:String>
+    <sys:String x:Key="Horizon.Content.Filter.Kind">类型</sys:String>
+
+    <!-- Horizon.Content.Kind -->
+
+    <sys:String x:Key="Horizon.Content.Kind.All">全部</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Datapack">数据包</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Mod">模组</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.ResourcePack">资源包</sys:String>
+    <sys:String x:Key="Horizon.Content.Kind.Shader">光影</sys:String>
+
+    <!-- Horizon.Content.Search -->
+
+    <sys:String x:Key="Horizon.Content.Search.Hint">搜索名称、作者或标签</sys:String>
+
+    <!-- Horizon.Content.Target -->
+
+    <sys:String x:Key="Horizon.Content.Target.NoBuild">实例 {0} 还没有可用的 Horizon 构建，无法判断兼容性。请先在 Horizon 构建页安装一个构建。</sys:String>
+    <sys:String x:Key="Horizon.Content.Target.NoInstance">还没有实例。请先新建一个实例。</sys:String>
+
     <!-- Horizon.Crash -->
 
     <sys:String x:Key="Horizon.Crash.Export">导出错误报告</sys:String>
@@ -865,6 +951,11 @@
 
     <sys:String x:Key="Horizon.Datapack.Error.Load">读取数据包列表失败。</sys:String>
 
+    <!-- Horizon.Download.Left -->
+
+    <sys:String x:Key="Horizon.Download.Left.Builds">Horizon 构建</sys:String>
+    <sys:String x:Key="Horizon.Download.Left.Content">Horizon 内容</sys:String>
+
     <!-- Horizon.Exit -->
 
     <sys:String x:Key="Horizon.Exit.Error">游戏因错误而退出（退出码 {0}）。</sys:String>
@@ -894,6 +985,11 @@
 
     <sys:String x:Key="Horizon.Instance.Delete.Confirm">确定要删除实例 {0} 吗？它的存档、资源包、截图和设置会一起移到回收站。</sys:String>
     <sys:String x:Key="Horizon.Instance.Delete.ConfirmPermanent">确定要永久删除实例 {0} 吗？它的存档、资源包、截图和设置会一起被删除，无法恢复！</sys:String>
+
+    <!-- Horizon.Instance.Left -->
+
+    <sys:String x:Key="Horizon.Instance.Left.Mods">模组</sys:String>
+    <sys:String x:Key="Horizon.Instance.Left.Shaders">光影</sys:String>
 
     <!-- Horizon.Instance.Overall -->
 
@@ -946,6 +1042,41 @@
     <sys:String x:Key="Horizon.Launch.Stage.Root">启动 Horizon</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Start">启动游戏进程</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.WaitWindow">等待游戏窗口出现</sys:String>
+
+    <!-- Horizon.Mod -->
+
+    <sys:String x:Key="Horizon.Mod.AppliesNextStart">游戏正在运行，修改会在下次启动时生效。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Card">模组（{0}）</sys:String>
+    <sys:String x:Key="Horizon.Mod.Disable">关闭</sys:String>
+    <sys:String x:Key="Horizon.Mod.Empty">这个实例还没有模组。从 Horizon 内容页安装，或把 .hmod 文件放进 horizon-mods 文件夹、拖到这个页面。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Enable">开启</sys:String>
+    <sys:String x:Key="Horizon.Mod.Enabled">已开启</sys:String>
+    <sys:String x:Key="Horizon.Mod.Folder">文件夹</sys:String>
+    <sys:String x:Key="Horizon.Mod.Hint">点击模组可以开启或关闭，拖入的模组默认关闭。原生模组需要重新构建游戏才能运行，启动器只展示它们。修改会在下次启动游戏时生效。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Native">原生模组</sys:String>
+    <sys:String x:Key="Horizon.Mod.OpenFolder">打开模组文件夹</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked">已被撤下</sys:String>
+    <sys:String x:Key="Horizon.Mod.Size">{0} MB</sys:String>
+
+    <!-- Horizon.Mod.Delete -->
+
+    <sys:String x:Key="Horizon.Mod.Delete.Confirm">确定要删除 {0} 吗？</sys:String>
+
+    <!-- Horizon.Mod.Error -->
+
+    <sys:String x:Key="Horizon.Mod.Error.Delete">删除失败。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Error.Load">读取模组列表失败。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Error.Toggle">修改开关失败。</sys:String>
+
+    <!-- Horizon.Mod.Native -->
+
+    <sys:String x:Key="Horizon.Mod.Native.ToolTip">原生模组需要重新构建游戏才能运行，启动器不能开启它。</sys:String>
+
+    <!-- Horizon.Mod.Revoked -->
+
+    <sys:String x:Key="Horizon.Mod.Revoked.EnableConfirm">{0} 已被注册表撤下：{1}&#xA;&#xA;仍要开启吗？</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked.Hint">有 {0} 个模组已被注册表撤下，建议删除。</sys:String>
+    <sys:String x:Key="Horizon.Mod.Revoked.Info">已被撤下：{0}</sys:String>
 
     <!-- Horizon.ResourcePack -->
 
@@ -1005,6 +1136,37 @@
     <sys:String x:Key="Horizon.Setup.Data.Open">打开数据目录</sys:String>
     <sys:String x:Key="Horizon.Setup.Data.Select">选择 Horizon 数据目录</sys:String>
     <sys:String x:Key="Horizon.Setup.Data.Title">Horizon 数据目录</sys:String>
+
+    <!-- Horizon.Shader -->
+
+    <sys:String x:Key="Horizon.Shader.AppliesNextStart">游戏正在运行，修改会在下次启动时生效。</sys:String>
+    <sys:String x:Key="Horizon.Shader.Card">光影（{0}）</sys:String>
+    <sys:String x:Key="Horizon.Shader.Empty">这个实例还没有光影。从 Horizon 内容页安装，或把 .hshader、光影包 .zip 放进 shaderpacks 文件夹、拖到这个页面。</sys:String>
+    <sys:String x:Key="Horizon.Shader.Folder">文件夹</sys:String>
+    <sys:String x:Key="Horizon.Shader.Hint">点击光影即可选中，同一时间只能使用一个光影。修改会在下次启动游戏时生效。</sys:String>
+    <sys:String x:Key="Horizon.Shader.None">不使用光影</sys:String>
+    <sys:String x:Key="Horizon.Shader.OpenFolder">打开光影文件夹</sys:String>
+    <sys:String x:Key="Horizon.Shader.Selected">使用中</sys:String>
+    <sys:String x:Key="Horizon.Shader.Size">{0} MB</sys:String>
+
+    <!-- Horizon.Shader.Delete -->
+
+    <sys:String x:Key="Horizon.Shader.Delete.Confirm">确定要删除 {0} 吗？</sys:String>
+
+    <!-- Horizon.Shader.Error -->
+
+    <sys:String x:Key="Horizon.Shader.Error.Delete">删除失败。</sys:String>
+    <sys:String x:Key="Horizon.Shader.Error.Load">读取光影列表失败。</sys:String>
+    <sys:String x:Key="Horizon.Shader.Error.Select">切换光影失败。</sys:String>
+
+    <!-- Horizon.Shader.None -->
+
+    <sys:String x:Key="Horizon.Shader.None.Info">使用原版画面</sys:String>
+
+    <!-- Horizon.Shader.Type -->
+
+    <sys:String x:Key="Horizon.Shader.Type.Horizon">Horizon 光影</sys:String>
+    <sys:String x:Key="Horizon.Shader.Type.ShaderPack">光影包</sys:String>
 
     <!-- Instance -->
 
