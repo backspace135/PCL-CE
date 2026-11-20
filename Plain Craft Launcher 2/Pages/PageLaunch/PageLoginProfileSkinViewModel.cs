@@ -10,6 +10,8 @@ public partial class PageLoginProfileSkinViewModel : ViewModelBase
 {
     [ObservableProperty] private Visibility _editVisibility = Visibility.Visible;
 
+    [ObservableProperty] private Visibility _passwordVisibility = Visibility.Visible;
+
     [ObservableProperty] private string _profileName = string.Empty;
 
     [ObservableProperty] private string _profileTypeText = string.Empty;
@@ -19,5 +21,7 @@ public partial class PageLoginProfileSkinViewModel : ViewModelBase
         ProfileName = profile.UserName;
         ProfileTypeText = ProfileUi.GetProfileInfo(profile);
         EditVisibility = Visibility.Visible;
+        // 离线档案没有密码，只能改玩家名
+        PasswordVisibility = profile.ProfileType == ProfileType.Offline ? Visibility.Collapsed : Visibility.Visible;
     }
 }

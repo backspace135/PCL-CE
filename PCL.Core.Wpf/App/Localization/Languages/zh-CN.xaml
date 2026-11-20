@@ -652,7 +652,6 @@
     <sys:String x:Key="Horizon.Launch.Error.ExitedEarly">游戏在打开窗口前就退出了（退出码 {0}）。</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.InstanceMissing">实例 {0} 的文件夹已不存在。</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.JavaDownloadFailed">下载 Java（{0}）失败。</sys:String>
-    <sys:String x:Key="Horizon.Launch.Error.NeedMicrosoft">Horizon 只能用拥有 Minecraft: Java Edition 的微软账户启动，请切换到微软账户。</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoInstance">还没有实例，请先在实例列表中新建一个。</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoJava">没有可用的 Java {0}。准备游戏资源需要它，请在设置中添加或允许自动下载。</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoJavaMajor">该构建没有给出准备资源需要的 Java 版本。</sys:String>
@@ -671,7 +670,7 @@
     <sys:String x:Key="Horizon.Launch.Stage.End">完成</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Files">分析原版文件</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Java">准备 Java</sys:String>
-    <sys:String x:Key="Horizon.Launch.Stage.Login">验证正版账户</sys:String>
+    <sys:String x:Key="Horizon.Launch.Stage.Login">验证账户</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Prepare">准备游戏资源</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Root">启动 Horizon</sys:String>
     <sys:String x:Key="Horizon.Launch.Stage.Start">启动游戏进程</sys:String>
@@ -990,6 +989,7 @@
     <sys:String x:Key="Launch.Account.Login">登录</sys:String>
     <sys:String x:Key="Launch.Account.LoginCancelled">已取消登录！</sys:String>
     <sys:String x:Key="Launch.Account.Type.Microsoft">正版验证</sys:String>
+    <sys:String x:Key="Launch.Account.Type.Offline">离线验证</sys:String>
 
     <!-- Launch.Account.LoginDialog -->
 
@@ -1019,7 +1019,9 @@
 
     <sys:String x:Key="Launch.Account.Profile.CopyUuid">复制 UUID</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Create">新建档案</sys:String>
+    <sys:String x:Key="Launch.Account.Profile.Create.SelectAuthType.Title">新建档案 - 选择验证类型</sys:String>
     <sys:String x:Key="Launch.Account.Profile.CreateAndSelectHint">新建并选择一个档案以启动游戏</sys:String>
+    <sys:String x:Key="Launch.Account.Profile.CreateOffline.Title">新建离线档案 - 输入玩家名</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Delete">删除档案</sys:String>
     <sys:String x:Key="Launch.Account.Profile.DeleteConfirm.Message">你正在选择删除此档案，该操作无法撤销。&#xA;确定继续？</sys:String>
     <sys:String x:Key="Launch.Account.Profile.DeleteConfirm.Title">删除档案确认</sys:String>
@@ -1027,7 +1029,6 @@
     <sys:String x:Key="Launch.Account.Profile.Error.ChangeId">修改档案 ID 失败</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Error.ChangeSkin">更改皮肤失败</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Error.Read">读取档案列表失败</sys:String>
-    <sys:String x:Key="Launch.Account.Profile.RequireMicrosoftHint">需要先进行一次正版验证才能使用其他验证方式</sys:String>
     <sys:String x:Key="Launch.Account.Profile.SelectHint">选择一个档案以启动游戏</sys:String>
 
     <!-- Launch.Account.Profile.EditPlayerId -->
@@ -1045,6 +1046,7 @@
 
     <!-- Launch.Account.ProfileSkin -->
 
+    <sys:String x:Key="Launch.Account.ProfileSkin.CapeUnsupported">当前档案不支持修改披风！</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.ChangeCape">修改披风</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.ChangeSkin">修改皮肤</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.EditPassword">修改密码</sys:String>
@@ -1052,6 +1054,7 @@
     <sys:String x:Key="Launch.Account.ProfileSkin.EditUsername">修改玩家名</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.RefreshSkin">刷新头像</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SaveSkin">保存皮肤</sys:String>
+    <sys:String x:Key="Launch.Account.ProfileSkin.SkinUnsupported">当前档案不支持修改皮肤！</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SkinsAndCapes">皮肤与披风</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SwitchProfile">选择档案</sys:String>
 

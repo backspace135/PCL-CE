@@ -42,6 +42,30 @@ public sealed class ProfileManagementTest
     }
 
     [TestMethod]
+    public void OfflineProfileTypeSurvivesRoundTrip()
+    {
+        var profile = new McProfile
+        {
+            ProfileId = "offline",
+            ProfileType = ProfileType.Offline,
+            UserName = "Player",
+            Uuid = ProfileService.GetOfflineUuid("Player"),
+            AccessToken = "placeholder"
+        };
+        var source = new ProfileManagement<McProfile>();
+        source.LoadFromString("{\"lastUsed\":-1,\"profiles\":[]}");
+        source.Add(profile, select: true);
+
+        var restored = new ProfileManagement<McProfile>();
+        restored.LoadFromString(source.Serialize());
+        var actual = restored.GetAll().Single();
+
+        Assert.AreEqual(ProfileType.Offline, actual.ProfileType);
+        Assert.AreEqual(profile.Uuid, actual.Uuid);
+        Assert.AreEqual("placeholder", actual.AccessToken);
+    }
+
+    [TestMethod]
     public void SelectionAndUpdateUseStableProfileIdentity()
     {
         var first = new McProfile { ProfileId = "first", UserName = "First", Uuid = "1" };

@@ -49,7 +49,7 @@ public partial class PageLoginProfileSkin : IPageView
         Common.Log("[Profile] 刷新档案界面");
         Skin.Clear();
         var profile = ProfileService.Current ?? throw new InvalidOperationException("No profile selected.");
-        Skin.loader = PageLaunchLeft.skinMs;
+        Skin.loader = profile.ProfileType == ProfileType.Offline ? PageLaunchLeft.skinLegacy : PageLaunchLeft.skinMs;
 
         Skin.loader.Start(isForceRestart: true);
         _vm.Load(profile);
@@ -115,7 +115,10 @@ public partial class PageLoginProfileSkin : IPageView
     // 修改皮肤
     private void Skin_Click(object sender, RoutedEventArgs e)
     {
-        ProfileUi.ChangeSkinMs();
+        if (ProfileService.Current?.ProfileType == ProfileType.Offline)
+            HintService.Show(Hints.Info(Lang.Text("Launch.Account.ProfileSkin.SkinUnsupported")));
+        else
+            ProfileUi.ChangeSkinMs();
     }
 
     // 保存皮肤
@@ -133,7 +136,10 @@ public partial class PageLoginProfileSkin : IPageView
     // 修改披风
     private void BtnSkinCape_Click(object sender, RoutedEventArgs e)
     {
-        Skin.BtnSkinCape_Click(sender, e);
+        if (ProfileService.Current?.ProfileType == ProfileType.Offline)
+            HintService.Show(Hints.Info(Lang.Text("Launch.Account.ProfileSkin.CapeUnsupported")));
+        else
+            Skin.BtnSkinCape_Click(sender, e);
     }
 
     #endregion

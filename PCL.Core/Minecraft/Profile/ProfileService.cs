@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading;
@@ -239,6 +241,46 @@ public partial class ProfileService
     }
 
     public static bool HasMicrosoftProfile => Profiles.Any(p => p.ProfileType == ProfileType.Microsoft);
+
+    /// <summary>
+    /// 新建并保存离线档案；同名的离线档案已存在时直接使用它。
+    /// </summary>
+    public static McProfile AddOffline(string userName, bool select = true)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(userName);
+        _EnsureLoaded();
+        var existing = Profiles.FirstOrDefault(profile =>
+            profile.ProfileType == ProfileType.Offline &&
+            string.Equals(profile.UserName, userName, StringComparison.Ordinal));
+        if (existing is not null)
+        {
+            if (select) Select(existing);
+            return existing;
+        }
+
+        var created = new McProfile
+        {
+            ProfileId = Guid.NewGuid().ToString("N"),
+            ProfileType = ProfileType.Offline,
+            UserName = userName,
+            Uuid = GetOfflineUuid(userName),
+            // 离线档案没有真实令牌，会话 JSON 仍要求非空，用随机值占位
+            AccessToken = Guid.NewGuid().ToString("N")
+        };
+        Add(created, select);
+        return created;
+    }
+
+    /// <summary>
+    /// 离线 UUID：对 <c>OfflinePlayer:玩家名</c> 取 MD5 得到的第 3 版 UUID（32 位小写，无连字符），与原版服务端、HMCL 等一致。
+    /// </summary>
+    public static string GetOfflineUuid(string userName)
+    {
+        var hash = MD5.HashData(Encoding.UTF8.GetBytes("OfflinePlayer:" + userName));
+        hash[6] = (byte)((hash[6] & 0x0F) | 0x30);
+        hash[8] = (byte)((hash[8] & 0x3F) | 0x80);
+        return Convert.ToHexStringLower(hash);
+    }
 
     private static McProfile? _FindMatchingProfile(AuthenticationResult result)
         => Profiles.FirstOrDefault(profile =>

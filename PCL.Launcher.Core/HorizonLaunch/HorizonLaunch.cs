@@ -1,6 +1,5 @@
 using PCL.Core.App;
 using PCL.Core.App.Localization;
-using PCL.Core.Minecraft.Profile;
 using PCL.Core.Minecraft.Profile.Models;
 using PCL.Core.Utils;
 using PCL.Core.Utils.OS;
@@ -168,8 +167,9 @@ public static partial class HorizonLaunch
             Thread.Sleep(RandomUtils.NextInt(100, 2000));
         if (!Directory.Exists(context.Instance.Directory))
             throw new Exception(Lang.Text("Horizon.Launch.Error.InstanceMissing", context.Instance.Name));
-        if (ProfileService.Current is { ProfileType: not ProfileType.Microsoft })
-            throw new Exception(Lang.Text("Horizon.Launch.Error.NeedMicrosoft"));
+        var profileError = LoginProfile.IsProfileValid();
+        if (!string.IsNullOrEmpty(profileError))
+            throw new Exception(profileError);
         Log("预检测已通过");
     }
 
@@ -274,11 +274,13 @@ public static partial class HorizonLaunch
     private static void _StageLogin(Loading.LoaderTask<int, int> task)
     {
         var context = Context;
-        // Horizon 只为拥有 Java 版的正版账户启动：每次启动前都确认一次
+        // 微软账户每次启动前都确认一次拥有 Java 版；离线档案直接使用
         var profile = HorizonLogin.Login(false, task.AbortedToken);
         context.Session = new HorizonSession(profile.UserName, profile.Uuid, profile.AccessToken);
         LaunchUi.RefreshLaunchPage(false);
-        Log($"已验证正版账户 {profile.UserName}");
+        Log(profile.ProfileType == ProfileType.Offline
+            ? $"使用离线档案 {profile.UserName}"
+            : $"已验证正版账户 {profile.UserName}");
     }
 
     private static void _StageCheck(Loading.LoaderTask<int, int> task)
