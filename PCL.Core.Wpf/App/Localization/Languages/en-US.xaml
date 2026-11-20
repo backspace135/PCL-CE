@@ -652,7 +652,6 @@
     <sys:String x:Key="Horizon.Launch.Error.ExitedEarly">The game exited before opening its window (exit code {0}).</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.InstanceMissing">The folder of instance {0} no longer exists.</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.JavaDownloadFailed">Downloading Java ({0}) failed.</sys:String>
-    <sys:String x:Key="Horizon.Launch.Error.NeedMicrosoft">Horizon only starts for a Microsoft account that owns Minecraft: Java Edition. Switch to a Microsoft account.</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoInstance">There is no instance yet. Create one in the instance list first.</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoJava">No Java {0} is available. Preparing the game resources needs it: add one in Settings or allow the automatic download.</sys:String>
     <sys:String x:Key="Horizon.Launch.Error.NoJavaMajor">This build doesn't say which Java version preparing needs.</sys:String>
@@ -990,6 +989,7 @@
     <sys:String x:Key="Launch.Account.Login">Log in</sys:String>
     <sys:String x:Key="Launch.Account.LoginCancelled">Login canceled!</sys:String>
     <sys:String x:Key="Launch.Account.Type.Microsoft">Microsoft</sys:String>
+    <sys:String x:Key="Launch.Account.Type.Offline">Offline</sys:String>
 
     <!-- Launch.Account.LoginDialog -->
 
@@ -1019,7 +1019,9 @@
 
     <sys:String x:Key="Launch.Account.Profile.CopyUuid">Copy UUID</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Create">New profile</sys:String>
+    <sys:String x:Key="Launch.Account.Profile.Create.SelectAuthType.Title">New profile - Select login type</sys:String>
     <sys:String x:Key="Launch.Account.Profile.CreateAndSelectHint">Create and select a profile before launching the game</sys:String>
+    <sys:String x:Key="Launch.Account.Profile.CreateOffline.Title">New offline profile - Enter player name</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Delete">Delete profile</sys:String>
     <sys:String x:Key="Launch.Account.Profile.DeleteConfirm.Message">You are about to delete this profile. This action cannot be undone.&#xA;Are you sure you want to continue?</sys:String>
     <sys:String x:Key="Launch.Account.Profile.DeleteConfirm.Title">Confirm profile deletion</sys:String>
@@ -1027,7 +1029,6 @@
     <sys:String x:Key="Launch.Account.Profile.Error.ChangeId">Failed to change username.</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Error.ChangeSkin">Failed to change skin</sys:String>
     <sys:String x:Key="Launch.Account.Profile.Error.Read">Failed to read profile list.</sys:String>
-    <sys:String x:Key="Launch.Account.Profile.RequireMicrosoftHint">A Microsoft profile is required to create profiles using other login types</sys:String>
     <sys:String x:Key="Launch.Account.Profile.SelectHint">Select a profile before launching the game</sys:String>
 
     <!-- Launch.Account.Profile.EditPlayerId -->
@@ -1045,6 +1046,7 @@
 
     <!-- Launch.Account.ProfileSkin -->
 
+    <sys:String x:Key="Launch.Account.ProfileSkin.CapeUnsupported">This profile does not support changing the cape!</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.ChangeCape">Change cape</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.ChangeSkin">Change skin</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.EditPassword">Edit password</sys:String>
@@ -1052,6 +1054,7 @@
     <sys:String x:Key="Launch.Account.ProfileSkin.EditUsername">Edit username</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.RefreshSkin">Refresh</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SaveSkin">Save skin</sys:String>
+    <sys:String x:Key="Launch.Account.ProfileSkin.SkinUnsupported">This profile does not support changing the skin!</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SkinsAndCapes">Skins and capes</sys:String>
     <sys:String x:Key="Launch.Account.ProfileSkin.SwitchProfile">Switch accounts</sys:String>
 

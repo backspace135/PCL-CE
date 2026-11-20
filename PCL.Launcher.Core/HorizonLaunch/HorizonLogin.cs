@@ -9,12 +9,12 @@ using PCL.Core.Minecraft.Profile.Models;
 namespace PCL;
 
 /// <summary>
-///     微软账户登录。Horizon 只为拥有 Minecraft: Java Edition 的正版账户启动。
+///     档案登录：离线档案直接使用，微软账户需确认拥有 Minecraft: Java Edition。
 /// </summary>
 public static class HorizonLogin
 {
     /// <summary>
-    ///     登录当前选中的微软账户（令牌过期时刷新）；没有选中账户时走设备码登录并新建档案。
+    ///     登录当前选中的档案（微软账户令牌过期时刷新）；没有选中档案时走设备码登录并新建微软档案。
     ///     输入为是否强制刷新令牌，输出为登录后的档案。
     /// </summary>
     public static readonly Loading.LoaderTask<bool, McProfile> LoginLoader = new(
@@ -27,11 +27,18 @@ public static class HorizonLogin
     };
 
     /// <summary>
-    ///     登录并确认账户拥有 Java 版。已处理的错误（未购买、XSTS 账户问题等）以 <c>$$</c> 抛出。
+    ///     登录当前档案。离线档案不联网直接返回；微软账户登录并确认拥有 Java 版，
+    ///     已处理的错误（未购买、XSTS 账户问题等）以 <c>$$</c> 抛出。
     /// </summary>
     public static McProfile Login(bool forceRefresh, CancellationToken token)
     {
         var existing = ProfileService.Current;
+        if (existing is { ProfileType: ProfileType.Offline })
+        {
+            LogWrapper.Info("Profile", $"验证方式：离线（{existing.UserName}）");
+            return existing;
+        }
+
         LogWrapper.Info("Profile", $"验证方式：正版（{(existing is null ? "尚未登录" : existing.UserName)}）");
         McProfile profile;
         try

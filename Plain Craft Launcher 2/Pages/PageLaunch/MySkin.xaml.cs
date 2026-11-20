@@ -310,7 +310,7 @@ public partial class MySkin
                     Common.IniClearCache(Common.pathTemp + @"Cache\Uuid\Mojang.ini");
                     foreach (var SkinLoader in sender is not null
                                  ? new[] { sender }
-                                 : new[] { PageLaunchLeft.skinMs })
+                                 : new[] { PageLaunchLeft.skinLegacy, PageLaunchLeft.skinMs })
                         SkinLoader.WaitForExit(isForceRestart: true);
                     HintService.Show(Hints.Success(Lang.Text("Launch.Skin.RefreshSuccess")));
                 }

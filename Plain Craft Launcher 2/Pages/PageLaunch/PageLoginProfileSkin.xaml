@@ -60,7 +60,8 @@
                     <local:MyIconButton.ContextMenu>
                         <ContextMenu Closed="MenuAccountOptions_Closed" HorizontalOffset="10" VerticalOffset="18">
                             <local:MyMenuItem Click="BtnEditPassword_Click"
-                                              Header="{loc:Loc Launch.Account.ProfileSkin.EditPassword}" />
+                                              Header="{loc:Loc Launch.Account.ProfileSkin.EditPassword}"
+                                              Visibility="{Binding PasswordVisibility, Mode=OneWay}" />
                             <local:MyMenuItem Click="BtnEditName_Click"
                                               Header="{loc:Loc Launch.Account.ProfileSkin.EditUsername}" />
                         </ContextMenu>

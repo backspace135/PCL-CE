@@ -1,8 +1,6 @@
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Windows;
@@ -198,13 +196,83 @@ public static class ProfileUi
     }
 
     /// <summary>
-    ///     新建档案：Horizon 只支持微软账户，直接进入微软登录页。
+    ///     没有任何档案时使用的离线玩家名。
     /// </summary>
-    public static Task CreateProfileAsync()
+    public const string DefaultOfflineName = "Player";
+
+    /// <summary>
+    ///     档案列表为空时新建并选中默认离线档案，让启动器不登录也能直接启动。
+    /// </summary>
+    public static void EnsureDefaultProfile()
     {
-        ProfileService.IsCreatingProfile = true;
-        Common.RunInUi(() => Launcher.frmLaunchLeft.ShowMicrosoftLogin());
-        return Task.CompletedTask;
+        if (ProfileService.Profiles.Count > 0) return;
+        ProfileService.AddOffline(DefaultOfflineName);
+        Common.Log($"[Profile] 没有档案，已新建默认离线档案 {DefaultOfflineName}");
+    }
+
+    /// <summary>
+    ///     新建档案：选择离线或微软账户。
+    /// </summary>
+    public static async Task CreateProfileAsync()
+    {
+        var typeDialog = await DialogService.Instance.ShowAsync(new SelectDialogRequest
+        {
+            Title = Lang.Text("Launch.Account.Profile.Create.SelectAuthType.Title"),
+            Options =
+            [
+                new DialogOption { Text = Lang.Text("Launch.Account.Type.Offline"), SvgIcon = "lucide/link-2-off" },
+                new DialogOption { Text = Lang.Text("Launch.Account.Type.Microsoft"), SvgIcon = "lucide/shield-check" }
+            ],
+            Buttons = DialogButtons.From(
+                DialogButton.Create(Lang.Text("Common.Action.Continue")),
+                DialogButton.Create(Lang.Text("Common.Action.Cancel"))),
+            HighLight = false,
+            ForceWait = false
+        });
+        if (!typeDialog.IsConfirmed || typeDialog.SelectedIndex is not { } selected) return;
+        if (selected == 1)
+        {
+            ProfileService.IsCreatingProfile = true;
+            Common.RunInUi(() => Launcher.frmLaunchLeft.ShowMicrosoftLogin());
+            return;
+        }
+
+        var userName = await _InputOfflineNameAsync(Lang.Text("Launch.Account.Profile.CreateOffline.Title"), "");
+        if (userName is null) return;
+        ProfileService.AddOffline(userName);
+        HorizonLogin.LoginLoader.State = LoadState.Waiting;
+        Common.RunInUi(() => Launcher.frmLaunchLeft.RefreshPage(true));
+    }
+
+    private static async Task<string?> _InputOfflineNameAsync(string title, string defaultValue)
+    {
+        var dialog = await DialogService.Instance.ShowAsync(new InputDialogRequest
+        {
+            Title = title,
+            DefaultValue = defaultValue,
+            ValidateRules = [new StringLengthValidator(3, 16), new RegexValidator("([A-z]|[0-9]|_)+")],
+            HintText = Lang.Text("Launch.Account.Profile.EditPlayerId.Hint"),
+            Buttons = DialogButtons.OkCancel,
+            HighLight = false,
+            ForceWait = false
+        });
+        return dialog.IsConfirmed && !string.IsNullOrWhiteSpace(dialog.InputText) ? dialog.InputText : null;
+    }
+
+    /// <summary>
+    ///     修改离线档案的玩家名，UUID 随玩家名重新生成。
+    /// </summary>
+    private static async Task _EditOfflineNameAsync(McProfile profile)
+    {
+        var userName = await _InputOfflineNameAsync(Lang.Text("Launch.Account.Profile.EditPlayerId.Title"), profile.UserName);
+        if (userName is null || userName == profile.UserName) return;
+        var updated = profile.Clone();
+        updated.UserName = userName;
+        updated.Uuid = ProfileService.GetOfflineUuid(userName);
+        ProfileService.Update(profile, updated);
+        ProfileService.Select(updated);
+        HintService.Show(Hints.Success(Lang.Text("Launch.Account.Profile.EditPlayerId.Success", updated.UserName)));
+        Common.RunInUi(() => { Launcher.frmLoginProfileSkin?.Reload(); Launcher.frmLaunchLeft.RefreshPage(true); });
     }
 
     public static void EditProfileId() => _ = EditProfileIdAsync();
@@ -213,6 +281,11 @@ public static class ProfileUi
     {
         var profile = ProfileService.Current;
         if (profile is null) return;
+        if (profile.ProfileType == ProfileType.Offline)
+        {
+            await _EditOfflineNameAsync(profile);
+            return;
+        }
         {
             var usernameDialog = await DialogService.Instance.ShowAsync(new InputDialogRequest
             {
@@ -303,32 +376,15 @@ public static class ProfileUi
             var value = fullUuid.Substring(0, 12) + "3" + fullUuid.Substring(13, 3) + "9" + fullUuid.Substring(17, 15);
             return value;
         }
-        using var md5 = MD5.Create();
-        var hash = md5.ComputeHash(Encoding.UTF8.GetBytes("OfflinePlayer:" + userName));
-        hash[6] = (byte)((hash[6] & 0xF) | 0x30);
-        hash[8] = (byte)((hash[8] & 0x3F) | 0x80);
-        var uuid = Guid.Parse(_ToUuidString(hash));
-        return isSplited ? uuid.ToString() : uuid.ToString("N");
-    }
-
-    private static string _ToUuidString(byte[] bytes)
-    {
-        long msb = 0;
-        long lsb = 0;
-        for (var i = 0; i <= 7; i++) msb = (msb << 8) | (bytes[i] & 0xff);
-        for (var i = 8; i <= 15; i++) lsb = (lsb << 8) | (bytes[i] & 0xff);
-        return $"{_Digits(msb >> 32, 8)}-{_Digits(msb >> 16, 4)}-{_Digits(msb, 4)}-{_Digits(lsb >> 48, 4)}-{_Digits(lsb, 12)}";
-    }
-
-    private static string _Digits(long value, int digits)
-    {
-        var high = 1L << (digits * 4);
-        return (high | (value & (high - 1L))).ToString("X")[1..];
+        var uuid = ProfileService.GetOfflineUuid(userName);
+        return isSplited ? Guid.ParseExact(uuid, "N").ToString() : uuid;
     }
 
     public static string GetProfileInfo(McProfile profile)
     {
-        var info = Lang.Text("Launch.Account.Type.Microsoft");
+        var info = Lang.Text(profile.ProfileType == ProfileType.Offline
+            ? "Launch.Account.Type.Offline"
+            : "Launch.Account.Type.Microsoft");
         return string.IsNullOrWhiteSpace(profile.Description) ? info : $"{info}，{profile.Description}";
     }
 

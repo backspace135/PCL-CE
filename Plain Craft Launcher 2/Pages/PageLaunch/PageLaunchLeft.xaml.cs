@@ -92,6 +92,7 @@ public partial class PageLaunchLeft : IPageView
         ProfileService.Load();
         if (ProfileService.LastUsedProfile >= 0 && ProfileService.LastUsedProfile < ProfileService.Profiles.Count)
             ProfileService.SelectAt(ProfileService.LastUsedProfile);
+        ProfileUi.EnsureDefaultProfile();
 
         // 改变页面
         RefreshPage(false);
@@ -378,7 +379,9 @@ public partial class PageLaunchLeft : IPageView
     public void PageChangeToLaunching()
     {
         // 修改验证方式
-        LabLaunchingMethod.TrySetLocalizedValue("Text", "Launch.Account.Type.Microsoft");
+        LabLaunchingMethod.TrySetLocalizedValue("Text", ProfileService.Current?.ProfileType == ProfileType.Offline
+            ? "Launch.Account.Type.Offline"
+            : "Launch.Account.Type.Microsoft");
 
         // 初始化页面
         LabLaunchingName.Text = HorizonLaunch.CurrentOptions?.Instance?.Name ?? HorizonEnvironment.SelectedInstance?.Name ?? "";
@@ -703,10 +706,36 @@ public partial class PageLaunchLeft : IPageView
             data.input = null; // 清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
     }
 
+    // 离线皮肤：按 UUID 使用默认皮肤
+    public static Loading.LoaderTask<Common.EqualableList<string>, string> skinLegacy = new("Loader Skin Legacy",
+        SkinLegacyLoad, inputDelegate: SkinLegacyInput, priority: ThreadPriority.AboveNormal);
+
+    private static Common.EqualableList<string> SkinLegacyInput()
+    {
+        return new Common.EqualableList<string>
+            { ProfileService.Current?.UserName ?? "", ProfileService.Current?.Uuid ?? "" };
+    }
+
+    private static void SkinLegacyLoad(Loading.LoaderTask<Common.EqualableList<string>, string> data)
+    {
+        // 清空已有皮肤
+        Common.RunInUi(() =>
+        {
+            if (Launcher.frmLoginProfileSkin is not null && Launcher.frmLoginProfileSkin.Skin is not null)
+                Launcher.frmLoginProfileSkin.Skin.Clear();
+        });
+        data.output = Common.PathImage + "Skins/" + Skin.McSkinVariant(data.input[1]) + ".png";
+        // 刷新显示
+        if (Launcher.frmLoginProfileSkin is not null && ReferenceEquals(Launcher.frmLoginProfileSkin.Skin.loader, data))
+            Common.RunInUi(() => Launcher.frmLoginProfileSkin.Skin.Load());
+        else if (!data.IsAborted) // 如果已经中断，Input 也被清空，就不会再次刷新
+            data.input = null; // 清空输入，因为皮肤实际上没有被渲染，如果不清空切换到页面的 Start 会由于输入相同而不渲染
+    }
+
     // 全部皮肤加载器
     // 需要放在其中元素的后面，否则会因为它提前被加载而莫名其妙变成 Nothing
     public static List<Loading.LoaderTask<Common.EqualableList<string>, string>> skinLoaders = new()
-        { skinMs };
+        { skinMs, skinLegacy };
 
     #endregion
 }
