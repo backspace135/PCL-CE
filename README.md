@@ -21,7 +21,7 @@ PCL Horizon 是 [Horizon](https://github.com/horizon-rust/horizon) 的启动器�
 
 ## ✨ 功能
 
-- **微软账户登录**：Horizon 只为正版账户启动，每次启动前都会确认账户拥有 Java 版。不支持离线账户和第三方验证服务器。
+- **账户**：默认使用离线档案，不需要账户就能启动；也可以登录微软账户，每次启动前会确认账户拥有 Java 版。不支持第三方验证服务器。
 - **Horizon 构建管理**：从 [horizon-rust/horizon](https://github.com/horizon-rust/horizon/releases) 的 Nightly 发布获取构建，安装前校验 `SHA256SUMS` 与 Ed25519 签名，每个构建独立存放。
 - **自动准备**：下载 Horizon 需要的原版文件与 Java，调用 `horizon-prepare` 准备资源，同一构建的所有实例共用准备结果。
 - **实例**：每个实例有独立的存档、资源包、光影、模组与设置，可以固定使用某个构建。

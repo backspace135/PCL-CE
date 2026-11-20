@@ -21,7 +21,7 @@ It is forked from [PCL Community Edition](https://github.com/PCL-Community/PCL-C
 
 ## ✨ Features
 
-- **Microsoft accounts**: Horizon only launches for accounts that own Java Edition, and ownership is checked before every launch. Offline accounts and third-party authentication servers are not supported.
+- **Accounts**: An offline profile is used by default, so no account is needed to launch. You can also sign in with a Microsoft account; ownership of Java Edition is then checked before every launch. Third-party authentication servers are not supported.
 - **Horizon builds**: builds come from the Nightly releases of [horizon-rust/horizon](https://github.com/horizon-rust/horizon/releases). `SHA256SUMS` and its Ed25519 signature are verified before a build is installed, and each build lives in its own directory.
 - **Automatic preparation**: the launcher downloads the vanilla files and Java that Horizon needs and runs `horizon-prepare`. All instances of a build share the prepared resources.
 - **Instances**: each instance has its own worlds, resource packs, shaders, mods and settings, and can be pinned to a build.
