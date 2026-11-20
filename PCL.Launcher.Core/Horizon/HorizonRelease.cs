@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-
 namespace PCL.Horizon;
 
 /// <summary>GitHub release 中的一个文件。</summary>
@@ -31,12 +29,8 @@ public sealed record HorizonRelease(
 /// <summary>各平台的发布包文件名。</summary>
 public static class HorizonPlatform
 {
+    /// <summary>启动器只支持 Windows x64，ARM64 设备通过 x64 仿真运行同一个包。</summary>
     public const string WindowsX64 = "horizon-windows-x64.zip";
-    public const string WindowsArm64 = "horizon-windows-arm64.zip";
-
-    /// <summary>当前系统架构对应的 Windows 发布包。</summary>
-    public static string CurrentWindowsAsset =>
-        RuntimeInformation.OSArchitecture == Architecture.Arm64 ? WindowsArm64 : WindowsX64;
 
     /// <summary>当前系统的可执行文件扩展名。</summary>
     public static string ExecutableSuffix => OperatingSystem.IsWindows() ? ".exe" : "";

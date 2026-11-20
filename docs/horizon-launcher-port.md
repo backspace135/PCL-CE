@@ -6,7 +6,7 @@
 
 - Horizon 是用 Rust 重写的 Minecraft: Java Edition 26.3。游戏本身不用 JVM，有自己的模组系统，不支持 Forge、Fabric、OptiFine 等。
 - 本仓库的 `horizon-core/` 是 Horizon 的可移植引擎库，跟启动无关。启动器要对接的是 Horizon 发布包里的 `horizon-prepare` 和 `horizon-client` 两个可执行文件。
-- PCL-CE 是 WPF 程序，只能在 Windows 上运行，所以改出来的启动器只覆盖 Windows x64 和 ARM64。
+- PCL-CE 是 WPF 程序，只能在 Windows 上运行，所以改出来的启动器只覆盖 Windows x64（ARM64 设备通过 x64 仿真运行）。
 
 ## 一、Horizon 对启动器的要求
 
@@ -15,7 +15,7 @@
 1. **只为正版账户启动。** 启动器负责微软登录（device code → Xbox Live → XSTS → Minecraft），并在每次启动前检查账户是否拥有 Java 版。必须用自己的 Azure client ID，不能用 Horizon 的。
 2. **选版本、下载、验签。**
    - 版本来自 GitHub release `horizon-rust/horizon`。最新版的标签是 `nightly`，每个版本还会以 `nightly-<date>` 标签保存 7 天，然后删除。
-   - Windows 包是 `horizon-windows-x64.zip` 和 `horizon-windows-arm64.zip`。
+   - Windows 包是 `horizon-windows-x64.zip`，启动器只用它（Nightly 已不再提供 `horizon-windows-arm64.zip`）。
    - 解压前先校验 `SHA256SUMS`，再用 Ed25519 验 `SHA256SUMS.v2.sig`，签名内容是 `horizon release nightly-<date>-<commit>\n` 加上 `SHA256SUMS`。公钥在 `crates/horizon-release-sign/release-keys.txt`。v2 签名的格式目前只写在 `crates/horizon-release-sign/src/lib.rs` 中，`docs/api` 还没收录。
    - 每个版本解压到独立目录并保持完整。
 3. **查询能力。** `horizon-client --launch-api` 和 `horizon-prepare --launch-api` 各输出一个 JSON，从中读取 `launch_api`、`minecraft`（需要的原版版本）、`java_major` 和 `options`。没列出的参数会被拒绝，退出码为 2。

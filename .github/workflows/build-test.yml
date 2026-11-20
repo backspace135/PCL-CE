@@ -27,8 +27,6 @@ jobs:
         include:
           - configuration: CI
             architecture: x64
-          - configuration: CI
-            architecture: ARM64
       fail-fast: false
 
     uses: ./.github/workflows/reusable-build.yml

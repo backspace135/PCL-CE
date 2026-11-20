@@ -7,7 +7,7 @@
         <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
         <Platform Condition="'$(Platform)' == ''">AnyCPU</Platform>
         <Configurations>Debug;CI;Release;Beta</Configurations>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <Platforms>AnyCPU;x64</Platforms>
         <AssemblyTitle>PCL.Test</AssemblyTitle>
         <Product>PCL.Test</Product>
         <Copyright>Copyright © PCL Community 2025</Copyright>

@@ -11,7 +11,6 @@
         <PublishSingleFile>true</PublishSingleFile>
         <IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
         <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
-        <RuntimeIdentifier Condition="'$(Platform)' == 'ARM64'">win-arm64</RuntimeIdentifier>
         <EnableWindowsTargeting>true</EnableWindowsTargeting>
         <MapFileExtensions>true</MapFileExtensions>
         <TargetCulture>zh-CN</TargetCulture>
@@ -20,7 +19,7 @@
         <LangVersion>15</LangVersion>
         <UseWPF>true</UseWPF>
         <Configurations>Beta;Debug;Release;CI</Configurations>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <Platforms>AnyCPU;x64</Platforms>
         <ImplicitUsings>enable</ImplicitUsings>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Images\icon.ico</ApplicationIcon>

@@ -7,7 +7,7 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <Platforms>AnyCPU;x64</Platforms>
         <Configurations>Debug;CI;Release;Beta</Configurations>
         <!-- 确保源代码生成器在所有平台架构下都能正常工作 -->
         <PlatformTarget>AnyCPU</PlatformTarget>

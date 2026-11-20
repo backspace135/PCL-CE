@@ -13,7 +13,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <Configurations>Debug;CI;Release;Beta</Configurations>
-        <Platforms>AnyCPU;x64;ARM64</Platforms>
+        <Platforms>AnyCPU;x64</Platforms>
         <NoWarn>$(NoWarn);CS9113</NoWarn>
     </PropertyGroup>
     <ItemGroup>
