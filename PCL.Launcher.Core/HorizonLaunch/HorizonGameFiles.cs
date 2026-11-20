@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using PCL.Core.App.Localization;
 using PCL.Horizon;
 using PCL.Network;
@@ -12,25 +14,60 @@ namespace PCL;
 public static class HorizonGameFiles
 {
     /// <summary>
-    ///     确保版本 JSON 存在并返回其内容；本地文件缺失或损坏时从版本列表获取地址后下载。
+    ///     确保版本 JSON 存在并返回其内容；本地文件缺失、损坏或与 Mojang 发布的不一致时从版本列表获取地址后下载。
+    ///     horizon-prepare 按 sha1 校验版本 JSON，所以文件必须按原始字节保存，不能重新格式化。
     /// </summary>
     public static JsonObject EnsureVersionJson(HorizonPaths paths, string minecraft)
     {
         var jsonPath = paths.MinecraftVersionJson(minecraft);
-        if (_TryReadJson(jsonPath) is { } existing && (string?)existing["id"] == minecraft)
+        // 拿不到版本列表（如离线）时信任本地文件
+        var url = GameDownload.DlClientListGet(minecraft) as string;
+        var sha1 = url is null ? null : _Sha1FromUrl(url);
+        if (_TryReadJson(jsonPath) is { } existing && (string?)existing["id"] == minecraft &&
+            (sha1 is null || _Sha1Of(jsonPath) == sha1))
             return existing;
 
-        var url = GameDownload.DlClientListGet(minecraft) as string
-            ?? throw new Exception(Lang.Text("Horizon.Files.Error.VersionNotFound", minecraft));
+        if (url is null)
+            throw new Exception(Lang.Text("Horizon.Files.Error.VersionNotFound", minecraft));
         LauncherCommon.Log($"[Horizon] 下载 Minecraft {minecraft} 版本 JSON：{url}");
-        var content = NetFacade.NetGetCodeByLoader(
-            GameDownload.DlSourceLauncherOrMetaGet(url), isJson: true);
-        var json = LauncherCommon.GetJson(content) as JsonObject
-            ?? throw new Exception(Lang.Text("Horizon.Files.Error.VersionJsonInvalid", minecraft));
         Directory.CreateDirectory(Path.GetDirectoryName(jsonPath)!);
-        LauncherCommon.WriteFile(jsonPath, content);
-        return json;
+        var temp = jsonPath + ".download";
+        Exception? lastException = null;
+        foreach (var source in GameDownload.DlSourceLauncherOrMetaGet(url))
+        {
+            try
+            {
+                File.Delete(temp);
+                FileDownloader.DownloadAsync(source, temp, enableParallelChunks: false).GetAwaiter().GetResult();
+                if (sha1 is not null && _Sha1Of(temp) != sha1)
+                    throw new InvalidDataException($"版本 JSON 的 sha1 与 {sha1} 不符：{source}");
+                var json = LauncherCommon.GetJson(File.ReadAllText(temp)) as JsonObject
+                    ?? throw new Exception(Lang.Text("Horizon.Files.Error.VersionJsonInvalid", minecraft));
+                File.Move(temp, jsonPath, true);
+                return json;
+            }
+            catch (Exception ex)
+            {
+                lastException = ex;
+                LauncherCommon.Log(ex, $"[Horizon] 从 {source} 下载版本 JSON 失败，尝试下一个源");
+            }
+        }
+
+        File.Delete(temp);
+        throw new Exception(Lang.Text("Horizon.Files.Error.VersionJsonInvalid", minecraft), lastException);
     }
+
+    /// <summary>
+    ///     Mojang 的版本 JSON 地址形如 <c>.../v1/packages/&lt;sha1&gt;/&lt;版本&gt;.json</c>，取出其中的 sha1；其他地址返回
+    ///     <see langword="null" />。
+    /// </summary>
+    private static string? _Sha1FromUrl(string url)
+    {
+        var match = Regex.Match(url, "/packages/([0-9a-f]{40})/");
+        return match.Success ? match.Groups[1].Value : null;
+    }
+
+    private static string _Sha1Of(string path) => Convert.ToHexStringLower(SHA1.HashData(File.ReadAllBytes(path)));
 
     /// <summary>
     ///     版本 JSON 中要求的 Java 组件名（如 <c>java-runtime-epsilon</c>），主版本与 <paramref name="javaMajor" /> 不符时为
